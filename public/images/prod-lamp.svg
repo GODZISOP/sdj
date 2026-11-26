@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#F5F6F8"/>
+  <ellipse cx="200" cy="248" rx="76" ry="12" fill="#D9DCE3"/>
+  <!-- Base -->
+  <rect x="138" y="230" width="124" height="16" rx="4" fill="#1F242D"/>
+  <rect x="138" y="226" width="124" height="6" rx="3" fill="#B8C0CC"/>
+  <!-- Stem -->
+  <rect x="193" y="96" width="12" height="132" rx="3" fill="url(#steel)"/>
+  <!-- Articulated Arm -->
+  <path d="M199 98 L266 64" stroke="#9AA3B2" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="199" cy="98" r="9" fill="#002FA7"/>
+  <!-- Lamp Shade -->
+  <path d="M236 52 L296 76 L284 106 L224 82 Z" fill="#1F242D"/>
+  <path d="M236 52 L296 76 L292 84 L232 60 Z" fill="#002FA7"/>
+  <!-- Warm Light Cone -->
+  <polygon points="228,84 282,106 318,224 196,224" fill="url(#glow)" opacity="0.28"/>
+  <defs>
+    <linearGradient id="steel" x1="193" y1="96" x2="205" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D4DAE3"/>
+      <stop offset="0.5" stop-color="#F2F4F7"/>
+      <stop offset="1" stop-color="#8F98A6"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="255" y1="84" x2="255" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE082"/>
+      <stop offset="1" stop-color="#F5F6F8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

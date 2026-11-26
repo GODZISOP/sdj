@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#F5F6F8"/>
+  <ellipse cx="200" cy="244" rx="74" ry="12" fill="#D9DCE3"/>
+  <!-- Speaker Body -->
+  <rect x="134" y="64" width="132" height="176" rx="18" fill="url(#cobaltGrad)"/>
+  <!-- Brushed Steel Top Plate -->
+  <rect x="142" y="56" width="116" height="12" rx="6" fill="#C6CDD8"/>
+  <!-- Acoustic Grille -->
+  <circle cx="200" cy="128" r="36" fill="#001B66"/>
+  <circle cx="200" cy="128" r="24" stroke="#4C78FF" stroke-width="2.5"/>
+  <circle cx="200" cy="128" r="9" fill="#FFFFFF"/>
+  <!-- Woofer Ring -->
+  <circle cx="200" cy="196" r="22" fill="#001B66"/>
+  <circle cx="200" cy="196" r="14" stroke="#4C78FF" stroke-width="2"/>
+  <defs>
+    <linearGradient id="cobaltGrad" x1="134" y1="64" x2="266" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0038CC"/>
+      <stop offset="1" stop-color="#00227A"/>
+    </linearGradient>
+  </defs>
+</svg>

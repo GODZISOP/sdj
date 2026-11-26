@@ -8,11 +8,11 @@ import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
 
 const CATEGORIES: { key: CategoryKey; label: string; image: string }[] = [
+  { key: 'Home & Desk', label: 'Home & Desk', image: '/images/prod-lamp.svg' },
+  { key: 'Audio & Tech', label: 'Audio & Tech', image: '/images/prod-speaker.svg' },
+  { key: 'Drinkware', label: 'Drinkware', image: '/images/prod-tumbler.svg' },
   { key: 'Strength', label: 'Strength', image: '/images/cat-dumbbell.jpg' },
-  { key: 'Conditioning', label: 'Conditioning', image: '/images/cat-kettlebell.jpg' },
-  { key: 'Mobility', label: 'Mobility', image: '/images/cat-mat.jpg' },
-  { key: 'Bodyweight', label: 'Bodyweight', image: '/images/cat-rings.jpg' },
-  { key: 'Recovery', label: 'Recovery', image: '/images/cat-dome.jpg' },
+  { key: 'Lifestyle', label: 'Lifestyle', image: '/images/cat-mat.jpg' },
 ];
 
 const MOVEMENTS = [
@@ -39,9 +39,9 @@ export const HomePage: React.FC = () => {
               {settings.brandName.toUpperCase()} &nbsp;/&nbsp; DESIGN &nbsp;/&nbsp; MOVEMENT &nbsp;/&nbsp; LONGEVITY
             </p>
             <h1 className="text-[40px] sm:text-[56px] lg:text-[72px] font-extrabold leading-[0.96] swiss-tracking text-[#111111]">
-              Fitness
+              Curated
               <br />
-              Equipment
+              Objects
               <br />
               <span className="text-[#002FA7]">Reimagined.</span>
             </h1>

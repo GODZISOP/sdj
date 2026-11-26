@@ -1,4 +1,9 @@
-export type CategoryKey = 'Strength' | 'Conditioning' | 'Mobility' | 'Bodyweight' | 'Recovery';
+export type CategoryKey =
+  | 'Home & Desk'
+  | 'Audio & Tech'
+  | 'Drinkware'
+  | 'Strength'
+  | 'Lifestyle';
 
 export interface Product {
   id: string;

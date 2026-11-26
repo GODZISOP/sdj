@@ -38,13 +38,13 @@ export const AdminPage: React.FC = () => {
 
   const [newProd, setNewProd] = useState({
     name: '',
-    category: 'Strength' as CategoryKey,
-    price: 250,
-    image: '/images/cat-dumbbell.jpg',
-    trainingFocus: 'Strength',
-    weightRange: '4 – 24 kg',
-    material: 'Machined Steel',
-    bestFor: 'Full-body Training',
+    category: 'Home & Desk' as CategoryKey,
+    price: 180,
+    image: '/images/prod-lamp.svg',
+    trainingFocus: 'Everyday Design',
+    weightRange: '1.2 kg',
+    material: 'Anodized Aluminum',
+    bestFor: 'Home & Studio',
     description: '',
     inCompare: false,
   });
@@ -304,11 +304,11 @@ export const AdminPage: React.FC = () => {
                       }
                       className="w-full border border-black/15 px-3 py-2 text-sm bg-white outline-none focus:border-[#002FA7]"
                     >
+                      <option value="Home & Desk">Home & Desk</option>
+                      <option value="Audio & Tech">Audio & Tech</option>
+                      <option value="Drinkware">Drinkware</option>
                       <option value="Strength">Strength</option>
-                      <option value="Conditioning">Conditioning</option>
-                      <option value="Mobility">Mobility</option>
-                      <option value="Bodyweight">Bodyweight</option>
-                      <option value="Recovery">Recovery</option>
+                      <option value="Lifestyle">Lifestyle</option>
                     </select>
                   </div>
                   <div>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#F5F6F8"/>
+  <ellipse cx="200" cy="230" rx="135" ry="12" fill="#D9DCE3"/>
+  <!-- CNC Aluminum Chassis -->
+  <rect x="66" y="96" width="268" height="126" rx="12" fill="#C8CFD9"/>
+  <rect x="74" y="104" width="252" height="110" rx="8" fill="#1E232B"/>
+  <!-- Keycaps Grid -->
+  <rect x="84" y="114" width="22" height="18" rx="3" fill="#002FA7"/>
+  <rect x="110" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="136" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="162" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="188" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="214" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="240" y="114" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="266" y="114" width="48" height="18" rx="3" fill="#D4DAE3"/>
+  <!-- Row 2 -->
+  <rect x="84" y="138" width="32" height="18" rx="3" fill="#D4DAE3"/>
+  <rect x="120" y="138" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="146" y="138" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="172" y="138" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="198" y="138" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="224" y="138" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="250" y="138" width="64" height="18" rx="3" fill="#002FA7"/>
+  <!-- Row 3 -->
+  <rect x="84" y="162" width="42" height="18" rx="3" fill="#D4DAE3"/>
+  <rect x="130" y="162" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="156" y="162" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="182" y="162" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="208" y="162" width="22" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="234" y="162" width="80" height="18" rx="3" fill="#D4DAE3"/>
+  <!-- Spacebar Row -->
+  <rect x="84" y="186" width="28" height="18" rx="3" fill="#D4DAE3"/>
+  <rect x="116" y="186" width="28" height="18" rx="3" fill="#D4DAE3"/>
+  <rect x="148" y="186" width="102" height="18" rx="3" fill="#F2F4F7"/>
+  <rect x="254" y="186" width="28" height="18" rx="3" fill="#D4DAE3"/>
+  <rect x="286" y="186" width="28" height="18" rx="3" fill="#002FA7"/>
+</svg>
