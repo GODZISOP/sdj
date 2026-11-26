@@ -1,0 +1,112 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Phone, Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react';
+import { useSite } from '../store/siteStore';
+
+export const Footer: React.FC = () => {
+  const { settings } = useSite();
+
+  return (
+    <footer className="bg-[#111111] text-white pt-16 pb-10 border-t border-black">
+      <div className="max-w-[1360px] mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-14 border-b border-white/10">
+          {/* Brand Column */}
+          <div className="md:col-span-4 space-y-4">
+            <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[22px]">
+              <span className="block">Forme</span>
+              <span className="block">
+                Studio<sup className="text-[11px] font-semibold ml-0.5">®</sup>
+              </span>
+            </div>
+            <p className="text-sm text-neutral-400 max-w-sm leading-relaxed">
+              {settings.footerNote}
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div className="md:col-span-2 space-y-3">
+            <p className="eyebrow-mono text-neutral-500">Explore</p>
+            <ul className="space-y-2.5 text-sm text-neutral-300">
+              <li>
+                <Link to="/#equipment" className="hover:text-white transition-colors">
+                  Equipment
+                </Link>
+              </li>
+              <li>
+                <Link to="/#programs" className="hover:text-white transition-colors">
+                  Movement Programs
+                </Link>
+              </li>
+              <li>
+                <Link to="/#compare" className="hover:text-white transition-colors">
+                  Compare Essentials
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-white transition-colors">
+                  Contact Studio
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Direct Contact Details (Editable via Admin Panel) */}
+          <div className="md:col-span-4 space-y-3">
+            <p className="eyebrow-mono text-neutral-500">Direct Contact</p>
+            <ul className="space-y-3 text-sm text-neutral-300">
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-[#4C78FF] flex-shrink-0" />
+                <a
+                  href={`tel:${settings.phone.replace(/\s+/g, '')}`}
+                  className="hover:text-white transition-colors font-medium"
+                >
+                  {settings.phone}
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-[#4C78FF] flex-shrink-0" />
+                <a
+                  href={`mailto:${settings.email}`}
+                  className="hover:text-white transition-colors font-medium"
+                >
+                  {settings.email}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-[#4C78FF] flex-shrink-0 mt-0.5" />
+                <span className="text-neutral-400">{settings.address}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Clock className="w-4 h-4 text-[#4C78FF] flex-shrink-0" />
+                <span className="text-neutral-400">{settings.hours}</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Admin Quick Access */}
+          <div className="md:col-span-2 space-y-3">
+            <p className="eyebrow-mono text-neutral-500">Management</p>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-[#002FA7] hover:bg-[#0038CC] px-4 py-2.5 transition-colors"
+            >
+              Admin Panel
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              Manage products, contact inquiries, orders & footer details.
+            </p>
+          </div>
+        </div>
+
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
+          <p>© {new Date().getFullYear()} {settings.brandName} All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span>{settings.email}</span>
+            <span>{settings.phone}</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
