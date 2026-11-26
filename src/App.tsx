@@ -7,6 +7,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { HomePage } from './pages/HomePage';
 import { ContactPage } from './pages/ContactPage';
 import { AdminPage } from './pages/AdminPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
           <div className="flex-1">
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/admin" element={<AdminPage />} />
             </Routes>

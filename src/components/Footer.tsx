@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowUpRight, UserCheck } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 
 export const Footer: React.FC = () => {
@@ -60,6 +60,10 @@ export const Footer: React.FC = () => {
             <p className="eyebrow-mono text-neutral-500">Direct Contact</p>
             <ul className="space-y-3 text-sm text-neutral-300">
               <li className="flex items-center gap-3">
+                <UserCheck className="w-4 h-4 text-[#4C78FF] flex-shrink-0" />
+                <span className="font-semibold text-white">{settings.ownerName}</span>
+              </li>
+              <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#4C78FF] flex-shrink-0" />
                 <a
                   href={`tel:${settings.phone.replace(/\s+/g, '')}`}
@@ -105,7 +109,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
-          <p>© {new Date().getFullYear()} {settings.companyLegalName}. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {settings.companyLegalName} · {settings.ownerName}. All rights reserved.
+          </p>
           <div className="flex items-center gap-6">
             <span>{settings.email}</span>
             <span>{settings.phone}</span>

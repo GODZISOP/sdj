@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Infinity as InfinityIcon, Leaf, Layers } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { CategoryKey } from '../types';
+import { Reveal } from '../components/Reveal';
 
 const CATEGORIES: { key: CategoryKey; label: string; image: string }[] = [
   { key: 'Strength', label: 'Strength', image: '/images/cat-dumbbell.jpg' },
@@ -30,7 +32,6 @@ export const HomePage: React.FC = () => {
       {/* 1. HERO SECTION */}
       <section className="max-w-[1360px] mx-auto px-6 md:px-10 pt-10 pb-16 md:pt-14 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Hero Typography */}
           <div className="lg:col-span-6 space-y-6 animate-fade-up">
             <p className="eyebrow-mono text-neutral-500">
               {settings.brandName.toUpperCase()} &nbsp;/&nbsp; DESIGN &nbsp;/&nbsp; MOVEMENT &nbsp;/&nbsp; LONGEVITY
@@ -55,7 +56,6 @@ export const HomePage: React.FC = () => {
               </a>
             </div>
 
-            {/* 3 Pillars */}
             <div className="pt-8 grid grid-cols-3 gap-6 max-w-md border-t border-black/[0.06]">
               <div className="space-y-2">
                 <InfinityIcon className="w-5 h-5 text-neutral-700" strokeWidth={1.5} />
@@ -84,7 +84,6 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Hero Visual */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end animate-fade-up-delay-1">
             <div className="relative w-full max-w-[580px] aspect-[4/3] overflow-hidden bg-white animate-float-slow">
               <img
@@ -98,278 +97,310 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 2. PHILOSOPHY SPLIT SECTION */}
-      <section id="philosophy" className="border-t border-b border-black/[0.06]">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-6 relative bg-[#EAECEF] min-h-[360px] lg:min-h-[440px] overflow-hidden">
-            <img
-              src="/images/philosophy-stretch.jpg"
-              alt="Athlete stretching in minimalist sunlit studio"
-              className="w-full h-full object-cover object-center hover:scale-[1.02] transition-transform duration-700"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[14%] top-1/2 -translate-y-1/2 w-[260px] h-[260px] rounded-full border border-[#002FA7]/45"
-            />
+      <Reveal>
+        <section id="philosophy" className="border-t border-b border-black/[0.06]">
+          <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
+            <div className="lg:col-span-6 relative bg-[#EAECEF] min-h-[360px] lg:min-h-[440px] overflow-hidden">
+              <img
+                src="/images/philosophy-stretch.jpg"
+                alt="Athlete stretching in minimalist sunlit studio"
+                className="w-full h-full object-cover object-center hover:scale-[1.03] transition-transform duration-700"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute right-[14%] top-1/2 -translate-y-1/2 w-[260px] h-[260px] rounded-full border border-[#002FA7]/45"
+              />
+            </div>
+
+            <div className="lg:col-span-6 grid grid-cols-12">
+              <div className="col-span-12 sm:col-span-9 px-8 md:px-14 py-14 flex flex-col justify-center space-y-5">
+                <p className="eyebrow-mono text-neutral-500">THE {settings.brandName.toUpperCase()} PHILOSOPHY</p>
+                <h2 className="text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]">
+                  Move
+                  <br />
+                  Stronger.
+                  <br />
+                  <span className="text-[#002FA7]">Live Longer.</span>
+                </h2>
+                <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
+                  Thoughtfully engineered equipment that supports strength, mobility, and everyday well-being.
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="#programs"
+                    className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#002FA7] hover:gap-3 transition-all"
+                  >
+                    Our Approach
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="hidden sm:block sm:col-span-3 bg-[#002FA7] relative overflow-hidden">
+                <img
+                  src="/images/compare-kettlebell.jpg"
+                  alt="Cobalt finish detail"
+                  className="w-full h-full object-cover opacity-85 mix-blend-multiply"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* 3. 5-COLUMN CATEGORY STRIP + INTERACTIVE EQUIPMENT GRID */}
+      <Reveal>
+        <section id="equipment" className="max-w-[1360px] mx-auto px-6 md:px-10 py-14">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {CATEGORIES.map((cat) => {
+              const isSelected = activeCategory === cat.key;
+              return (
+                <button
+                  key={cat.key}
+                  type="button"
+                  onClick={() => setActiveCategory(isSelected ? 'All' : cat.key)}
+                  className={`group text-left transition-all ${
+                    isSelected ? 'ring-2 ring-[#002FA7]' : ''
+                  }`}
+                >
+                  <div className="aspect-[4/3] bg-[#F5F6F8] flex items-center justify-center p-5 overflow-hidden">
+                    <img
+                      src={cat.image}
+                      alt={cat.label}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="pt-3 pb-1 px-1 flex items-center justify-between border-b border-black/[0.08]">
+                    <span className="text-[13px] font-semibold text-[#111111]">{cat.label}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#002FA7] group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="lg:col-span-6 grid grid-cols-12">
-            <div className="col-span-12 sm:col-span-9 px-8 md:px-14 py-14 flex flex-col justify-center space-y-5">
-              <p className="eyebrow-mono text-neutral-500">THE {settings.brandName.toUpperCase()} PHILOSOPHY</p>
-              <h2 className="text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]">
-                Move
+          <div className="mt-10 pt-8 border-t border-black/[0.06]">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <p className="eyebrow-mono text-neutral-500">COLLECTION</p>
+                <h3 className="text-xl font-bold tracking-tight">
+                  {activeCategory === 'All' ? 'All Studio Equipment' : `${activeCategory} Gear`}
+                </h3>
+              </div>
+              {activeCategory !== 'All' && (
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory('All')}
+                  className="text-xs font-semibold text-[#002FA7] hover:underline"
+                >
+                  Show All ({products.length})
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredEquipment.map((item, idx) => (
+                <Reveal key={item.id} delayMs={idx * 70}>
+                  <div className="border border-black/[0.08] bg-white flex flex-col justify-between p-5 h-full hover:border-[#002FA7]/40 hover:-translate-y-1 transition-all duration-300">
+                    <div>
+                      <Link
+                        to={`/product/${item.id}`}
+                        className="block aspect-[16/10] bg-[#F5F6F8] mb-4 flex items-center justify-center p-4 overflow-hidden"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                        />
+                      </Link>
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="eyebrow-mono text-[#002FA7]">{item.category}</p>
+                          <Link
+                            to={`/product/${item.id}`}
+                            className="text-base font-bold mt-1 block hover:text-[#002FA7] transition-colors"
+                          >
+                            {item.name}
+                          </Link>
+                        </div>
+                        <span className="text-base font-bold">${item.price}</span>
+                      </div>
+                      <p className="text-xs text-neutral-600 mt-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="mt-5 pt-4 border-t border-black/[0.06] flex items-center justify-between gap-2">
+                      <Link
+                        to={`/product/${item.id}`}
+                        className="text-xs font-semibold text-[#111111] hover:text-[#002FA7] transition-colors"
+                      >
+                        View Details →
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => addToCart(item)}
+                        className="bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold px-4 py-2 transition-colors"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* 4. MOVEMENT IN FOCUS — TRAIN WITH INTENTION */}
+      <Reveal>
+        <section id="programs" className="border-t border-black/[0.06] py-16">
+          <div className="max-w-[1360px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-4 space-y-4">
+              <p className="eyebrow-mono text-neutral-500">MOVEMENT IN FOCUS</p>
+              <h2 className="text-[36px] md:text-[42px] font-extrabold leading-[1.04] swiss-tracking">
+                Train
                 <br />
-                Stronger.
-                <br />
-                <span className="text-[#002FA7]">Live Longer.</span>
+                with Intention.
               </h2>
-              <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
-                Thoughtfully engineered equipment that supports strength, mobility, and everyday well-being.
+              <p className="text-[14px] text-neutral-600 max-w-xs leading-relaxed">
+                Expert-guided movements to help you get the most from your gear.
               </p>
               <div className="pt-2">
                 <a
-                  href="#programs"
-                  className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#002FA7] hover:gap-3 transition-all"
+                  href="#compare"
+                  className="inline-flex items-center gap-2.5 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-6 py-3 transition-colors"
                 >
-                  Our Approach
+                  Browse Programs
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
 
-            <div className="hidden sm:block sm:col-span-3 bg-[#002FA7] relative overflow-hidden">
-              <img
-                src="/images/compare-kettlebell.jpg"
-                alt="Cobalt finish detail"
-                className="w-full h-full object-cover opacity-85 mix-blend-multiply"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. 5-COLUMN CATEGORY STRIP + INTERACTIVE EQUIPMENT GRID */}
-      <section id="equipment" className="max-w-[1360px] mx-auto px-6 md:px-10 py-14">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {CATEGORIES.map((cat) => {
-            const isSelected = activeCategory === cat.key;
-            return (
-              <button
-                key={cat.key}
-                type="button"
-                onClick={() => setActiveCategory(isSelected ? 'All' : cat.key)}
-                className={`group text-left transition-all ${
-                  isSelected ? 'ring-2 ring-[#002FA7]' : ''
-                }`}
-              >
-                <div className="aspect-[4/3] bg-[#F5F6F8] flex items-center justify-center p-5 overflow-hidden">
-                  <img
-                    src={cat.image}
-                    alt={cat.label}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="pt-3 pb-1 px-1 flex items-center justify-between border-b border-black/[0.08]">
-                  <span className="text-[13px] font-semibold text-[#111111]">{cat.label}</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#002FA7] group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-10 pt-8 border-t border-black/[0.06]">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div>
-              <p className="eyebrow-mono text-neutral-500">COLLECTION</p>
-              <h3 className="text-xl font-bold tracking-tight">
-                {activeCategory === 'All' ? 'All Studio Equipment' : `${activeCategory} Gear`}
-              </h3>
-            </div>
-            {activeCategory !== 'All' && (
-              <button
-                type="button"
-                onClick={() => setActiveCategory('All')}
-                className="text-xs font-semibold text-[#002FA7] hover:underline"
-              >
-                Show All ({products.length})
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEquipment.map((item) => (
-              <div
-                key={item.id}
-                className="border border-black/[0.08] bg-white flex flex-col justify-between p-5 hover:border-[#002FA7]/40 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                <div>
-                  <div className="aspect-[16/10] bg-[#F5F6F8] mb-4 flex items-center justify-center p-4 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="eyebrow-mono text-[#002FA7]">{item.category}</p>
-                      <h4 className="text-base font-bold mt-1">{item.name}</h4>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {MOVEMENTS.map((step, idx) => (
+                <Reveal key={step.num} delayMs={idx * 100}>
+                  <div className="group">
+                    <div className="aspect-[3/4] bg-white border border-black/[0.06] flex items-center justify-center p-4 overflow-hidden relative">
+                      <img
+                        src={step.image}
+                        alt={`${step.num} ${step.title}`}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
-                    <span className="text-base font-bold">${item.price}</span>
+                    <div className="mt-3">
+                      <span className="block text-[14px] font-bold text-[#002FA7] font-mono">
+                        {step.num}
+                      </span>
+                      <span className="block text-[15px] font-bold text-[#111111]">{step.title}</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-neutral-600 mt-2 leading-relaxed">{item.description}</p>
-                </div>
-                <div className="mt-5 pt-4 border-t border-black/[0.06] flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-neutral-500">{item.weightRange}</span>
-                  <button
-                    type="button"
-                    onClick={() => addToCart(item)}
-                    className="bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold px-4 py-2 transition-colors"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. MOVEMENT IN FOCUS — TRAIN WITH INTENTION */}
-      <section id="programs" className="border-t border-black/[0.06] py-16">
-        <div className="max-w-[1360px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-4 space-y-4">
-            <p className="eyebrow-mono text-neutral-500">MOVEMENT IN FOCUS</p>
-            <h2 className="text-[36px] md:text-[42px] font-extrabold leading-[1.04] swiss-tracking">
-              Train
-              <br />
-              with Intention.
-            </h2>
-            <p className="text-[14px] text-neutral-600 max-w-xs leading-relaxed">
-              Expert-guided movements to help you get the most from your gear.
-            </p>
-            <div className="pt-2">
-              <a
-                href="#compare"
-                className="inline-flex items-center gap-2.5 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-6 py-3 transition-colors"
-              >
-                Browse Programs
-                <ArrowRight className="w-4 h-4" />
-              </a>
+                </Reveal>
+              ))}
             </div>
           </div>
-
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {MOVEMENTS.map((step) => (
-              <div key={step.num} className="group">
-                <div className="aspect-[3/4] bg-white border border-black/[0.06] flex items-center justify-center p-4 overflow-hidden relative">
-                  <img
-                    src={step.image}
-                    alt={`${step.num} ${step.title}`}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="mt-3">
-                  <span className="block text-[14px] font-bold text-[#002FA7] font-mono">
-                    {step.num}
-                  </span>
-                  <span className="block text-[15px] font-bold text-[#111111]">{step.title}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* 5. COMPARE ESSENTIALS */}
-      <section id="compare" className="border-t border-black/[0.06] bg-white">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-4 bg-[#F5F6F8] min-h-[280px] overflow-hidden flex items-end">
-            <img
-              src="/images/compare-kettlebell.jpg"
-              alt="Cobalt cast iron kettlebell macro"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="lg:col-span-8 px-6 md:px-12 py-14">
-            <div className="mb-8">
-              <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>
-              <h2 className="text-[32px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1">
-                Compare
-                <br />
-                Our Essentials
-              </h2>
+      <Reveal>
+        <section id="compare" className="border-t border-black/[0.06] bg-white">
+          <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
+            <div className="lg:col-span-4 bg-[#F5F6F8] min-h-[280px] overflow-hidden flex items-end">
+              <img
+                src="/images/compare-kettlebell.jpg"
+                alt="Cobalt cast iron kettlebell macro"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              />
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[580px] text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-black/10">
-                    <th className="py-4 pr-4 w-1/4" />
-                    {compareProducts.map((p) => (
-                      <th key={p.id} className="py-4 px-3 text-center align-bottom">
-                        <div className="h-16 flex items-center justify-center mb-2">
-                          <img src={p.image} alt={p.name} className="max-h-14 object-contain" />
-                        </div>
-                        <span className="text-[12px] font-bold text-[#111111] block">{p.name}</span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="text-[12px]">
-                  <tr className="bg-[#F5F6F8]">
-                    <td className="py-3 px-4 font-semibold text-neutral-700">Training Focus</td>
-                    {compareProducts.map((p) => (
-                      <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
-                        {p.trainingFocus}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-neutral-700">Weight Range</td>
-                    {compareProducts.map((p) => (
-                      <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
-                        {p.weightRange}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr className="bg-[#F5F6F8]">
-                    <td className="py-3 px-4 font-semibold text-neutral-700">Material</td>
-                    {compareProducts.map((p) => (
-                      <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
-                        {p.material}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-neutral-700">Best For</td>
-                    {compareProducts.map((p) => (
-                      <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
-                        {p.bestFor}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="pt-5 px-4" />
-                    {compareProducts.map((p) => (
-                      <td key={p.id} className="pt-5 px-3 text-center">
-                        <button
-                          type="button"
-                          onClick={() => addToCart(p)}
-                          className="w-full bg-[#002FA7] hover:bg-[#00227A] text-white text-[11px] font-semibold py-2.5 px-4 transition-colors"
-                        >
-                          Add to Cart
-                        </button>
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+            <div className="lg:col-span-8 px-6 md:px-12 py-14">
+              <div className="mb-8">
+                <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>
+                <h2 className="text-[32px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1">
+                  Compare
+                  <br />
+                  Our Essentials
+                </h2>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[580px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-black/10">
+                      <th className="py-4 pr-4 w-1/4" />
+                      {compareProducts.map((p) => (
+                        <th key={p.id} className="py-4 px-3 text-center align-bottom">
+                          <Link to={`/product/${p.id}`} className="group block">
+                            <div className="h-16 flex items-center justify-center mb-2">
+                              <img
+                                src={p.image}
+                                alt={p.name}
+                                className="max-h-14 object-contain group-hover:scale-105 transition-transform"
+                              />
+                            </div>
+                            <span className="text-[12px] font-bold text-[#111111] group-hover:text-[#002FA7] block">
+                              {p.name}
+                            </span>
+                          </Link>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="text-[12px]">
+                    <tr className="bg-[#F5F6F8]">
+                      <td className="py-3 px-4 font-semibold text-neutral-700">Training Focus</td>
+                      {compareProducts.map((p) => (
+                        <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
+                          {p.trainingFocus}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-semibold text-neutral-700">Weight Range</td>
+                      {compareProducts.map((p) => (
+                        <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
+                          {p.weightRange}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className="bg-[#F5F6F8]">
+                      <td className="py-3 px-4 font-semibold text-neutral-700">Material</td>
+                      {compareProducts.map((p) => (
+                        <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
+                          {p.material}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-semibold text-neutral-700">Best For</td>
+                      {compareProducts.map((p) => (
+                        <td key={p.id} className="py-3 px-3 text-center text-neutral-600">
+                          {p.bestFor}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="pt-5 px-4" />
+                      {compareProducts.map((p) => (
+                        <td key={p.id} className="pt-5 px-3 text-center">
+                          <button
+                            type="button"
+                            onClick={() => addToCart(p)}
+                            className="w-full bg-[#002FA7] hover:bg-[#00227A] text-white text-[11px] font-semibold py-2.5 px-4 transition-colors"
+                          >
+                            Add to Cart
+                          </button>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
     </main>
   );
 };

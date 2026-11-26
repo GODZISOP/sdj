@@ -180,7 +180,7 @@ export const AdminPage: React.FC = () => {
             )}
 
             <form onSubmit={handleSaveSettings} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div>
                   <label className="block text-xs font-semibold mb-1.5">Brand Name</label>
                   <input
@@ -196,6 +196,14 @@ export const AdminPage: React.FC = () => {
                     onChange={(e) =>
                       setFormSettings({ ...formSettings, companyLegalName: e.target.value })
                     }
+                    className="w-full border border-black/15 px-3.5 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5">Owner / Contact Name</label>
+                  <input
+                    value={formSettings.ownerName}
+                    onChange={(e) => setFormSettings({ ...formSettings, ownerName: e.target.value })}
                     className="w-full border border-black/15 px-3.5 py-2.5 text-sm outline-none focus:border-[#002FA7]"
                   />
                 </div>

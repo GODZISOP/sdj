@@ -9,8 +9,10 @@ import {
   MessageCircle,
   ChevronDown,
   Building2,
+  UserCheck,
 } from 'lucide-react';
 import { useSite } from '../store/siteStore';
+import { Reveal } from '../components/Reveal';
 
 export const ContactPage: React.FC = () => {
   const { settings, submitInquiry, faqs } = useSite();
@@ -47,8 +49,9 @@ export const ContactPage: React.FC = () => {
             <span className="text-[#002FA7]">Studio Outfitting.</span>
           </h1>
           <p className="text-sm text-neutral-600 mt-4 leading-relaxed">
-            Reach <span className="font-semibold text-[#111111]">{settings.companyLegalName}</span> for
-            private gym commissions, commercial orders, or product guidance.
+            Reach <span className="font-semibold text-[#111111]">{settings.ownerName}</span> and our{' '}
+            <span className="font-semibold text-[#111111]">{settings.companyLegalName}</span> team
+            for private gym commissions, commercial orders, or product guidance.
           </p>
         </div>
 
@@ -57,6 +60,16 @@ export const ContactPage: React.FC = () => {
           <div className="lg:col-span-5 space-y-5 animate-fade-up-delay-1">
             <div className="p-7 bg-[#F5F6F8] border border-black/[0.06] space-y-5">
               <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-[#002FA7] text-white flex items-center justify-center flex-shrink-0">
+                  <UserCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="eyebrow-mono text-neutral-500">Contact Person</p>
+                  <p className="text-lg font-bold text-[#111111] mt-0.5">{settings.ownerName}</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 pt-4 border-t border-black/[0.06]">
                 <div className="w-10 h-10 bg-[#111111] text-white flex items-center justify-center flex-shrink-0">
                   <Building2 className="w-4 h-4" />
                 </div>
@@ -142,8 +155,10 @@ export const ContactPage: React.FC = () => {
                   <CheckCircle2 className="w-12 h-12 text-[#002FA7] mx-auto" />
                   <h2 className="text-2xl font-bold">Message Sent</h2>
                   <p className="text-sm text-neutral-600 max-w-md mx-auto">
-                    Thank you. Your inquiry has been recorded in the Admin Panel inbox and our team at{' '}
-                    <span className="font-semibold text-black">{settings.email}</span> will respond shortly.
+                    Thank you. Your inquiry has been recorded in the Admin Panel inbox and{' '}
+                    <span className="font-semibold text-black">{settings.ownerName}</span> (
+                    <span className="font-semibold text-black">{settings.email}</span>) will respond
+                    shortly.
                   </p>
                   <button
                     type="button"
@@ -230,62 +245,64 @@ export const ContactPage: React.FC = () => {
         </div>
 
         {/* ANIMATED FAQS SECTION */}
-        <section id="faqs" className="mt-20 pt-16 border-t border-black/[0.08]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-4 space-y-3">
-              <p className="eyebrow-mono text-[#002FA7]">FREQUENTLY ASKED QUESTIONS</p>
-              <h2 className="text-[34px] font-extrabold leading-[1.05] swiss-tracking">
-                Everything You
-                <br />
-                Need to Know.
-              </h2>
-              <p className="text-sm text-neutral-600 leading-relaxed">
-                Answers about {settings.brandName} shipping, custom studio outfitting, warranties, and support.
-              </p>
-            </div>
+        <Reveal className="mt-20 pt-16 border-t border-black/[0.08]">
+          <section id="faqs">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              <div className="lg:col-span-4 space-y-3">
+                <p className="eyebrow-mono text-[#002FA7]">FREQUENTLY ASKED QUESTIONS</p>
+                <h2 className="text-[34px] font-extrabold leading-[1.05] swiss-tracking">
+                  Everything You
+                  <br />
+                  Need to Know.
+                </h2>
+                <p className="text-sm text-neutral-600 leading-relaxed">
+                  Answers about {settings.brandName} shipping, custom studio outfitting, warranties, and support.
+                </p>
+              </div>
 
-            <div className="lg:col-span-8 space-y-3">
-              {faqs.map((faq) => {
-                const isOpen = openFaqId === faq.id;
-                return (
-                  <div
-                    key={faq.id}
-                    className={`border transition-colors duration-300 ${
-                      isOpen ? 'border-[#002FA7] bg-[#F5F6F8]/60' : 'border-black/10 bg-white'
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaqId(isOpen ? null : faq.id)}
-                      className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left"
-                    >
-                      <div>
-                        <span className="eyebrow-mono text-[#002FA7] block mb-1">{faq.category}</span>
-                        <span className="text-[15px] font-bold text-[#111111]">{faq.question}</span>
-                      </div>
-                      <ChevronDown
-                        className={`w-5 h-5 text-[#002FA7] flex-shrink-0 transition-transform duration-300 ${
-                          isOpen ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </button>
+              <div className="lg:col-span-8 space-y-3">
+                {faqs.map((faq) => {
+                  const isOpen = openFaqId === faq.id;
+                  return (
                     <div
-                      className={`grid transition-all duration-300 ease-out ${
-                        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                      key={faq.id}
+                      className={`border transition-colors duration-300 ${
+                        isOpen ? 'border-[#002FA7] bg-[#F5F6F8]/60' : 'border-black/10 bg-white'
                       }`}
                     >
-                      <div className="overflow-hidden">
-                        <p className="px-6 pb-5 text-sm text-neutral-600 leading-relaxed">
-                          {faq.answer}
-                        </p>
+                      <button
+                        type="button"
+                        onClick={() => setOpenFaqId(isOpen ? null : faq.id)}
+                        className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left"
+                      >
+                        <div>
+                          <span className="eyebrow-mono text-[#002FA7] block mb-1">{faq.category}</span>
+                          <span className="text-[15px] font-bold text-[#111111]">{faq.question}</span>
+                        </div>
+                        <ChevronDown
+                          className={`w-5 h-5 text-[#002FA7] flex-shrink-0 transition-transform duration-300 ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <div
+                        className={`grid transition-all duration-300 ease-out ${
+                          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                        }`}
+                      >
+                        <div className="overflow-hidden">
+                          <p className="px-6 pb-5 text-sm text-neutral-600 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
       </div>
     </main>
   );
