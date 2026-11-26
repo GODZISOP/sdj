@@ -1,23 +1,57 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CartItem, ContactInquiry, OrderRecord, Product, SiteSettings } from '../types';
+import { CartItem, ContactInquiry, FaqItem, OrderRecord, Product, SiteSettings } from '../types';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'forme_products_v1',
-  SETTINGS: 'forme_settings_v1',
-  INQUIRIES: 'forme_inquiries_v1',
-  ORDERS: 'forme_orders_v1',
-  CART: 'forme_cart_v1',
+  PRODUCTS: 'sjdurallc_products_v1',
+  SETTINGS: 'sjdurallc_settings_v1',
+  INQUIRIES: 'sjdurallc_inquiries_v1',
+  ORDERS: 'sjdurallc_orders_v1',
+  CART: 'sjdurallc_cart_v1',
+  FAQS: 'sjdurallc_faqs_v1',
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  brandName: 'Forme Studio®',
+  brandName: 'Sjdurallc',
+  companyLegalName: 'Sjdurallc Fitness & Studio Equipment',
   tagline: 'Sculptural, performance-driven gear for a stronger, more balanced you.',
   phone: '+966 53 097 8783',
+  whatsapp: '+966 53 097 8783',
   email: 'info@sjdurallc.com',
   address: 'Riyadh Design District, Studio 04, Kingdom of Saudi Arabia',
   hours: 'Sun – Thu: 09:00 – 19:00 AST',
-  footerNote: 'Precision-machined studio equipment engineered for longevity, balance, and architectural calm.',
+  footerNote: 'Sjdurallc — Precision-machined studio equipment engineered for longevity, balance, and architectural calm.',
 };
+
+export const DEFAULT_FAQS: FaqItem[] = [
+  {
+    id: 'faq-1',
+    category: 'Orders & Delivery',
+    question: 'Do you deliver across Saudi Arabia and GCC?',
+    answer:
+      'Yes. Sjdurallc ships studio equipment across Riyadh, Jeddah, Dammam, and all GCC countries with white-glove studio installation available for commercial orders.',
+  },
+  {
+    id: 'faq-2',
+    category: 'Commercial Studios',
+    question: 'Can we request custom weights or studio outfitting?',
+    answer:
+      'Absolutely. Contact our team at info@sjdurallc.com or +966 53 097 8783 for tailored commercial gym packages, custom laser-engraved branding, and volume pricing.',
+  },
+  {
+    id: 'faq-3',
+    category: 'Materials & Warranty',
+    question: 'What warranty covers Sjdurallc machined steel and cast iron gear?',
+    answer:
+      'All Vector Dumbbells and Core Kettlebells carry a 5-year structural warranty against manufacturing defects. Beechwood Flow Rings and mats include a 2-year studio warranty.',
+  },
+  {
+    id: 'faq-4',
+    category: 'Support',
+    question: 'How quickly does Sjdurallc respond to inquiries?',
+    answer:
+      'Our specialists respond to all email and Contact page inquiries within 1 business day (Sun–Thu, 09:00–19:00 AST).',
+  },
+];
 
 export const DEFAULT_PRODUCTS: Product[] = [
   {
@@ -105,6 +139,7 @@ interface SiteContextValue {
   settings: SiteSettings;
   inquiries: ContactInquiry[];
   orders: OrderRecord[];
+  faqs: FaqItem[];
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
@@ -121,6 +156,8 @@ interface SiteContextValue {
   updateInquiryStatus: (id: string, status: ContactInquiry['status']) => void;
   deleteInquiry: (id: string) => void;
   updateOrderStatus: (id: string, status: OrderRecord['status']) => void;
+  addFaq: (faq: Omit<FaqItem, 'id'>) => void;
+  deleteFaq: (id: string) => void;
 }
 
 const SiteContext = createContext<SiteContextValue | null>(null);
@@ -147,6 +184,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [orders, setOrders] = useState<OrderRecord[]>(() =>
     loadFromStorage(STORAGE_KEYS.ORDERS, [])
   );
+  const [faqs, setFaqs] = useState<FaqItem[]>(() =>
+    loadFromStorage(STORAGE_KEYS.FAQS, DEFAULT_FAQS)
+  );
   const [cart, setCart] = useState<CartItem[]>(() =>
     loadFromStorage(STORAGE_KEYS.CART, [])
   );
@@ -167,6 +207,10 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
   }, [orders]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.FAQS, JSON.stringify(faqs));
+  }, [faqs]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify(cart));
@@ -261,6 +305,14 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
   };
 
+  const addFaq = (faq: Omit<FaqItem, 'id'>) => {
+    setFaqs((prev) => [...prev, { ...faq, id: `faq-${Date.now()}` }]);
+  };
+
+  const deleteFaq = (id: string) => {
+    setFaqs((prev) => prev.filter((f) => f.id !== id));
+  };
+
   return (
     <SiteContext.Provider
       value={{
@@ -268,6 +320,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         settings,
         inquiries,
         orders,
+        faqs,
         cart,
         isCartOpen,
         setIsCartOpen,
@@ -284,6 +337,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateInquiryStatus,
         deleteInquiry,
         updateOrderStatus,
+        addFaq,
+        deleteFaq,
       }}
     >
       {children}

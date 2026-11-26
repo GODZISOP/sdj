@@ -13,9 +13,9 @@ export const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="md:col-span-4 space-y-4">
             <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[22px]">
-              <span className="block">Forme</span>
-              <span className="block">
-                Studio<sup className="text-[11px] font-semibold ml-0.5">®</sup>
+              <span className="block">{settings.brandName}</span>
+              <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#4C78FF] mt-1">
+                Studio®
               </span>
             </div>
             <p className="text-sm text-neutral-400 max-w-sm leading-relaxed">
@@ -43,8 +43,13 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/contact#faqs" className="hover:text-white transition-colors">
+                  FAQs
+                </Link>
+              </li>
+              <li>
                 <Link to="/contact" className="hover:text-white transition-colors">
-                  Contact Studio
+                  Contact {settings.brandName}
                 </Link>
               </li>
             </ul>
@@ -94,13 +99,13 @@ export const Footer: React.FC = () => {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
             <p className="text-xs text-neutral-500 leading-relaxed">
-              Manage products, contact inquiries, orders & footer details.
+              Manage products, FAQs, contact inquiries, orders & footer details.
             </p>
           </div>
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
-          <p>© {new Date().getFullYear()} {settings.brandName} All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {settings.companyLegalName}. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span>{settings.email}</span>
             <span>{settings.phone}</span>

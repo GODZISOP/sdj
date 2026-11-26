@@ -18,7 +18,7 @@ const MOVEMENTS = [
 ];
 
 export const HomePage: React.FC = () => {
-  const { products, addToCart } = useSite();
+  const { products, addToCart, settings } = useSite();
   const [activeCategory, setActiveCategory] = useState<CategoryKey | 'All'>('All');
 
   const compareProducts = products.filter((p) => p.inCompare).slice(0, 3);
@@ -31,9 +31,9 @@ export const HomePage: React.FC = () => {
       <section className="max-w-[1360px] mx-auto px-6 md:px-10 pt-10 pb-16 md:pt-14 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Hero Typography */}
-          <div className="lg:col-span-6 space-y-6">
+          <div className="lg:col-span-6 space-y-6 animate-fade-up">
             <p className="eyebrow-mono text-neutral-500">
-              DESIGN &nbsp;/&nbsp; MOVEMENT &nbsp;/&nbsp; LONGEVITY
+              {settings.brandName.toUpperCase()} &nbsp;/&nbsp; DESIGN &nbsp;/&nbsp; MOVEMENT &nbsp;/&nbsp; LONGEVITY
             </p>
             <h1 className="text-[48px] sm:text-[62px] lg:text-[72px] font-extrabold leading-[0.96] swiss-tracking text-[#111111]">
               Fitness
@@ -43,12 +43,12 @@ export const HomePage: React.FC = () => {
               <span className="text-[#002FA7]">Reimagined.</span>
             </h1>
             <p className="text-[16px] text-neutral-600 max-w-md leading-relaxed">
-              Sculptural, performance-driven gear for a stronger, more balanced you.
+              {settings.tagline}
             </p>
             <div className="pt-1">
               <a
                 href="#equipment"
-                className="inline-flex items-center gap-3 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 transition-colors"
+                className="inline-flex items-center gap-3 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 transition-all hover:translate-x-0.5"
               >
                 Shop the Collection
                 <ArrowRight className="w-4 h-4" />
@@ -85,11 +85,11 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Right Hero Visual */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[580px] aspect-[4/3] overflow-hidden bg-white">
+          <div className="lg:col-span-6 flex justify-center lg:justify-end animate-fade-up-delay-1">
+            <div className="relative w-full max-w-[580px] aspect-[4/3] overflow-hidden bg-white animate-float-slow">
               <img
                 src="/images/hero-dumbbell.jpg"
-                alt="Forme Studio machined steel dumbbell on architectural stone block"
+                alt="Sjdurallc machined steel dumbbell on architectural stone block"
                 className="w-full h-full object-cover object-center"
               />
             </div>
@@ -100,12 +100,11 @@ export const HomePage: React.FC = () => {
       {/* 2. PHILOSOPHY SPLIT SECTION */}
       <section id="philosophy" className="border-t border-b border-black/[0.06]">
         <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
-          {/* Left Editorial Image with subtle cobalt ring */}
           <div className="lg:col-span-6 relative bg-[#EAECEF] min-h-[360px] lg:min-h-[440px] overflow-hidden">
             <img
               src="/images/philosophy-stretch.jpg"
               alt="Athlete stretching in minimalist sunlit studio"
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-center hover:scale-[1.02] transition-transform duration-700"
             />
             <div
               aria-hidden="true"
@@ -113,10 +112,9 @@ export const HomePage: React.FC = () => {
             />
           </div>
 
-          {/* Right Philosophy Copy + Cobalt Accent */}
           <div className="lg:col-span-6 grid grid-cols-12">
             <div className="col-span-12 sm:col-span-9 px-8 md:px-14 py-14 flex flex-col justify-center space-y-5">
-              <p className="eyebrow-mono text-neutral-500">THE FORME PHILOSOPHY</p>
+              <p className="eyebrow-mono text-neutral-500">THE {settings.brandName.toUpperCase()} PHILOSOPHY</p>
               <h2 className="text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]">
                 Move
                 <br />
@@ -138,7 +136,6 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Far-right cropped cobalt detail matching reference */}
             <div className="hidden sm:block sm:col-span-3 bg-[#002FA7] relative overflow-hidden">
               <img
                 src="/images/compare-kettlebell.jpg"
@@ -180,7 +177,6 @@ export const HomePage: React.FC = () => {
           })}
         </div>
 
-        {/* Interactive Collection Drawer/Grid when category filtered or browsing */}
         <div className="mt-10 pt-8 border-t border-black/[0.06]">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
@@ -204,11 +200,15 @@ export const HomePage: React.FC = () => {
             {filteredEquipment.map((item) => (
               <div
                 key={item.id}
-                className="border border-black/[0.08] bg-white flex flex-col justify-between p-5 hover:border-[#002FA7]/40 transition-colors"
+                className="border border-black/[0.08] bg-white flex flex-col justify-between p-5 hover:border-[#002FA7]/40 hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div>
-                  <div className="aspect-[16/10] bg-[#F5F6F8] mb-4 flex items-center justify-center p-4">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+                  <div className="aspect-[16/10] bg-[#F5F6F8] mb-4 flex items-center justify-center p-4 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -284,7 +284,6 @@ export const HomePage: React.FC = () => {
       {/* 5. COMPARE ESSENTIALS */}
       <section id="compare" className="border-t border-black/[0.06] bg-white">
         <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
-          {/* Left Macro Cobalt Kettlebell */}
           <div className="lg:col-span-4 bg-[#F5F6F8] min-h-[280px] overflow-hidden flex items-end">
             <img
               src="/images/compare-kettlebell.jpg"
@@ -293,7 +292,6 @@ export const HomePage: React.FC = () => {
             />
           </div>
 
-          {/* Right Comparison Matrix */}
           <div className="lg:col-span-8 px-6 md:px-12 py-14">
             <div className="mb-8">
               <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>

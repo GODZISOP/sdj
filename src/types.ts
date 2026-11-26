@@ -41,10 +41,19 @@ export interface OrderRecord {
   status: 'Pending' | 'Confirmed' | 'Shipped';
 }
 
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
 export interface SiteSettings {
   brandName: string;
+  companyLegalName: string;
   tagline: string;
   phone: string;
+  whatsapp: string;
   email: string;
   address: string;
   hours: string;

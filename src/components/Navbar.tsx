@@ -4,7 +4,7 @@ import { Search, User, ShoppingBag, X } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 
 export const Navbar: React.FC = () => {
-  const { cart, setIsCartOpen, products, addToCart } = useSite();
+  const { cart, setIsCartOpen, products, addToCart, settings } = useSite();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const location = useLocation();
@@ -34,11 +34,11 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-black/[0.06]">
       <div className="max-w-[1360px] mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
-        {/* Stacked Brand Wordmark matching reference */}
+        {/* Stacked Brand Wordmark */}
         <Link to="/" className="leading-[0.95] tracking-[-0.03em] font-bold text-[19px] text-[#111111]">
-          <span className="block">Forme</span>
-          <span className="block">
-            Studio<sup className="text-[10px] font-semibold ml-0.5">®</sup>
+          <span className="block">{settings.brandName}</span>
+          <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#002FA7] mt-0.5">
+            Studio®
           </span>
         </Link>
 
@@ -65,13 +65,12 @@ export const Navbar: React.FC = () => {
           >
             Compare
           </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection('philosophy')}
+          <Link
+            to="/contact#faqs"
             className="hover:text-[#002FA7] transition-colors"
           >
-            About
-          </button>
+            FAQs
+          </Link>
           <Link
             to="/contact"
             className={`hover:text-[#002FA7] transition-colors ${
@@ -118,7 +117,7 @@ export const Navbar: React.FC = () => {
 
       {/* Expandable Search Bar */}
       {searchOpen && (
-        <div className="border-t border-black/[0.06] bg-white px-6 md:px-10 py-4">
+        <div className="border-t border-black/[0.06] bg-white px-6 md:px-10 py-4 animate-fade-up">
           <div className="max-w-[1360px] mx-auto">
             <div className="flex items-center gap-3 border-b border-black/20 pb-2">
               <Search className="w-4 h-4 text-neutral-400" />

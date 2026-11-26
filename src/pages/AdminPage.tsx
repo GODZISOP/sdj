@@ -4,6 +4,7 @@ import {
   MessageSquare,
   Settings,
   ShoppingBag,
+  HelpCircle,
   Plus,
   Trash2,
   Check,
@@ -12,7 +13,7 @@ import {
 import { useSite } from '../store/siteStore';
 import { CategoryKey } from '../types';
 
-type TabKey = 'settings' | 'products' | 'inquiries' | 'orders';
+type TabKey = 'settings' | 'products' | 'faqs' | 'inquiries' | 'orders';
 
 export const AdminPage: React.FC = () => {
   const {
@@ -20,19 +21,21 @@ export const AdminPage: React.FC = () => {
     settings,
     inquiries,
     orders,
+    faqs,
     updateSettings,
     addProduct,
     deleteProduct,
     updateInquiryStatus,
     deleteInquiry,
     updateOrderStatus,
+    addFaq,
+    deleteFaq,
   } = useSite();
 
   const [tab, setTab] = useState<TabKey>('settings');
   const [formSettings, setFormSettings] = useState(settings);
   const [savedBanner, setSavedBanner] = useState(false);
 
-  // New Product state
   const [newProd, setNewProd] = useState({
     name: '',
     category: 'Strength' as CategoryKey,
@@ -44,6 +47,12 @@ export const AdminPage: React.FC = () => {
     bestFor: 'Full-body Training',
     description: '',
     inCompare: false,
+  });
+
+  const [newFaq, setNewFaq] = useState({
+    category: 'General',
+    question: '',
+    answer: '',
   });
 
   const handleSaveSettings = (e: React.FormEvent) => {
@@ -71,6 +80,13 @@ export const AdminPage: React.FC = () => {
     });
   };
 
+  const handleAddFaq = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newFaq.question.trim() || !newFaq.answer.trim()) return;
+    addFaq(newFaq);
+    setNewFaq({ category: 'General', question: '', answer: '' });
+  };
+
   return (
     <main className="bg-[#F5F6F8] min-h-[82vh] py-12">
       <div className="max-w-[1360px] mx-auto px-6 md:px-10">
@@ -79,7 +95,7 @@ export const AdminPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 text-[#002FA7] eyebrow-mono mb-1">
               <ShieldCheck className="w-4 h-4" />
-              ADMIN PANEL
+              {settings.brandName.toUpperCase()} ADMIN PANEL
             </div>
             <h1 className="text-3xl font-extrabold swiss-tracking">Studio Management Console</h1>
           </div>
@@ -111,6 +127,18 @@ export const AdminPage: React.FC = () => {
             </button>
             <button
               type="button"
+              onClick={() => setTab('faqs')}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold transition-colors ${
+                tab === 'faqs'
+                  ? 'bg-[#002FA7] text-white'
+                  : 'bg-white text-neutral-700 border border-black/10 hover:border-black/30'
+              }`}
+            >
+              <HelpCircle className="w-4 h-4" />
+              FAQs ({faqs.length})
+            </button>
+            <button
+              type="button"
               onClick={() => setTab('inquiries')}
               className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold transition-colors ${
                 tab === 'inquiries'
@@ -138,23 +166,44 @@ export const AdminPage: React.FC = () => {
 
         {/* TAB 1: CONTACT & FOOTER SETTINGS */}
         {tab === 'settings' && (
-          <div className="mt-8 bg-white border border-black/10 p-8 max-w-3xl">
-            <h2 className="text-lg font-bold mb-1">Contact Page & Footer Configuration</h2>
+          <div className="mt-8 bg-white border border-black/10 p-8 max-w-3xl animate-fade-up">
+            <h2 className="text-lg font-bold mb-1">Brand, Contact Page & Footer Configuration</h2>
             <p className="text-xs text-neutral-500 mb-6">
-              Changes saved here update the website Footer and Contact page immediately.
+              Changes saved here update the Header, Footer, and Contact page immediately.
             </p>
 
             {savedBanner && (
               <div className="mb-6 bg-[#002FA7]/10 border border-[#002FA7]/30 text-[#002FA7] px-4 py-3 text-xs font-semibold flex items-center gap-2">
                 <Check className="w-4 h-4" />
-                Settings saved and applied live to Footer & Contact Page.
+                Settings saved and applied live across Sjdurallc.
               </div>
             )}
 
             <form onSubmit={handleSaveSettings} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5">Phone Number (Footer & Contact)</label>
+                  <label className="block text-xs font-semibold mb-1.5">Brand Name</label>
+                  <input
+                    value={formSettings.brandName}
+                    onChange={(e) => setFormSettings({ ...formSettings, brandName: e.target.value })}
+                    className="w-full border border-black/15 px-3.5 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5">Legal Company Name</label>
+                  <input
+                    value={formSettings.companyLegalName}
+                    onChange={(e) =>
+                      setFormSettings({ ...formSettings, companyLegalName: e.target.value })
+                    }
+                    className="w-full border border-black/15 px-3.5 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5">Phone Number</label>
                   <input
                     value={formSettings.phone}
                     onChange={(e) => setFormSettings({ ...formSettings, phone: e.target.value })}
@@ -162,7 +211,15 @@ export const AdminPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5">Contact Email (Footer & Contact)</label>
+                  <label className="block text-xs font-semibold mb-1.5">WhatsApp Number</label>
+                  <input
+                    value={formSettings.whatsapp}
+                    onChange={(e) => setFormSettings({ ...formSettings, whatsapp: e.target.value })}
+                    className="w-full border border-black/15 px-3.5 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5">Contact Email</label>
                   <input
                     type="email"
                     value={formSettings.email}
@@ -212,7 +269,7 @@ export const AdminPage: React.FC = () => {
 
         {/* TAB 2: PRODUCTS MANAGER */}
         {tab === 'products' && (
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-up">
             <div className="lg:col-span-5 bg-white border border-black/10 p-6 h-fit">
               <h2 className="text-base font-bold mb-4 flex items-center gap-2">
                 <Plus className="w-4 h-4 text-[#002FA7]" />
@@ -327,9 +384,82 @@ export const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 3: CONTACT INQUIRIES INBOX */}
+        {/* TAB 3: FAQS MANAGER */}
+        {tab === 'faqs' && (
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-up">
+            <div className="lg:col-span-5 bg-white border border-black/10 p-6 h-fit">
+              <h2 className="text-base font-bold mb-4 flex items-center gap-2">
+                <Plus className="w-4 h-4 text-[#002FA7]" />
+                Add New FAQ
+              </h2>
+              <form onSubmit={handleAddFaq} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Category</label>
+                  <input
+                    value={newFaq.category}
+                    onChange={(e) => setNewFaq({ ...newFaq, category: e.target.value })}
+                    placeholder="Orders & Delivery"
+                    className="w-full border border-black/15 px-3 py-2 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Question *</label>
+                  <input
+                    required
+                    value={newFaq.question}
+                    onChange={(e) => setNewFaq({ ...newFaq, question: e.target.value })}
+                    placeholder="Enter question..."
+                    className="w-full border border-black/15 px-3 py-2 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Answer *</label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={newFaq.answer}
+                    onChange={(e) => setNewFaq({ ...newFaq, answer: e.target.value })}
+                    placeholder="Enter answer..."
+                    className="w-full border border-black/15 px-3 py-2 text-sm outline-none focus:border-[#002FA7]"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold py-2.5 transition-colors"
+                >
+                  Publish FAQ
+                </button>
+              </form>
+            </div>
+
+            <div className="lg:col-span-7 space-y-3">
+              {faqs.map((faq) => (
+                <div
+                  key={faq.id}
+                  className="bg-white border border-black/10 p-5 flex items-start justify-between gap-4"
+                >
+                  <div>
+                    <p className="eyebrow-mono text-[#002FA7]">{faq.category}</p>
+                    <h3 className="text-sm font-bold mt-1">{faq.question}</h3>
+                    <p className="text-xs text-neutral-600 mt-1.5 leading-relaxed">{faq.answer}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => deleteFaq(faq.id)}
+                    className="p-2 text-neutral-400 hover:text-red-600 transition-colors"
+                    title="Delete FAQ"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: CONTACT INQUIRIES INBOX */}
         {tab === 'inquiries' && (
-          <div className="mt-8 space-y-4">
+          <div className="mt-8 space-y-4 animate-fade-up">
             {inquiries.length === 0 ? (
               <div className="bg-white border border-black/10 p-10 text-center text-sm text-neutral-500">
                 No contact inquiries yet.
@@ -376,9 +506,9 @@ export const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 4: ORDERS */}
+        {/* TAB 5: ORDERS */}
         {tab === 'orders' && (
-          <div className="mt-8 space-y-4">
+          <div className="mt-8 space-y-4 animate-fade-up">
             {orders.length === 0 ? (
               <div className="bg-white border border-black/10 p-10 text-center text-sm text-neutral-500">
                 No orders placed yet. Add items to the Studio Bag to test checkout.
