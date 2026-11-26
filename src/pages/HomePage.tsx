@@ -4,6 +4,8 @@ import { ArrowRight, Infinity as InfinityIcon, Leaf, Layers } from 'lucide-react
 import { useSite } from '../store/siteStore';
 import { CategoryKey } from '../types';
 import { Reveal } from '../components/Reveal';
+import { FaqSection } from '../components/FaqSection';
+import { ContactSection } from '../components/ContactSection';
 
 const CATEGORIES: { key: CategoryKey; label: string; image: string }[] = [
   { key: 'Strength', label: 'Strength', image: '/images/cat-dumbbell.jpg' },
@@ -443,6 +445,12 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
       </Reveal>
+
+      {/* 6. FAQS SECTION ON HOME PAGE */}
+      <FaqSection />
+
+      {/* 7. CONTACT SECTION ON HOME PAGE */}
+      <ContactSection />
     </main>
   );
 };
