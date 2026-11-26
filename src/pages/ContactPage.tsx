@@ -38,12 +38,12 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <main className="bg-white min-h-[75vh] py-16">
-      <div className="max-w-[1360px] mx-auto px-6 md:px-10">
+    <main className="bg-white min-h-[75vh] py-10 sm:py-16">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10">
         {/* Header */}
-        <div className="max-w-2xl mb-14 animate-fade-up">
+        <div className="max-w-2xl mb-10 sm:mb-14 animate-fade-up">
           <p className="eyebrow-mono text-[#002FA7]">CONTACT {settings.brandName.toUpperCase()}</p>
-          <h1 className="text-[42px] md:text-[54px] font-extrabold leading-[1.02] swiss-tracking mt-2">
+          <h1 className="text-[34px] sm:text-[46px] md:text-[54px] font-extrabold leading-[1.02] swiss-tracking mt-2">
             Direct Support &
             <br />
             <span className="text-[#002FA7]">Studio Outfitting.</span>

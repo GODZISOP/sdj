@@ -88,19 +88,19 @@ export const AdminPage: React.FC = () => {
   };
 
   return (
-    <main className="bg-[#F5F6F8] min-h-[82vh] py-12">
-      <div className="max-w-[1360px] mx-auto px-6 md:px-10">
+    <main className="bg-[#F5F6F8] min-h-[82vh] py-8 sm:py-12">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-black/10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 sm:pb-8 border-b border-black/10">
           <div>
             <div className="inline-flex items-center gap-2 text-[#002FA7] eyebrow-mono mb-1">
               <ShieldCheck className="w-4 h-4" />
               {settings.brandName.toUpperCase()} ADMIN PANEL
             </div>
-            <h1 className="text-3xl font-extrabold swiss-tracking">Studio Management Console</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold swiss-tracking">Studio Management Console</h1>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setTab('settings')}

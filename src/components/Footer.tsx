@@ -7,9 +7,9 @@ export const Footer: React.FC = () => {
   const { settings } = useSite();
 
   return (
-    <footer className="bg-[#111111] text-white pt-16 pb-10 border-t border-black">
-      <div className="max-w-[1360px] mx-auto px-6 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-14 border-b border-white/10">
+    <footer className="bg-[#111111] text-white pt-12 sm:pt-16 pb-10 border-t border-black">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 pb-12 sm:pb-14 border-b border-white/10">
           {/* Brand Column */}
           <div className="md:col-span-4 space-y-4">
             <div className="flex items-center gap-3">

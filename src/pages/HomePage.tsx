@@ -30,33 +30,33 @@ export const HomePage: React.FC = () => {
   return (
     <main className="bg-white">
       {/* 1. HERO SECTION */}
-      <section className="max-w-[1360px] mx-auto px-6 md:px-10 pt-10 pb-16 md:pt-14 md:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-6 space-y-6 animate-fade-up">
-            <p className="eyebrow-mono text-neutral-500">
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-14 md:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="lg:col-span-6 space-y-5 sm:space-y-6 animate-fade-up">
+            <p className="eyebrow-mono text-neutral-500 text-[10px] sm:text-[11px]">
               {settings.brandName.toUpperCase()} &nbsp;/&nbsp; DESIGN &nbsp;/&nbsp; MOVEMENT &nbsp;/&nbsp; LONGEVITY
             </p>
-            <h1 className="text-[48px] sm:text-[62px] lg:text-[72px] font-extrabold leading-[0.96] swiss-tracking text-[#111111]">
+            <h1 className="text-[40px] sm:text-[56px] lg:text-[72px] font-extrabold leading-[0.96] swiss-tracking text-[#111111]">
               Fitness
               <br />
               Equipment
               <br />
               <span className="text-[#002FA7]">Reimagined.</span>
             </h1>
-            <p className="text-[16px] text-neutral-600 max-w-md leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] text-neutral-600 max-w-md leading-relaxed">
               {settings.tagline}
             </p>
             <div className="pt-1">
               <a
                 href="#equipment"
-                className="inline-flex items-center gap-3 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 transition-all hover:translate-x-0.5"
+                className="w-full sm:w-auto justify-center inline-flex items-center gap-3 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 transition-all hover:translate-x-0.5"
               >
                 Shop the Collection
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
 
-            <div className="pt-8 grid grid-cols-3 gap-6 max-w-md border-t border-black/[0.06]">
+            <div className="pt-6 sm:pt-8 grid grid-cols-3 gap-3 sm:gap-6 max-w-md border-t border-black/[0.06]">
               <div className="space-y-2">
                 <InfinityIcon className="w-5 h-5 text-neutral-700" strokeWidth={1.5} />
                 <p className="text-[11px] font-medium leading-tight text-neutral-700">
@@ -314,17 +314,59 @@ export const HomePage: React.FC = () => {
               />
             </div>
 
-            <div className="lg:col-span-8 px-6 md:px-12 py-14">
+            <div className="lg:col-span-8 px-4 sm:px-6 md:px-12 py-10 sm:py-14">
               <div className="mb-8">
                 <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>
-                <h2 className="text-[32px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1">
+                <h2 className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1">
                   Compare
                   <br />
                   Our Essentials
                 </h2>
               </div>
 
-              <div className="overflow-x-auto">
+              {/* Mobile Stacked Compare Cards */}
+              <div className="sm:hidden space-y-4">
+                {compareProducts.map((p) => (
+                  <div key={p.id} className="border border-black/10 p-4 bg-white space-y-3">
+                    <Link to={`/product/${p.id}`} className="flex items-center gap-4">
+                      <img src={p.image} alt={p.name} className="w-16 h-16 object-contain bg-[#F5F6F8] p-2" />
+                      <div>
+                        <p className="eyebrow-mono text-[#002FA7]">{p.category}</p>
+                        <h3 className="text-base font-bold">{p.name}</h3>
+                        <span className="text-xs font-bold">${p.price}</span>
+                      </div>
+                    </Link>
+                    <div className="grid grid-cols-2 gap-2 text-xs bg-[#F5F6F8] p-3">
+                      <div>
+                        <span className="text-neutral-500 block">Focus</span>
+                        <span className="font-semibold">{p.trainingFocus}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-500 block">Weight</span>
+                        <span className="font-semibold">{p.weightRange}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-500 block">Material</span>
+                        <span className="font-semibold">{p.material}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-500 block">Best For</span>
+                        <span className="font-semibold">{p.bestFor}</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => addToCart(p)}
+                      className="w-full bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold py-2.5 transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop / Tablet Compare Table */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full min-w-[580px] text-left border-collapse">
                   <thead>
                     <tr className="border-b border-black/10">
