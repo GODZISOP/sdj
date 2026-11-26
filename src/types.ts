@@ -51,6 +51,7 @@ export interface FaqItem {
 export interface SiteSettings {
   brandName: string;
   companyLegalName: string;
+  ownerName: string;
   tagline: string;
   phone: string;
   whatsapp: string;

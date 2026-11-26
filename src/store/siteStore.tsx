@@ -2,17 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, ContactInquiry, FaqItem, OrderRecord, Product, SiteSettings } from '../types';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'sjdurallc_products_v1',
-  SETTINGS: 'sjdurallc_settings_v1',
-  INQUIRIES: 'sjdurallc_inquiries_v1',
-  ORDERS: 'sjdurallc_orders_v1',
-  CART: 'sjdurallc_cart_v1',
-  FAQS: 'sjdurallc_faqs_v1',
+  PRODUCTS: 'sjdurallc_products_v2',
+  SETTINGS: 'sjdurallc_settings_v2',
+  INQUIRIES: 'sjdurallc_inquiries_v2',
+  ORDERS: 'sjdurallc_orders_v2',
+  CART: 'sjdurallc_cart_v2',
+  FAQS: 'sjdurallc_faqs_v2',
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   brandName: 'Sjdurallc',
   companyLegalName: 'Sjdurallc Fitness & Studio Equipment',
+  ownerName: 'Rana Javeed Akhter',
   tagline: 'Sculptural, performance-driven gear for a stronger, more balanced you.',
   phone: '+966 53 097 8783',
   whatsapp: '+966 53 097 8783',
@@ -35,7 +36,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
     category: 'Commercial Studios',
     question: 'Can we request custom weights or studio outfitting?',
     answer:
-      'Absolutely. Contact our team at info@sjdurallc.com or +966 53 097 8783 for tailored commercial gym packages, custom laser-engraved branding, and volume pricing.',
+      'Absolutely. Contact Rana Javeed Akhter and our team at info@sjdurallc.com or +966 53 097 8783 for tailored commercial gym packages, custom laser-engraved branding, and volume pricing.',
   },
   {
     id: 'faq-3',
@@ -143,7 +144,7 @@ interface SiteContextValue {
   cart: CartItem[];
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   updateCartQty: (productId: string, delta: number) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
@@ -216,15 +217,17 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, quantity = 1) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
         return prev.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
-      return [...prev, { product, quantity: 1 }];
+      return [...prev, { product, quantity }];
     });
     setIsCartOpen(true);
   };
