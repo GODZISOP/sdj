@@ -34,12 +34,19 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-black/[0.06]">
       <div className="max-w-[1360px] mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
-        {/* Stacked Brand Wordmark */}
-        <Link to="/" className="leading-[0.95] tracking-[-0.03em] font-bold text-[19px] text-[#111111]">
-          <span className="block">{settings.brandName}</span>
-          <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#002FA7] mt-0.5">
-            Studio®
-          </span>
+        {/* Stacked Brand Wordmark + Sculptural Logo Mark */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src="/favicon.svg"
+            alt={`${settings.brandName} Logo`}
+            className="w-9 h-9 rounded-lg transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[19px] text-[#111111]">
+            <span className="block">{settings.brandName}</span>
+            <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#002FA7] mt-0.5">
+              Studio®
+            </span>
+          </div>
         </Link>
 
         {/* Centered Navigation */}

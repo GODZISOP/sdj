@@ -12,11 +12,18 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-14 border-b border-white/10">
           {/* Brand Column */}
           <div className="md:col-span-4 space-y-4">
-            <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[22px]">
-              <span className="block">{settings.brandName}</span>
-              <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#4C78FF] mt-1">
-                Studio®
-              </span>
+            <div className="flex items-center gap-3">
+              <img
+                src="/favicon.svg"
+                alt={`${settings.brandName} Logo`}
+                className="w-10 h-10 rounded-lg"
+              />
+              <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[22px]">
+                <span className="block">{settings.brandName}</span>
+                <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#4C78FF] mt-1">
+                  Studio®
+                </span>
+              </div>
             </div>
             <p className="text-sm text-neutral-400 max-w-sm leading-relaxed">
               {settings.footerNote}
