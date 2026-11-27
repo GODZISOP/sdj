@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, CheckCircle2 } from 'lucide-react';
 import { useSite } from '../store/siteStore';
+import { EASE_EDITORIAL } from '../lib/motion';
 
 export const CartDrawer: React.FC = () => {
   const { cart, isCartOpen, setIsCartOpen, updateCartQty, removeFromCart, placeOrder } = useSite();
@@ -9,8 +11,6 @@ export const CartDrawer: React.FC = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [confirmedId, setConfirmedId] = useState<string | null>(null);
-
-  if (!isCartOpen) return null;
 
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
@@ -26,158 +26,194 @@ export const CartDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-[2px]">
-      <div className="w-full max-w-md bg-white h-full flex flex-col shadow-2xl">
-        <div className="px-6 py-5 border-b border-black/10 flex items-center justify-between">
-          <h2 className="text-base font-bold tracking-tight">Your Studio Bag</h2>
-          <button
-            type="button"
-            onClick={() => {
-              setIsCartOpen(false);
-              setConfirmedId(null);
-            }}
-            className="p-1 text-neutral-500 hover:text-black"
+    <AnimatePresence>
+      {isCartOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          onClick={() => {
+            setIsCartOpen(false);
+            setConfirmedId(null);
+          }}
+          className="fixed inset-0 z-50 flex justify-end bg-black/45 backdrop-blur-[3px]"
+        >
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.38, ease: EASE_EDITORIAL }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md bg-white h-full flex flex-col shadow-2xl"
           >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
-          {confirmedId ? (
-            <div className="py-12 text-center space-y-3">
-              <CheckCircle2 className="w-12 h-12 text-[#002FA7] mx-auto" />
-              <h3 className="text-lg font-bold">Order Received</h3>
-              <p className="text-sm text-neutral-600">
-                Reference <span className="font-mono font-semibold text-black">{confirmedId}</span> has been logged in the Admin Panel.
-              </p>
+            <div className="px-6 py-5 border-b border-black/10 flex items-center justify-between">
+              <h2 className="text-base font-bold tracking-tight">Your Studio Bag</h2>
               <button
                 type="button"
                 onClick={() => {
-                  setConfirmedId(null);
                   setIsCartOpen(false);
+                  setConfirmedId(null);
                 }}
-                className="mt-4 bg-[#002FA7] text-white text-xs font-semibold px-6 py-3 hover:bg-[#00227A]"
+                className="p-1 text-neutral-500 hover:text-black transition-colors"
               >
-                Continue Exploring
+                <X className="w-5 h-5" />
               </button>
             </div>
-          ) : cart.length === 0 ? (
-            <div className="py-16 text-center text-neutral-500 text-sm">
-              Your studio bag is currently empty.
-            </div>
-          ) : checkoutMode ? (
-            <form id="checkout-form" onSubmit={handleCheckout} className="space-y-4">
-              <p className="eyebrow-mono text-[#002FA7]">Studio Checkout</p>
-              <div>
-                <label className="block text-xs font-medium mb-1">Full Name *</label>
-                <input
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
-                  placeholder="Alex Morgan"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium mb-1">Email *</label>
-                <input
-                  required
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
-                  placeholder="you@domain.com"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium mb-1">Phone</label>
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
-                  placeholder="+966 5X XXX XXXX"
-                />
-              </div>
-            </form>
-          ) : (
-            cart.map(({ product, quantity }) => (
-              <div key={product.id} className="flex gap-4 pb-4 border-b border-black/[0.06]">
-                <div className="w-20 h-20 bg-[#F5F6F8] flex-shrink-0 flex items-center justify-center p-2">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-contain" />
+
+            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+              {confirmedId ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-12 text-center space-y-3"
+                >
+                  <CheckCircle2 className="w-12 h-12 text-[#002FA7] mx-auto" />
+                  <h3 className="text-lg font-bold">Order Received</h3>
+                  <p className="text-sm text-neutral-600">
+                    Reference <span className="font-mono font-semibold text-black">{confirmedId}</span> has been logged in the Admin Panel.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmedId(null);
+                      setIsCartOpen(false);
+                    }}
+                    className="mt-4 bg-[#002FA7] text-white text-xs font-semibold px-6 py-3 hover:bg-[#00227A]"
+                  >
+                    Continue Exploring
+                  </button>
+                </motion.div>
+              ) : cart.length === 0 ? (
+                <div className="py-16 text-center text-neutral-500 text-sm">
+                  Your studio bag is currently empty.
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <h4 className="text-sm font-semibold truncate">{product.name}</h4>
+              ) : checkoutMode ? (
+                <form id="checkout-form" onSubmit={handleCheckout} className="space-y-4">
+                  <p className="eyebrow-mono text-[#002FA7]">Studio Checkout</p>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">Full Name *</label>
+                    <input
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                      placeholder="Alex Morgan"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">Email *</label>
+                    <input
+                      required
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                      placeholder="you@domain.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">Phone</label>
+                    <input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full border border-black/15 px-3 py-2.5 text-sm outline-none focus:border-[#002FA7]"
+                      placeholder="+966 5X XXX XXXX"
+                    />
+                  </div>
+                </form>
+              ) : (
+                <AnimatePresence initial={false}>
+                  {cart.map(({ product, quantity }) => (
+                    <motion.div
+                      key={product.id}
+                      layout
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: 30 }}
+                      transition={{ duration: 0.25 }}
+                      className="flex gap-4 pb-4 border-b border-black/[0.06]"
+                    >
+                      <div className="w-20 h-20 bg-[#F5F6F8] flex-shrink-0 flex items-center justify-center overflow-hidden">
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-sm font-semibold truncate">{product.name}</h4>
+                          <button
+                            type="button"
+                            onClick={() => removeFromCart(product.id)}
+                            className="text-neutral-400 hover:text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <p className="text-xs text-neutral-500 mt-0.5">{product.material}</p>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="inline-flex items-center border border-black/15">
+                            <button
+                              type="button"
+                              onClick={() => updateCartQty(product.id, -1)}
+                              className="p-1.5 hover:bg-neutral-100 transition-colors"
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="px-3 text-xs font-medium tabular-nums">{quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => updateCartQty(product.id, 1)}
+                              className="p-1.5 hover:bg-neutral-100 transition-colors"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <span className="text-sm font-semibold tabular-nums">${product.price * quantity}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              )}
+            </div>
+
+            {cart.length > 0 && !confirmedId && (
+              <div className="p-6 border-t border-black/10 bg-[#F5F6F8] space-y-4">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-neutral-600">Subtotal</span>
+                  <span className="text-base font-bold tabular-nums">${subtotal}</span>
+                </div>
+                {checkoutMode ? (
+                  <div className="flex gap-2">
                     <button
                       type="button"
-                      onClick={() => removeFromCart(product.id)}
-                      className="text-neutral-400 hover:text-red-600"
+                      onClick={() => setCheckoutMode(false)}
+                      className="w-1/3 border border-black/20 bg-white py-3 text-xs font-semibold"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      form="checkout-form"
+                      className="w-2/3 bg-[#002FA7] text-white py-3 text-xs font-semibold hover:bg-[#00227A]"
+                    >
+                      Confirm Order
                     </button>
                   </div>
-                  <p className="text-xs text-neutral-500 mt-0.5">{product.material}</p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <div className="inline-flex items-center border border-black/15">
-                      <button
-                        type="button"
-                        onClick={() => updateCartQty(product.id, -1)}
-                        className="p-1.5 hover:bg-neutral-100"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                      <span className="px-3 text-xs font-medium">{quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() => updateCartQty(product.id, 1)}
-                        className="p-1.5 hover:bg-neutral-100"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <span className="text-sm font-semibold">${product.price * quantity}</span>
-                  </div>
-                </div>
+                ) : (
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    onClick={() => setCheckoutMode(true)}
+                    className="w-full bg-[#002FA7] text-white py-3.5 text-xs font-semibold tracking-wide hover:bg-[#00227A] transition-colors"
+                  >
+                    Proceed to Checkout →
+                  </motion.button>
+                )}
               </div>
-            ))
-          )}
-        </div>
-
-        {cart.length > 0 && !confirmedId && (
-          <div className="p-6 border-t border-black/10 bg-[#F5F6F8] space-y-4">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-neutral-600">Subtotal</span>
-              <span className="text-base font-bold">${subtotal}</span>
-            </div>
-            {checkoutMode ? (
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setCheckoutMode(false)}
-                  className="w-1/3 border border-black/20 bg-white py-3 text-xs font-semibold"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  form="checkout-form"
-                  className="w-2/3 bg-[#002FA7] text-white py-3 text-xs font-semibold hover:bg-[#00227A]"
-                >
-                  Confirm Order
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setCheckoutMode(true)}
-                className="w-full bg-[#002FA7] text-white py-3.5 text-xs font-semibold tracking-wide hover:bg-[#00227A] transition-colors"
-              >
-                Proceed to Checkout →
-              </button>
             )}
-          </div>
-        )}
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

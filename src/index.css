@@ -29,7 +29,7 @@
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -43,6 +43,39 @@
   }
   50% {
     transform: translateY(-7px);
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marqueeSlide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
   }
 }
 
@@ -62,13 +95,40 @@
   animation: floatSlow 6s ease-in-out infinite;
 }
 
+.animate-spin-slow {
+  animation: spinSlow 36s linear infinite;
+}
+
+.marquee-track {
+  width: max-content;
+  animation: marqueeSlide 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.live-dot {
+  position: relative;
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulseRing 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 /* Scroll-triggered reveal */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(28px) scale(0.985);
+  transform: translateY(24px) scale(0.99);
   transition:
-    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
@@ -81,7 +141,10 @@
   .animate-fade-up,
   .animate-fade-up-delay-1,
   .animate-fade-up-delay-2,
-  .animate-float-slow {
+  .animate-float-slow,
+  .animate-spin-slow,
+  .marquee-track,
+  .live-dot::after {
     animation: none !important;
   }
   .scroll-reveal {

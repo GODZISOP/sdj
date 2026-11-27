@@ -40,7 +40,8 @@ export const AdminPage: React.FC = () => {
     name: '',
     category: 'Home & Desk' as CategoryKey,
     price: 180,
-    image: '/images/prod-lamp.svg',
+    image: '/images/prod-lamp.jpg',
+    hoverImage: '/images/prod-lamp-alt.jpg',
     trainingFocus: 'Everyday Design',
     weightRange: '1.2 kg',
     material: 'Anodized Aluminum',
@@ -68,13 +69,14 @@ export const AdminPage: React.FC = () => {
     addProduct(newProd);
     setNewProd({
       name: '',
-      category: 'Strength',
-      price: 250,
-      image: '/images/cat-dumbbell.jpg',
-      trainingFocus: 'Strength',
-      weightRange: '4 – 24 kg',
-      material: 'Machined Steel',
-      bestFor: 'Full-body Training',
+      category: 'Home & Desk',
+      price: 180,
+      image: '/images/prod-lamp.jpg',
+      hoverImage: '/images/prod-lamp-alt.jpg',
+      trainingFocus: 'Everyday Design',
+      weightRange: '1.2 kg',
+      material: 'Anodized Aluminum',
+      bestFor: 'Home & Studio',
       description: '',
       inCompare: false,
     });
@@ -337,6 +339,24 @@ export const AdminPage: React.FC = () => {
                       value={newProd.weightRange}
                       onChange={(e) => setNewProd({ ...newProd, weightRange: e.target.value })}
                       className="w-full border border-black/15 px-3 py-2 text-sm outline-none focus:border-[#002FA7]"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold mb-1">Primary Image URL</label>
+                    <input
+                      value={newProd.image}
+                      onChange={(e) => setNewProd({ ...newProd, image: e.target.value })}
+                      className="w-full border border-black/15 px-3 py-2 text-xs outline-none focus:border-[#002FA7]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold mb-1">Hover Image URL</label>
+                    <input
+                      value={newProd.hoverImage}
+                      onChange={(e) => setNewProd({ ...newProd, hoverImage: e.target.value })}
+                      className="w-full border border-black/15 px-3 py-2 text-xs outline-none focus:border-[#002FA7]"
                     />
                   </div>
                 </div>

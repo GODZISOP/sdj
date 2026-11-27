@@ -11,6 +11,7 @@ export interface Product {
   category: CategoryKey;
   price: number;
   image: string;
+  hoverImage: string;
   trainingFocus: string;
   weightRange: string;
   material: string;

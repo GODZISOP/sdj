@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,23 +13,28 @@ import {
 } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { Reveal } from '../components/Reveal';
+import { ProductCard } from '../components/ProductCard';
+import { EASE_EDITORIAL } from '../lib/motion';
 
 export const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { products, addToCart, settings } = useSite();
   const [qty, setQty] = useState(1);
+  const [selectedView, setSelectedView] = useState<0 | 1>(0);
+  const [stageHovered, setStageHovered] = useState(false);
 
   const product = products.find((p) => p.id === id);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setQty(1);
+    setSelectedView(0);
   }, [id]);
 
   if (!product) {
     return (
-      <main className="max-w-[1360px] mx-auto px-6 md:px-10 py-24 text-center">
-        <p className="eyebrow-mono text-[#002FA7]">404 — EQUIPMENT NOT FOUND</p>
+      <main className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 py-24 text-center">
+        <p className="eyebrow-mono text-[#002FA7]">404 — OBJECT NOT FOUND</p>
         <h1 className="text-3xl font-extrabold mt-2">Product not found</h1>
         <Link
           to="/"
@@ -41,11 +47,18 @@ export const ProductDetailPage: React.FC = () => {
     );
   }
 
+  const gallery = [
+    { label: '01 / Studio View', src: product.image },
+    { label: '02 / Alternate Detail', src: product.hoverImage || product.image },
+  ];
+
+  // Hovering the main photo previews the opposite view smoothly
+  const displayedIndex: 0 | 1 = stageHovered ? (selectedView === 0 ? 1 : 0) : selectedView;
   const related = products.filter((p) => p.id !== product.id).slice(0, 3);
 
   return (
-    <main className="bg-white py-12 md:py-16">
-      <div className="max-w-[1360px] mx-auto px-6 md:px-10">
+    <main className="bg-white py-10 sm:py-14 md:py-16">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10">
         {/* Breadcrumb */}
         <div className="mb-8 animate-fade-up">
           <Link
@@ -58,51 +71,100 @@ export const ProductDetailPage: React.FC = () => {
         </div>
 
         {/* Main Product Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Studio Gallery */}
-          <div className="lg:col-span-6 bg-[#F5F6F8] border border-black/[0.06] aspect-square flex items-center justify-center p-10 overflow-hidden animate-fade-up">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Left Interactive Dual-View Gallery */}
+          <div className="lg:col-span-6 space-y-3 animate-fade-up">
+            <div
+              onMouseEnter={() => setStageHovered(true)}
+              onMouseLeave={() => setStageHovered(false)}
+              className="relative bg-[#F5F6F8] border border-black/[0.06] aspect-square overflow-hidden cursor-crosshair"
+            >
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={gallery[displayedIndex].src + displayedIndex}
+                  src={gallery[displayedIndex].src}
+                  alt={`${product.name} — ${gallery[displayedIndex].label}`}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: EASE_EDITORIAL }}
+                  className="w-full h-full object-cover"
+                />
+              </AnimatePresence>
+
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 border border-black/[0.08] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#111111]">
+                  {gallery[displayedIndex].label}
+                </span>
+              </div>
+
+              <div className="absolute bottom-4 right-4 bg-black/75 text-white px-3 py-1 text-[10px] font-mono uppercase tracking-wider">
+                Hover image to peek alternate view
+              </div>
+            </div>
+
+            {/* Thumbnail Switcher */}
+            <div className="grid grid-cols-2 gap-3">
+              {gallery.map((item, idx) => {
+                const isSelected = selectedView === idx;
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => setSelectedView(idx as 0 | 1)}
+                    className={`flex items-center gap-3 p-2.5 border text-left transition-all ${
+                      isSelected
+                        ? 'border-[#002FA7] bg-[#F5F6F8]'
+                        : 'border-black/10 hover:border-black/30 bg-white'
+                    }`}
+                  >
+                    <img src={item.src} alt={item.label} className="w-14 h-14 object-cover bg-white flex-shrink-0" />
+                    <div>
+                      <span className="eyebrow-mono text-[#002FA7] block">{item.label.split(' / ')[0]}</span>
+                      <span className="text-xs font-semibold text-[#111111]">{item.label.split(' / ')[1]}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right Product Specs & Actions */}
           <div className="lg:col-span-6 space-y-6 animate-fade-up-delay-1">
             <div>
               <p className="eyebrow-mono text-[#002FA7]">{product.category}</p>
-              <h1 className="text-[38px] md:text-[48px] font-extrabold leading-[1.02] swiss-tracking mt-2">
+              <h1 className="text-[32px] sm:text-[42px] lg:text-[48px] font-extrabold leading-[1.02] swiss-tracking mt-2">
                 {product.name}
               </h1>
-              <p className="text-2xl font-extrabold text-[#111111] mt-3">${product.price}</p>
+              <p className="text-2xl font-extrabold text-[#111111] mt-3 tabular-nums">${product.price}</p>
             </div>
 
             <p className="text-[15px] text-neutral-600 leading-relaxed">{product.description}</p>
 
             {/* Technical Spec Table */}
             <div className="border-t border-b border-black/10 divide-y divide-black/[0.06] text-sm">
-              <div className="py-3.5 flex items-center justify-between">
-                <span className="text-neutral-500 font-medium">Training Focus</span>
-                <span className="font-semibold text-[#111111]">{product.trainingFocus}</span>
+              <div className="py-3.5 flex items-center justify-between gap-4">
+                <span className="text-neutral-500 font-medium">Key Feature</span>
+                <span className="font-semibold text-[#111111] text-right">{product.trainingFocus}</span>
               </div>
-              <div className="py-3.5 flex items-center justify-between">
+              <div className="py-3.5 flex items-center justify-between gap-4">
                 <span className="text-neutral-500 font-medium">Weight / Spec</span>
-                <span className="font-semibold text-[#111111] font-mono">{product.weightRange}</span>
+                <span className="font-semibold text-[#111111] font-mono text-right">{product.weightRange}</span>
               </div>
-              <div className="py-3.5 flex items-center justify-between">
+              <div className="py-3.5 flex items-center justify-between gap-4">
                 <span className="text-neutral-500 font-medium">Material</span>
-                <span className="font-semibold text-[#111111]">{product.material}</span>
+                <span className="font-semibold text-[#111111] text-right">{product.material}</span>
               </div>
-              <div className="py-3.5 flex items-center justify-between">
+              <div className="py-3.5 flex items-center justify-between gap-4">
                 <span className="text-neutral-500 font-medium">Best For</span>
-                <span className="font-semibold text-[#111111]">{product.bestFor}</span>
+                <span className="font-semibold text-[#111111] text-right">{product.bestFor}</span>
               </div>
             </div>
 
             {/* Quantity + Add to Cart */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <div className="inline-flex items-center border border-black/20 h-[48px]">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <div className="inline-flex items-center justify-between border border-black/20 h-[48px]">
                 <button
                   type="button"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -111,7 +173,7 @@ export const ProductDetailPage: React.FC = () => {
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="px-5 text-sm font-bold">{qty}</span>
+                <span className="px-5 text-sm font-bold tabular-nums">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty((q) => q + 1)}
@@ -122,14 +184,15 @@ export const ProductDetailPage: React.FC = () => {
                 </button>
               </div>
 
-              <button
+              <motion.button
+                whileTap={{ scale: 0.97 }}
                 type="button"
                 onClick={() => addToCart(product, qty)}
-                className="flex-1 min-w-[200px] h-[48px] bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold tracking-wide transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                className="flex-1 h-[48px] bg-[#002FA7] hover:bg-[#00227A] text-white text-xs font-semibold tracking-wide transition-colors flex items-center justify-center gap-2"
               >
                 Add to Studio Bag — ${product.price * qty}
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Studio Guarantees */}
@@ -137,13 +200,13 @@ export const ProductDetailPage: React.FC = () => {
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
-                  5-Year Structural Studio Warranty
+                  Studio Structural Warranty
                 </span>
               </div>
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
                 <Truck className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
-                  KSA & GCC White-Glove Delivery
+                  KSA & GCC Express Delivery
                 </span>
               </div>
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
@@ -155,11 +218,11 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Direct Specialist Note */}
-            <div className="p-4 border border-black/[0.08] flex items-center justify-between gap-4">
+            <div className="p-4 border border-black/[0.08] flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2.5 text-xs text-neutral-600">
-                <Check className="w-4 h-4 text-[#002FA7]" />
+                <Check className="w-4 h-4 text-[#002FA7] flex-shrink-0" />
                 <span>
-                  Commercial studio pricing available via <strong className="text-black">{settings.ownerName}</strong>
+                  Bulk & corporate pricing available via <strong className="text-black">{settings.ownerName}</strong>
                 </span>
               </div>
               <Link
@@ -172,39 +235,25 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Related Equipment */}
+        {/* Related Objects with Hover-Swap ProductCard */}
         <Reveal className="mt-20 pt-14 border-t border-black/[0.08]">
           <div className="flex items-center justify-between mb-8">
             <div>
               <p className="eyebrow-mono text-neutral-500">PAIR WITH</p>
-              <h2 className="text-2xl font-extrabold swiss-tracking mt-1">Related Studio Gear</h2>
+              <h2 className="text-2xl font-extrabold swiss-tracking mt-1">Related Studio Objects</h2>
             </div>
             <Link to="/#equipment" className="text-xs font-semibold text-[#002FA7] hover:underline">
               View All →
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {related.map((item) => (
-              <Link
+            {related.map((item, idx) => (
+              <ProductCard
                 key={item.id}
-                to={`/product/${item.id}`}
-                className="group border border-black/[0.08] p-5 hover:border-[#002FA7]/50 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="aspect-[16/10] bg-[#F5F6F8] mb-4 flex items-center justify-center p-4 overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <p className="eyebrow-mono text-[#002FA7]">{item.category}</p>
-                <div className="flex items-center justify-between mt-1">
-                  <h3 className="text-base font-bold group-hover:text-[#002FA7] transition-colors">
-                    {item.name}
-                  </h3>
-                  <span className="text-sm font-bold">${item.price}</span>
-                </div>
-              </Link>
+                product={item}
+                onAddToCart={(p) => addToCart(p)}
+                index={idx}
+              />
             ))}
           </div>
         </Reveal>
