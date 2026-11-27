@@ -11,7 +11,7 @@
   body {
     background-color: #ffffff;
     color: #111111;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 

@@ -65,6 +65,13 @@ export const Navbar: React.FC = () => {
           </button>
           <button
             type="button"
+            onClick={() => scrollToSection('services')}
+            className="hover:text-[#002FA7] transition-colors"
+          >
+            Services
+          </button>
+          <button
+            type="button"
             onClick={() => scrollToSection('compare')}
             className="hover:text-[#002FA7] transition-colors"
           >

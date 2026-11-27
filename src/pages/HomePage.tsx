@@ -16,6 +16,7 @@ import { ProductCard } from '../components/ProductCard';
 import { StudioMarquee } from '../components/StudioMarquee';
 import { HangingGallerySection } from '../components/HangingGallerySection';
 import { ClientReviewsSection } from '../components/ClientReviewsSection';
+import { ServicesScrollSection } from '../components/ServicesScrollSection';
 import { ScrollScrubText } from '../components/ScrollScrubText';
 import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
@@ -445,6 +446,9 @@ export const HomePage: React.FC = () => {
 
       {/* 1D. ANIMATED CLIENT PRODUCT REVIEWS FEED (Eldora-style 4-Phase Stream) */}
       <ClientReviewsSection />
+
+      {/* 1E. FULL-SCREEN SCROLL-DRIVEN STACKED SERVICES SECTION ("WHAT WE DO") */}
+      <ServicesScrollSection />
 
       {/* KINETIC EDITORIAL TICKER */}
       <StudioMarquee />
