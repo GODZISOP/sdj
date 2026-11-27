@@ -72,10 +72,10 @@ export const Navbar: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => scrollToSection('compare')}
+            onClick={() => scrollToSection('reviews')}
             className="hover:text-[#002FA7] transition-colors"
           >
-            Collection
+            Reviews
           </button>
           <button
             type="button"
@@ -183,10 +183,10 @@ export const Navbar: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => scrollToSection('compare')}
+              onClick={() => scrollToSection('services')}
               className="w-full text-left px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
             >
-              Compare
+              Services
             </button>
             <button
               type="button"
