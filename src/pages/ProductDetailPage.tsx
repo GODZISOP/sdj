@@ -9,7 +9,7 @@ import {
   Plus,
   ShieldCheck,
   Truck,
-  Sparkles,
+  Award,
 } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { Reveal } from '../components/Reveal';
@@ -210,7 +210,7 @@ export const ProductDetailPage: React.FC = () => {
                 </span>
               </div>
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
-                <Sparkles className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
+                <Award className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
                   Precision Architectural Finish
                 </span>

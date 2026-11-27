@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, Infinity as InfinityIcon, Leaf, Layers, Sparkles } from 'lucide-react';
+import { ArrowRight, Infinity as InfinityIcon, Leaf, Layers } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { CategoryKey } from '../types';
 import { Reveal } from '../components/Reveal';
@@ -213,7 +213,7 @@ export const HomePage: React.FC = () => {
               {/* Live Floating Caption Badge */}
               <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between bg-white/92 backdrop-blur-md px-4 py-2.5 border border-black/[0.08]">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-[#002FA7]" />
+                  <Layers className="w-3.5 h-3.5 text-[#002FA7]" />
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111]">
                     {heroHover ? 'ILLUMINATED EDITION · KINETIX' : 'HOVER TO REVEAL ALTERNATE EDITION'}
                   </span>
