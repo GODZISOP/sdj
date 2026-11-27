@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
 import { ArrowUpRight, Plus, Eye } from 'lucide-react';
 import { Product } from '../types';
 import { EASE_EDITORIAL, EASE_TACTILE } from '../lib/motion';
@@ -9,19 +9,37 @@ interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
   index?: number;
+  gridInView?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onAddToCart,
   index = 0,
+  gridInView,
 }) => {
+  const cardRef = useRef<HTMLElement>(null);
+  const selfInView = useInView(cardRef, { once: false, amount: 0.08 });
+  const isRevealed = gridInView !== undefined ? gridInView : selfInView;
+
   const [isHovered, setIsHovered] = useState(false);
   const [touchAlt, setTouchAlt] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
   const showAlt = isHovered || touchAlt;
   const altImage = product.hoverImage || product.image;
+
+  // Directional 3-column card-deal signature (left-angled, center-rise, right-angled)
+  const col = index % 3;
+  const hiddenVariant =
+    col === 0
+      ? { opacity: 0, x: -72, y: 48, rotate: -5, scale: 0.9 }
+      : col === 1
+        ? { opacity: 0, x: 0, y: 74, rotate: 0, scale: 0.88 }
+        : { opacity: 0, x: 72, y: 48, rotate: 5, scale: 0.9 };
+
+  // Crisp unmistakable one-by-one stagger (never all at once!)
+  const enterDelay = Math.min(index * 0.11, 0.55);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -32,16 +50,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <motion.article
+      ref={cardRef}
       layout
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.08 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.32, delay: Math.min(index * 0.04, 0.16), ease: EASE_EDITORIAL }}
+      initial={hiddenVariant}
+      animate={isRevealed ? { opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 } : hiddenVariant}
+      exit={{ opacity: 0, scale: 0.92, y: 20 }}
+      transition={
+        isRevealed
+          ? {
+              type: 'spring',
+              stiffness: 290,
+              damping: 24,
+              mass: 0.78,
+              delay: enterDelay,
+            }
+          : { duration: 0.14, delay: 0 }
+      }
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
-      className="group relative border border-black/[0.08] bg-white flex flex-col justify-between overflow-hidden transition-[border-color,box-shadow,transform] duration-300 hover:border-[#002FA7]/50 hover:shadow-[0_18px_42px_-20px_rgba(0,47,167,0.22)] hover:-translate-y-1"
+      className="group relative border border-black/[0.08] bg-white flex flex-col justify-between overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-[#002FA7]/55 hover:shadow-[0_18px_40px_-20px_rgba(0,47,167,0.24)] will-change-transform"
     >
       {/* Subtle interactive specular spotlight following pointer */}
       <div
@@ -52,17 +80,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         }}
       />
 
-      {/* Interactive Dual-Image Stage */}
+      {/* Interactive Dual-Image Stage with Architectural Cobalt Shutter Wipe */}
       <div className="relative aspect-[4/3] bg-[#F5F6F8] overflow-hidden">
         <Link to={`/product/${product.id}`} className="block w-full h-full relative">
           {/* Primary Studio Image */}
           <img
             src={product.image}
             alt={product.name}
+            decoding="async"
             className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
-              showAlt
-                ? 'opacity-0 scale-105'
-                : 'opacity-100 scale-100'
+              showAlt ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
             }`}
           />
 
@@ -70,16 +97,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <img
             src={altImage}
             alt={`${product.name} — alternate studio view`}
+            decoding="async"
             className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
-              showAlt
-                ? 'opacity-100 scale-100'
-                : 'opacity-0 scale-110'
+              showAlt ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
             }`}
           />
         </Link>
 
+        {/* Architectural Cobalt Shutter Curtain that sweeps up right as each card deals in */}
+        <motion.div
+          aria-hidden="true"
+          initial={{ scaleY: 1 }}
+          animate={isRevealed ? { scaleY: 0 } : { scaleY: 1 }}
+          transition={
+            isRevealed
+              ? { duration: 0.42, delay: enterDelay + 0.08, ease: EASE_EDITORIAL }
+              : { duration: 0.1, delay: 0 }
+          }
+          style={{ transformOrigin: '50% 0%' }}
+          className="pointer-events-none absolute inset-0 bg-[#002FA7] z-30 will-change-transform"
+        />
+
         {/* Top-Left Live View Indicator Pill */}
-        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 border border-black/[0.07]">
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-white/95 px-2.5 py-1 border border-black/[0.07]">
           <span
             className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
               showAlt ? 'bg-[#002FA7] live-dot text-[#002FA7]' : 'bg-neutral-400'
@@ -90,7 +130,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         </div>
 
-        {/* Touch-friendly Alternate View toggle button (always clickable on mobile, subtle on desktop) */}
+        {/* Touch-friendly Alternate View toggle button */}
         <button
           type="button"
           onClick={(e) => {
@@ -100,7 +140,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           }}
           aria-label="Toggle alternate product image"
           title="Switch view"
-          className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 bg-white/90 hover:bg-[#002FA7] hover:text-white backdrop-blur-md px-2.5 py-1 border border-black/[0.07] text-[10px] font-mono uppercase tracking-wider text-neutral-700 transition-colors duration-200"
+          className="absolute top-3 right-3 z-20 inline-flex items-center gap-1 bg-white/95 hover:bg-[#002FA7] hover:text-white px-2.5 py-1 border border-black/[0.07] text-[10px] font-mono uppercase tracking-wider text-neutral-700 transition-colors duration-200"
         >
           <Eye className="w-3 h-3" />
           <span className="sm:hidden">{showAlt ? '1/2' : '2/2'}</span>
@@ -109,9 +149,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Slide-Up Quick Action Bar on Hover */}
         <div
           className={`absolute inset-x-3 bottom-3 z-20 flex items-center gap-2 transition-all duration-300 ${
-            isHovered
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-3 pointer-events-none'
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'
           }`}
           style={{ transitionTimingFunction: `cubic-bezier(${EASE_TACTILE.join(',')})` }}
         >

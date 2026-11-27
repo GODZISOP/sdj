@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
 import {
   ArrowRight,
   Volume2,
@@ -127,6 +127,8 @@ export const HomePage: React.FC = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const philosophyRef = useRef<HTMLElement>(null);
+  const collectionGridRef = useRef<HTMLDivElement>(null);
+  const isCollectionInView = useInView(collectionGridRef, { once: false, amount: 0.06 });
 
   const { scrollYProgress: philProgress } = useScroll({
     target: philosophyRef,
@@ -581,7 +583,11 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div
+            ref={collectionGridRef}
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-clip py-2"
+          >
             <AnimatePresence mode="popLayout">
               {filteredEquipment.map((item, idx) => (
                 <ProductCard
@@ -589,6 +595,7 @@ export const HomePage: React.FC = () => {
                   product={item}
                   onAddToCart={(p) => addToCart(p)}
                   index={idx}
+                  gridInView={isCollectionInView}
                 />
               ))}
             </AnimatePresence>
