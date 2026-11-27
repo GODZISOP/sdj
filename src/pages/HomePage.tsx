@@ -15,6 +15,7 @@ import { Reveal } from '../components/Reveal';
 import { ProductCard } from '../components/ProductCard';
 import { StudioMarquee } from '../components/StudioMarquee';
 import { HangingGallerySection } from '../components/HangingGallerySection';
+import { ScrollScrubText } from '../components/ScrollScrubText';
 import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
 import { EASE_EDITORIAL, SPRING_CRISP } from '../lib/motion';
@@ -267,13 +268,12 @@ export const HomePage: React.FC = () => {
           <div className="lg:col-span-6 grid grid-cols-12">
             <Reveal className="col-span-12 sm:col-span-9 px-6 sm:px-10 md:px-14 py-12 sm:py-14 flex flex-col justify-center space-y-5">
               <p className="eyebrow-mono text-neutral-500">THE {settings.brandName.toUpperCase()} PHILOSOPHY</p>
-              <h2 className="text-[34px] sm:text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]">
-                Built Better.
-                <br />
-                Live Calmer.
-                <br />
-                <span className="text-[#002FA7]">Last Longer.</span>
-              </h2>
+              <ScrollScrubText
+                as="h2"
+                lines={['Built Better.', 'Live Calmer.', 'Last Longer.']}
+                accentWords={['Last', 'Longer.']}
+                className="text-[34px] sm:text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]"
+              />
               <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
                 Thoughtfully engineered audio, lighting, drinkware, and studio objects crafted from honest materials.
               </p>
@@ -349,9 +349,12 @@ export const HomePage: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8">
             <div>
               <p className="eyebrow-mono text-[#002FA7]">HOVER ANY PRODUCT FOR ALTERNATE VIEW</p>
-              <h3 className="text-2xl sm:text-3xl font-extrabold swiss-tracking mt-1">
-                {activeCategory === 'All' ? 'Curated Studio Collection' : `${activeCategory} Collection`}
-              </h3>
+              <ScrollScrubText
+                as="h3"
+                lines={[activeCategory === 'All' ? 'Curated Studio Collection' : `${activeCategory} Collection`]}
+                accentWords={['Studio']}
+                className="text-2xl sm:text-3xl font-extrabold swiss-tracking mt-1"
+              />
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
@@ -401,11 +404,12 @@ export const HomePage: React.FC = () => {
           <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4 space-y-4">
               <p className="eyebrow-mono text-neutral-500">MOVEMENT IN FOCUS</p>
-              <h2 className="text-[34px] sm:text-[38px] md:text-[42px] font-extrabold leading-[1.04] swiss-tracking">
-                Train
-                <br />
-                with Intention.
-              </h2>
+              <ScrollScrubText
+                as="h2"
+                lines={['Train', 'with Intention.']}
+                accentWords={['Intention.']}
+                className="text-[34px] sm:text-[38px] md:text-[42px] font-extrabold leading-[1.04] swiss-tracking"
+              />
               <p className="text-[14px] text-neutral-600 max-w-xs leading-relaxed">
                 Hover each stage to inspect balanced technique and daily movement rituals.
               </p>
@@ -475,11 +479,12 @@ export const HomePage: React.FC = () => {
             <div className="lg:col-span-8 px-4 sm:px-6 md:px-12 py-10 sm:py-14">
               <div className="mb-8">
                 <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>
-                <h2 className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1">
-                  Compare
-                  <br />
-                  Our Essentials
-                </h2>
+                <ScrollScrubText
+                  as="h2"
+                  lines={['Compare', 'Our Essentials']}
+                  accentWords={['Essentials']}
+                  className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1"
+                />
               </div>
 
               {/* Mobile Stacked Compare Cards */}

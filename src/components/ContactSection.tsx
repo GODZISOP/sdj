@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { Reveal } from './Reveal';
+import { ScrollScrubText } from './ScrollScrubText';
 
 interface ContactSectionProps {
   isHeadingH1?: boolean;
@@ -53,11 +54,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ isHeadingH1 = fa
                 <span className="text-[#002FA7]">Studio Outfitting.</span>
               </h1>
             ) : (
-              <h2 className="text-[32px] sm:text-[42px] md:text-[48px] font-extrabold leading-[1.02] swiss-tracking mt-2">
-                Direct Support &
-                <br />
-                <span className="text-[#002FA7]">Studio Outfitting.</span>
-              </h2>
+              <ScrollScrubText
+                as="h2"
+                lines={['Direct Support &', 'Studio Outfitting.']}
+                accentWords={['Studio', 'Outfitting.']}
+                className="text-[32px] sm:text-[42px] md:text-[48px] font-extrabold leading-[1.02] swiss-tracking mt-2"
+              />
             )}
             <p className="text-sm text-neutral-600 mt-4 leading-relaxed">
               Reach <span className="font-semibold text-[#111111]">{settings.ownerName}</span> and our{' '}

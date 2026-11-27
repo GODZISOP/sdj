@@ -4,7 +4,8 @@ import { motion, AnimatePresence, PanInfo } from 'motion/react';
 import { ArrowRight, GripHorizontal, X, ShoppingBag, Eye, RotateCcw } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { Product } from '../types';
-import { SPRING_CRISP } from '../lib/motion';
+import { EASE_EDITORIAL, SPRING_CRISP } from '../lib/motion';
+import { ScrollScrubText } from './ScrollScrubText';
 
 // Exact positions along quadratic Bezier wire: P0=(0,26), P1=(720,152), P2=(1440,26)
 // y(t) = 26 + 252 * t * (1 - t)
@@ -61,26 +62,45 @@ export const HangingGallerySection: React.FC = () => {
         className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[780px] h-[340px] rounded-full bg-[#002FA7]/[0.055] blur-3xl"
       />
 
-      {/* Top Editorial Header (Sjdurallc Cobalt & Monochrome Theme) */}
-      <div className="relative z-10 max-w-[920px] mx-auto px-4 sm:px-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 border border-black/[0.08] shadow-sm mb-6">
+      {/* Top Editorial Header with Scroll-Scrubbed Word-by-Word 3D Reveal */}
+      <div className="relative z-10 max-w-[960px] mx-auto px-4 sm:px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 14, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.5, ease: EASE_EDITORIAL }}
+          className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 border border-black/[0.08] shadow-sm mb-6"
+        >
           <span className="w-2 h-2 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
           <span className="text-[11px] font-semibold tracking-[0.06em] text-neutral-700">
             Interactive {settings.brandName} Archive — Drag Any Card Out
           </span>
-        </div>
+        </motion.div>
 
-        <h2 className="text-[36px] sm:text-[52px] md:text-[64px] font-black uppercase leading-[0.94] tracking-[-0.04em] text-[#111111]">
-          CURATED OBJECTS BUILT TO{' '}
-          <span className="text-[#002FA7]">MOVE</span>
-          <br className="hidden sm:block" /> AND INSPIRE EVERY SPACE
-        </h2>
+        <ScrollScrubText
+          as="h2"
+          lines={['CURATED OBJECTS BUILT TO', 'MOVE AND INSPIRE', 'EVERY SPACE']}
+          accentWords={['MOVE']}
+          className="text-[36px] sm:text-[52px] md:text-[64px] font-black uppercase leading-[0.95] tracking-[-0.04em] text-[#111111]"
+        />
 
-        <p className="text-[14px] sm:text-[15px] text-neutral-600 mt-4 max-w-lg mx-auto leading-relaxed">
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.65, delay: 0.18, ease: EASE_EDITORIAL }}
+          className="text-[14px] sm:text-[15px] text-neutral-600 mt-5 max-w-lg mx-auto leading-relaxed"
+        >
           Grab and pull any hanging piece right off the studio line to inspect its details, or jump straight into its full specification page.
-        </p>
+        </motion.p>
 
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.28, ease: EASE_EDITORIAL }}
+          className="mt-7 flex flex-wrap items-center justify-center gap-3"
+        >
           <a
             href="#equipment"
             className="inline-flex items-center gap-2.5 rounded-full bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 shadow-[0_14px_30px_-10px_rgba(0,47,167,0.45)] transition-all hover:-translate-y-0.5"
@@ -92,25 +112,28 @@ export const HangingGallerySection: React.FC = () => {
             <GripHorizontal className="w-4 h-4 text-[#002FA7]" />
             Grab & Pull Cards Below
           </span>
-        </div>
+        </motion.div>
       </div>
 
       {/* DESKTOP / TABLET INTERACTIVE HANGING WIRE STAGE */}
       <div className="hidden md:block relative w-full max-w-[1440px] mx-auto mt-10 h-[370px] lg:h-[410px] select-none">
-        {/* Dynamic Curved Wire SVG */}
+        {/* Dynamic Curved Wire SVG that draws itself in on scroll */}
         <svg
           viewBox="0 0 1440 180"
           preserveAspectRatio="none"
           aria-hidden="true"
           className="absolute top-0 left-0 w-full h-[180px] pointer-events-none z-0"
         >
-          <path
+          <motion.path
             d={`M -20 26 Q 720 ${wireControlY} 1460 26`}
             fill="none"
             stroke="#111111"
-            strokeOpacity="0.22"
+            strokeOpacity="0.24"
             strokeWidth="1.6"
-            className="transition-all duration-150"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 1.0, ease: EASE_EDITORIAL }}
           />
         </svg>
 
@@ -126,8 +149,12 @@ export const HangingGallerySection: React.FC = () => {
           const isDetached = pulledProduct?.id === product.id;
 
           return (
-            <div
+            <motion.div
               key={product.id}
+              initial={{ opacity: 0, y: -36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ type: 'spring', stiffness: 240, damping: 20, delay: idx * 0.11 }}
               style={{
                 left: `${slot.t * 100}%`,
                 top: `${topPx}px`,
@@ -163,7 +190,6 @@ export const HangingGallerySection: React.FC = () => {
                   onDragEnd={(e, info) => handleDragEnd(product, e, info)}
                   onMouseEnter={() => setHoveredId(product.id)}
                   onMouseLeave={() => setHoveredId(null)}
-                  initial={{ rotate: slot.baseRotate, opacity: 0, y: 20 }}
                   animate={{
                     rotate: isDragging ? 0 : isHovered ? slot.baseRotate * 0.35 : slot.baseRotate,
                     scale: isDetached ? 0.88 : isDragging ? 1.07 : isHovered ? 1.04 : 1,
@@ -248,7 +274,7 @@ export const HangingGallerySection: React.FC = () => {
                   </div>
                 </motion.div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>

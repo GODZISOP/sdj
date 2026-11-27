@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { Reveal } from './Reveal';
+import { ScrollScrubText } from './ScrollScrubText';
 
 export const FaqSection: React.FC = () => {
   const { settings, faqs } = useSite();
@@ -13,11 +14,12 @@ export const FaqSection: React.FC = () => {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4 space-y-3">
             <p className="eyebrow-mono text-[#002FA7]">FREQUENTLY ASKED QUESTIONS</p>
-            <h2 className="text-[30px] sm:text-[34px] font-extrabold leading-[1.05] swiss-tracking">
-              Everything You
-              <br />
-              Need to Know.
-            </h2>
+            <ScrollScrubText
+              as="h2"
+              lines={['Everything You', 'Need to Know.']}
+              accentWords={['Know.']}
+              className="text-[30px] sm:text-[34px] font-extrabold leading-[1.05] swiss-tracking"
+            />
             <p className="text-sm text-neutral-600 leading-relaxed">
               Answers about {settings.brandName} shipping, custom studio outfitting, warranties, and support.
             </p>
