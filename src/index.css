@@ -79,6 +79,40 @@
   }
 }
 
+@keyframes gentleSwayA {
+  0%, 100% {
+    transform: rotate(-2.4deg);
+  }
+  50% {
+    transform: rotate(2.6deg);
+  }
+}
+
+@keyframes gentleSwayB {
+  0%, 100% {
+    transform: rotate(2.2deg);
+  }
+  50% {
+    transform: rotate(-2.8deg);
+  }
+}
+
+.sway-a {
+  transform-origin: 50% 0%;
+  animation: gentleSwayA 4.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.sway-b {
+  transform-origin: 50% 0%;
+  animation: gentleSwayB 5.3s ease-in-out infinite;
+  will-change: transform;
+}
+
+.sway-paused {
+  animation-play-state: paused !important;
+}
+
 .animate-fade-up {
   animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -144,7 +178,9 @@
   .animate-float-slow,
   .animate-spin-slow,
   .marquee-track,
-  .live-dot::after {
+  .live-dot::after,
+  .sway-a,
+  .sway-b {
     animation: none !important;
   }
   .scroll-reveal {

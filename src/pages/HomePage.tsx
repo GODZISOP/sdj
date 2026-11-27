@@ -14,6 +14,7 @@ import { CategoryKey } from '../types';
 import { Reveal } from '../components/Reveal';
 import { ProductCard } from '../components/ProductCard';
 import { StudioMarquee } from '../components/StudioMarquee';
+import { HangingGallerySection } from '../components/HangingGallerySection';
 import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
 import { EASE_EDITORIAL, SPRING_CRISP } from '../lib/motion';
@@ -240,6 +241,9 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* 1C. INTERACTIVE HANGING POLAROID GALLERY (Drag & Pull Cards Off Wire!) */}
+      <HangingGallerySection />
 
       {/* KINETIC EDITORIAL TICKER */}
       <StudioMarquee />
