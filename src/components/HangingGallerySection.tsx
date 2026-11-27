@@ -147,13 +147,13 @@ export const HangingGallerySection: React.FC = () => {
             animate={isStageInView ? { pathLength: 1 } : { pathLength: 0 }}
             transition={
               isStageInView
-                ? { duration: 0.36, ease: EASE_EDITORIAL }
-                : { duration: 0.1, delay: 0 }
+                ? { duration: 0.55, ease: EASE_EDITORIAL }
+                : { duration: 0.12, delay: 0 }
             }
           />
         </svg>
 
-        {/* STEP 2 ON SCROLL: Cards 1 -> 2 -> 3 -> 4 -> 5 clip & drop onto the wire ONE BY ONE (snappy!) */}
+        {/* STEP 2 ON SCROLL: Cards 1 -> 2 -> 3 -> 4 -> 5 clip & drop onto the wire ONE BY ONE (smooth editorial pace!) */}
         {hangingProducts.map((product, idx) => {
           const slot = SLOT_CONFIG[idx];
           if (!slot) return null;
@@ -164,9 +164,9 @@ export const HangingGallerySection: React.FC = () => {
           const isPullReady = pullReadyId === product.id;
           const isDetached = pulledProduct?.id === product.id;
 
-          // Wire draws first (0 -> 0.36s), then cards clip in crisply 75ms apart
-          const clipDelay = 0.16 + idx * 0.075;
-          const cardDelay = 0.20 + idx * 0.075;
+          // Wire draws first (0 -> 0.55s), then each card clips in smoothly 0.13s apart
+          const clipDelay = 0.28 + idx * 0.13;
+          const cardDelay = 0.34 + idx * 0.13;
 
           return (
             <div

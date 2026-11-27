@@ -72,11 +72,11 @@ export const ScrollScrubText: React.FC<ScrollScrubTextProps> = ({
                     transition={
                       isInView
                         ? {
-                            duration: 0.34,
-                            delay: idx * 0.036,
+                            duration: 0.52,
+                            delay: idx * 0.06,
                             ease: EASE_EDITORIAL,
                           }
-                        : { duration: 0.1, delay: 0 }
+                        : { duration: 0.12, delay: 0 }
                     }
                     className={`inline-block will-change-transform ${isAccent ? 'text-[#002FA7]' : ''}`}
                   >

@@ -586,7 +586,7 @@ export const HomePage: React.FC = () => {
           <motion.div
             ref={collectionGridRef}
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-clip py-2"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 overflow-x-clip py-2"
           >
             <AnimatePresence mode="popLayout">
               {filteredEquipment.map((item, idx) => (
