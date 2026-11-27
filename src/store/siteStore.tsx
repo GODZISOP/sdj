@@ -2,12 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, ContactInquiry, FaqItem, OrderRecord, Product, SiteSettings } from '../types';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'sjdurallc_products_v4',
-  SETTINGS: 'sjdurallc_settings_v4',
-  INQUIRIES: 'sjdurallc_inquiries_v4',
-  ORDERS: 'sjdurallc_orders_v4',
-  CART: 'sjdurallc_cart_v4',
-  FAQS: 'sjdurallc_faqs_v4',
+  PRODUCTS: 'sjdurallc_products_v5',
+  SETTINGS: 'sjdurallc_settings_v5',
+  INQUIRIES: 'sjdurallc_inquiries_v5',
+  ORDERS: 'sjdurallc_orders_v5',
+  CART: 'sjdurallc_cart_v5',
+  FAQS: 'sjdurallc_faqs_v5',
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -191,10 +191,47 @@ function loadFromStorage<T>(key: string, fallback: T): T {
   }
 }
 
+function sanitizeProducts(list: Product[]): Product[] {
+  const defaultMap = new Map(DEFAULT_PRODUCTS.map((p) => [p.id, p]));
+  return list.map((p) => {
+    const def = defaultMap.get(p.id);
+    const hasDeadSvg = typeof p.image === 'string' && p.image.endsWith('.svg');
+    const missingHover = !p.hoverImage || p.hoverImage.endsWith('.svg');
+    if (def && (hasDeadSvg || missingHover)) {
+      return {
+        ...p,
+        image: def.image,
+        hoverImage: def.hoverImage,
+      };
+    }
+    if (hasDeadSvg) {
+      return {
+        ...p,
+        image: p.image.replace(/\.svg$/, '.jpg'),
+        hoverImage: p.hoverImage ? p.hoverImage.replace(/\.svg$/, '.jpg') : p.image.replace(/\.svg$/, '.jpg'),
+      };
+    }
+    return p;
+  });
+}
+
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(() =>
-    loadFromStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS)
+    sanitizeProducts(loadFromStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS))
   );
+
+  // Auto-heal stale HMR state if any product still holds legacy .svg paths or missing hoverImage
+  useEffect(() => {
+    const needsHeal = products.some(
+      (p) =>
+        (typeof p.image === 'string' && p.image.endsWith('.svg')) ||
+        !p.hoverImage ||
+        p.hoverImage.endsWith('.svg')
+    );
+    if (needsHeal) {
+      setProducts((prev) => sanitizeProducts(prev));
+    }
+  }, [products]);
   const [settings, setSettings] = useState<SiteSettings>(() =>
     loadFromStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS)
   );
