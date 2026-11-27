@@ -22,10 +22,10 @@ export const HangingGallerySection: React.FC = () => {
   const navigate = useNavigate();
   const wireStageRef = useRef<HTMLDivElement>(null);
 
-  // Replays EVERY TIME you scroll into the wire stage:
-  // 0.00s -> 0.55s: Wire draws left to right FIRST
-  // 0.45s -> 1.05s: Cards 1 -> 2 -> 3 -> 4 -> 5 snap onto the wire one by one!
-  const isStageInView = useInView(wireStageRef, { once: false, amount: 0.15 });
+  // Replays EVERY TIME you scroll into the wire stage (triggers early & fast!):
+  // 0.00s -> 0.36s: Wire draws left to right FIRST
+  // 0.20s -> 0.56s: Cards 1 -> 2 -> 3 -> 4 -> 5 snap onto the wire one by one!
+  const isStageInView = useInView(wireStageRef, { once: false, amount: 0.05 });
 
   const hangingProducts = products.slice(0, 5);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -74,10 +74,10 @@ export const HangingGallerySection: React.FC = () => {
       {/* Top Editorial Header with Word-by-Word Staggered Scroll Animation */}
       <div className="relative z-10 max-w-[960px] mx-auto px-4 sm:px-6 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.45, ease: EASE_EDITORIAL }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.3, ease: EASE_EDITORIAL }}
           className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 border border-black/[0.08] shadow-sm mb-6"
         >
           <span className="w-2 h-2 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
@@ -94,20 +94,20 @@ export const HangingGallerySection: React.FC = () => {
         />
 
         <motion.p
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.55, delay: 0.22, ease: EASE_EDITORIAL }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.35, delay: 0.08, ease: EASE_EDITORIAL }}
           className="text-[14px] sm:text-[15px] text-neutral-600 mt-5 max-w-lg mx-auto leading-relaxed"
         >
           Grab and pull any hanging piece right off the studio line to inspect its details, or jump straight into its full specification page.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.55, delay: 0.3, ease: EASE_EDITORIAL }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.35, delay: 0.14, ease: EASE_EDITORIAL }}
           className="mt-7 flex flex-wrap items-center justify-center gap-3"
         >
           <a
@@ -147,13 +147,13 @@ export const HangingGallerySection: React.FC = () => {
             animate={isStageInView ? { pathLength: 1 } : { pathLength: 0 }}
             transition={
               isStageInView
-                ? { duration: 0.62, ease: EASE_EDITORIAL }
-                : { duration: 0.15, delay: 0 }
+                ? { duration: 0.36, ease: EASE_EDITORIAL }
+                : { duration: 0.1, delay: 0 }
             }
           />
         </svg>
 
-        {/* STEP 2 ON SCROLL: Cards 1 -> 2 -> 3 -> 4 -> 5 clip & drop onto the wire ONE BY ONE */}
+        {/* STEP 2 ON SCROLL: Cards 1 -> 2 -> 3 -> 4 -> 5 clip & drop onto the wire ONE BY ONE (snappy!) */}
         {hangingProducts.map((product, idx) => {
           const slot = SLOT_CONFIG[idx];
           if (!slot) return null;
@@ -164,9 +164,9 @@ export const HangingGallerySection: React.FC = () => {
           const isPullReady = pullReadyId === product.id;
           const isDetached = pulledProduct?.id === product.id;
 
-          // Wire draws first (0 -> 0.5s), then each card clips in cleanly 0.14s apart
-          const cardDelay = 0.45 + idx * 0.14;
-          const clipDelay = 0.38 + idx * 0.14;
+          // Wire draws first (0 -> 0.36s), then cards clip in crisply 75ms apart
+          const clipDelay = 0.16 + idx * 0.075;
+          const cardDelay = 0.20 + idx * 0.075;
 
           return (
             <div
@@ -184,8 +184,8 @@ export const HangingGallerySection: React.FC = () => {
                 animate={isStageInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0.2 }}
                 transition={
                   isStageInView
-                    ? { duration: 0.25, delay: clipDelay, ease: EASE_EDITORIAL }
-                    : { duration: 0.12, delay: 0 }
+                    ? { duration: 0.18, delay: clipDelay, ease: EASE_EDITORIAL }
+                    : { duration: 0.1, delay: 0 }
                 }
                 style={{ transformOrigin: '50% 0%' }}
                 className={`absolute -top-4 left-1/2 -translate-x-1/2 z-30 w-5 h-9 rounded-[5px] bg-[#002FA7] shadow flex flex-col items-center justify-between py-1.5 transition-colors duration-200 ${
@@ -198,16 +198,16 @@ export const HangingGallerySection: React.FC = () => {
 
               {/* Sequential One-by-One Drop-In Entrance Wrapper */}
               <motion.div
-                initial={{ opacity: 0, y: -44, scale: 0.86 }}
+                initial={{ opacity: 0, y: -36, scale: 0.88 }}
                 animate={
                   isStageInView
                     ? { opacity: 1, y: 0, scale: 1 }
-                    : { opacity: 0, y: -44, scale: 0.86 }
+                    : { opacity: 0, y: -36, scale: 0.88 }
                 }
                 transition={
                   isStageInView
-                    ? { type: 'spring', stiffness: 280, damping: 22, delay: cardDelay }
-                    : { duration: 0.12, delay: 0 }
+                    ? { type: 'spring', stiffness: 360, damping: 24, delay: cardDelay }
+                    : { duration: 0.1, delay: 0 }
                 }
                 style={{ transformOrigin: '50% 0%' }}
               >

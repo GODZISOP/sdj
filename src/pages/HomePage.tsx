@@ -104,9 +104,15 @@ export const HomePage: React.FC = () => {
 
   return (
     <main className="bg-white">
-      {/* 1. FULL-BLEED CINEMATIC VIDEO HERO SECTION (Matching Reference) */}
-      <section className="relative w-full h-[76vh] min-h-[540px] max-h-[840px] bg-[#BFC3C9] overflow-hidden">
-        {/* Seamless Autoplaying Studio Video */}
+      {/* 1. FULL-BLEED CINEMATIC VIDEO HERO WITH MULTI-DIRECTION TEXT ANIMATION */}
+      <section
+        className="relative w-full h-[80vh] min-h-[580px] max-h-[860px] overflow-hidden flex items-center justify-center"
+        style={{
+          background:
+            'radial-gradient(ellipse 62% 78% at 50% 46%, #B8BCC2 0%, #A1A5AB 58%, #8F9399 100%)',
+        }}
+      >
+        {/* Uncropped Studio Video (100% visible head + headphones, feathered seamlessly into backdrop) */}
         <video
           ref={videoRef}
           src="/videos/hero-headphones.mp4"
@@ -114,21 +120,126 @@ export const HomePage: React.FC = () => {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(90deg, transparent 0%, black 11%, black 89%, transparent 100%)',
+            maskImage:
+              'linear-gradient(90deg, transparent 0%, black 11%, black 89%, transparent 100%)',
+          }}
+          className="relative z-0 h-full w-full max-w-[1380px] object-contain object-center"
         />
 
-        {/* Subtle Top/Bottom Editorial Vignette for Legibility */}
+        {/* Subtle Bottom Editorial Vignette */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.04] via-transparent to-black/[0.14]"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.05] via-transparent to-black/[0.18] z-10"
         />
+
+        {/* MULTI-DIRECTION SLIDE TEXT OVERLAY (Left slides from Left, Right slides from Right — replays on scroll!) */}
+        <div className="pointer-events-none absolute inset-0 z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-between pt-8 md:pt-0 pb-36 md:pb-16">
+          {/* LEFT FLANK — Slides IN from Left -> Right */}
+          <motion.div
+            initial={{ opacity: 0, x: -70 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.55, ease: EASE_EDITORIAL }}
+            className="max-w-[290px] lg:max-w-[360px] space-y-2.5"
+          >
+            <div className="inline-flex items-center gap-2 bg-white/80 px-3 py-1 rounded-full border border-white/90 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111] font-semibold">
+                {settings.brandName} · Edition 01
+              </span>
+            </div>
+
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={{ x: -80, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0.05, ease: EASE_EDITORIAL }}
+                className="text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
+              >
+                SCULPTED
+              </motion.h1>
+            </div>
+            <div className="overflow-hidden">
+              <motion.span
+                initial={{ x: 60, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0.14, ease: EASE_EDITORIAL }}
+                className="block text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#002FA7]"
+              >
+                SOUND.
+              </motion.span>
+            </div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 0.45, delay: 0.22, ease: EASE_EDITORIAL }}
+              className="hidden sm:block text-[12px] lg:text-[13px] font-medium text-[#111111]/80 leading-relaxed pt-1"
+            >
+              Precision-engineered industrial acoustics & architectural objects crafted for clarity.
+            </motion.p>
+          </motion.div>
+
+          {/* RIGHT FLANK — Slides IN from Right -> Left */}
+          <motion.div
+            initial={{ opacity: 0, x: 70 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.55, delay: 0.08, ease: EASE_EDITORIAL }}
+            className="hidden md:flex flex-col items-end text-right max-w-[290px] lg:max-w-[360px] space-y-2.5"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#111111]/75 bg-white/75 px-3 py-1 rounded-full border border-white/90">
+              ACTIVE ANC · 45H BATTERY
+            </span>
+
+            <div className="overflow-hidden">
+              <motion.span
+                initial={{ x: 80, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: EASE_EDITORIAL }}
+                className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.14)]"
+              >
+                PURE
+              </motion.span>
+            </div>
+            <div className="overflow-hidden">
+              <motion.span
+                initial={{ x: -60, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0.18, ease: EASE_EDITORIAL }}
+                className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
+              >
+                FORM.
+              </motion.span>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 0.45, delay: 0.25, ease: EASE_EDITORIAL }}
+              className="flex flex-col items-end gap-1 pt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111]/80"
+            >
+              <span>CNC ALUMINUM HOUSING</span>
+              <span>RIYADH STUDIO · GCC DELIVERY</span>
+            </motion.div>
+          </motion.div>
+        </div>
 
         {/* Subtle Sound Toggle Button (Bottom-Right) */}
         <button
           type="button"
           onClick={toggleAudio}
           aria-label={isMuted ? 'Unmute hero video' : 'Mute hero video'}
-          className="absolute top-5 right-5 sm:bottom-8 sm:top-auto sm:right-8 z-20 inline-flex items-center gap-2 rounded-full bg-white/75 hover:bg-white backdrop-blur-md px-3.5 py-2 border border-white/80 text-[10px] font-mono uppercase tracking-[0.14em] text-[#111111] transition-all shadow-sm"
+          className="absolute top-5 right-5 sm:bottom-8 sm:top-auto sm:right-8 z-20 inline-flex items-center gap-2 rounded-full bg-white/80 hover:bg-white backdrop-blur-md px-3.5 py-2 border border-white/90 text-[10px] font-mono uppercase tracking-[0.14em] text-[#111111] transition-all shadow-sm"
         >
           {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-[#002FA7]" />}
           <span className="hidden sm:inline">{isMuted ? 'Sound Off' : 'Sound On'}</span>

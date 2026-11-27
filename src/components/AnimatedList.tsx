@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { EASE_EDITORIAL } from '../lib/motion';
 
 export type AnimationPhase = 'idle' | 'forming' | 'scrolling' | 'resetting';
@@ -20,38 +20,47 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   children,
   className = '',
   stackGap = 18,
-  columnGap = 116,
+  columnGap = 114,
   scaleFactor = 0.045,
-  scrollDownDuration = 6.5,
-  formationDuration = 0.9,
+  scrollDownDuration = 4.2,
+  formationDuration = 0.55,
   paused = false,
   onPhaseChange,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.08 });
   const items = React.Children.toArray(children);
   const count = items.length;
   const prefersReduced = useReducedMotion();
   const [phase, setPhase] = useState<AnimationPhase>('idle');
+
+  // Reset immediately when scrolled out of view so it ALWAYS replays fresh on scroll!
+  useEffect(() => {
+    if (!isInView) {
+      setPhase('idle');
+    }
+  }, [isInView]);
 
   useEffect(() => {
     onPhaseChange?.(phase);
   }, [phase, onPhaseChange]);
 
   useEffect(() => {
-    if (prefersReduced || paused || count <= 1) return;
+    if (prefersReduced || paused || !isInView || count <= 1) return;
 
     let timer: number;
     if (phase === 'idle') {
-      timer = window.setTimeout(() => setPhase('forming'), 1400);
+      timer = window.setTimeout(() => setPhase('forming'), 550);
     } else if (phase === 'forming') {
-      timer = window.setTimeout(() => setPhase('scrolling'), formationDuration * 1000 + 350);
+      timer = window.setTimeout(() => setPhase('scrolling'), formationDuration * 1000 + 180);
     } else if (phase === 'scrolling') {
-      timer = window.setTimeout(() => setPhase('resetting'), scrollDownDuration * 1000 + 350);
+      timer = window.setTimeout(() => setPhase('resetting'), scrollDownDuration * 1000 + 220);
     } else if (phase === 'resetting') {
-      timer = window.setTimeout(() => setPhase('idle'), 950);
+      timer = window.setTimeout(() => setPhase('idle'), 550);
     }
 
     return () => window.clearTimeout(timer);
-  }, [phase, paused, prefersReduced, count, formationDuration, scrollDownDuration]);
+  }, [phase, paused, isInView, prefersReduced, count, formationDuration, scrollDownDuration]);
 
   // Distance to scroll through the formed vertical column cleanly inside the viewport
   const scrollTravel = Math.max(0, (count - 3) * columnGap);
@@ -69,7 +78,7 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   }
 
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`}>
+    <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className}`}>
       {/* Top & Bottom Soft Studio Gradient Masks */}
       <div
         aria-hidden="true"

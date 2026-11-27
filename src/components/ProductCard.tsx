@@ -33,10 +33,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 22 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.08 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.45, delay: Math.min(index * 0.05, 0.25), ease: EASE_EDITORIAL }}
+      transition={{ duration: 0.32, delay: Math.min(index * 0.04, 0.16), ease: EASE_EDITORIAL }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}

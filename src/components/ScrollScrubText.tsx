@@ -16,8 +16,8 @@ export const ScrollScrubText: React.FC<ScrollScrubTextProps> = ({
   as = 'h2',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // once: false replays the staggered word reveal every time you scroll into view
-  const isInView = useInView(containerRef, { once: false, amount: 0.15 });
+  // once: false replays fast & early every time you scroll into view
+  const isInView = useInView(containerRef, { once: false, amount: 0.05 });
   const prefersReduced = useReducedMotion();
 
   const accentSet = new Set(accentWords.map((w) => w.toUpperCase()));
@@ -72,11 +72,11 @@ export const ScrollScrubText: React.FC<ScrollScrubTextProps> = ({
                     transition={
                       isInView
                         ? {
-                            duration: 0.56,
-                            delay: idx * 0.065,
+                            duration: 0.34,
+                            delay: idx * 0.036,
                             ease: EASE_EDITORIAL,
                           }
-                        : { duration: 0.15, delay: 0 }
+                        : { duration: 0.1, delay: 0 }
                     }
                     className={`inline-block will-change-transform ${isAccent ? 'text-[#002FA7]' : ''}`}
                   >

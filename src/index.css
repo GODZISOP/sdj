@@ -156,13 +156,13 @@
   animation: pulseRing 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-/* Scroll-triggered reveal */
+/* Scroll-triggered reveal (fast & snappy) */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(24px) scale(0.99);
+  transform: translateY(16px) scale(0.99);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 

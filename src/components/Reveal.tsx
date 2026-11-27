@@ -18,7 +18,7 @@ export const Reveal: React.FC<RevealProps> = ({ children, className = '', delayM
       ([entry]) => {
         setVisible(entry.isIntersecting);
       },
-      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+      { threshold: 0.02, rootMargin: '0px 0px -8px 0px' }
     );
 
     observer.observe(el);
