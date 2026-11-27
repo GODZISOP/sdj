@@ -22,10 +22,10 @@ export const HangingGallerySection: React.FC = () => {
   const navigate = useNavigate();
   const wireStageRef = useRef<HTMLDivElement>(null);
 
-  // Trigger ONCE when the wire stage scrolls into view:
+  // Replays EVERY TIME you scroll into the wire stage:
   // 0.00s -> 0.55s: Wire draws left to right FIRST
-  // 0.42s -> 1.05s: Cards 1 -> 2 -> 3 -> 4 -> 5 snap onto the wire one by one!
-  const isStageInView = useInView(wireStageRef, { once: true, amount: 0.22 });
+  // 0.45s -> 1.05s: Cards 1 -> 2 -> 3 -> 4 -> 5 snap onto the wire one by one!
+  const isStageInView = useInView(wireStageRef, { once: false, amount: 0.15 });
 
   const hangingProducts = products.slice(0, 5);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -76,7 +76,7 @@ export const HangingGallerySection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
+          viewport={{ once: false, amount: 0.35 }}
           transition={{ duration: 0.45, ease: EASE_EDITORIAL }}
           className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 border border-black/[0.08] shadow-sm mb-6"
         >
@@ -96,8 +96,8 @@ export const HangingGallerySection: React.FC = () => {
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.55, delay: 0.25, ease: EASE_EDITORIAL }}
+          viewport={{ once: false, amount: 0.35 }}
+          transition={{ duration: 0.55, delay: 0.22, ease: EASE_EDITORIAL }}
           className="text-[14px] sm:text-[15px] text-neutral-600 mt-5 max-w-lg mx-auto leading-relaxed"
         >
           Grab and pull any hanging piece right off the studio line to inspect its details, or jump straight into its full specification page.
@@ -106,8 +106,8 @@ export const HangingGallerySection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.55, delay: 0.35, ease: EASE_EDITORIAL }}
+          viewport={{ once: false, amount: 0.35 }}
+          transition={{ duration: 0.55, delay: 0.3, ease: EASE_EDITORIAL }}
           className="mt-7 flex flex-wrap items-center justify-center gap-3"
         >
           <a
@@ -145,7 +145,11 @@ export const HangingGallerySection: React.FC = () => {
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={isStageInView ? { pathLength: 1 } : { pathLength: 0 }}
-            transition={{ duration: 0.62, ease: EASE_EDITORIAL }}
+            transition={
+              isStageInView
+                ? { duration: 0.62, ease: EASE_EDITORIAL }
+                : { duration: 0.15, delay: 0 }
+            }
           />
         </svg>
 
@@ -178,7 +182,11 @@ export const HangingGallerySection: React.FC = () => {
                 aria-hidden="true"
                 initial={{ opacity: 0, scaleY: 0.2 }}
                 animate={isStageInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0.2 }}
-                transition={{ duration: 0.25, delay: clipDelay, ease: EASE_EDITORIAL }}
+                transition={
+                  isStageInView
+                    ? { duration: 0.25, delay: clipDelay, ease: EASE_EDITORIAL }
+                    : { duration: 0.12, delay: 0 }
+                }
                 style={{ transformOrigin: '50% 0%' }}
                 className={`absolute -top-4 left-1/2 -translate-x-1/2 z-30 w-5 h-9 rounded-[5px] bg-[#002FA7] shadow flex flex-col items-center justify-between py-1.5 transition-colors duration-200 ${
                   isPullReady || isDetached ? 'bg-[#111111]' : ''
@@ -196,7 +204,11 @@ export const HangingGallerySection: React.FC = () => {
                     ? { opacity: 1, y: 0, scale: 1 }
                     : { opacity: 0, y: -44, scale: 0.86 }
                 }
-                transition={{ type: 'spring', stiffness: 280, damping: 22, delay: cardDelay }}
+                transition={
+                  isStageInView
+                    ? { type: 'spring', stiffness: 280, damping: 22, delay: cardDelay }
+                    : { duration: 0.12, delay: 0 }
+                }
                 style={{ transformOrigin: '50% 0%' }}
               >
                 {/* Organic Breeze Pendulum Sway Wrapper */}
@@ -320,7 +332,7 @@ export const HangingGallerySection: React.FC = () => {
             strokeWidth="2"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.6, ease: EASE_EDITORIAL }}
           />
         </svg>
@@ -331,7 +343,7 @@ export const HangingGallerySection: React.FC = () => {
               key={product.id}
               initial={{ opacity: 0, y: -28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.15 }}
               transition={{ type: 'spring', stiffness: 260, damping: 22, delay: 0.3 + idx * 0.12 }}
               className="snap-center flex-shrink-0 w-[230px] relative pt-3"
             >

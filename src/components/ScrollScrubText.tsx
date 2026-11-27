@@ -16,8 +16,8 @@ export const ScrollScrubText: React.FC<ScrollScrubTextProps> = ({
   as = 'h2',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Observe the UNCLIPPED outer container so IntersectionObserver always fires reliably!
-  const isInView = useInView(containerRef, { once: true, amount: 0.12 });
+  // once: false replays the staggered word reveal every time you scroll into view
+  const isInView = useInView(containerRef, { once: false, amount: 0.15 });
   const prefersReduced = useReducedMotion();
 
   const accentSet = new Set(accentWords.map((w) => w.toUpperCase()));
@@ -69,11 +69,15 @@ export const ScrollScrubText: React.FC<ScrollScrubTextProps> = ({
                   <motion.span
                     initial={{ y: '105%', opacity: 0 }}
                     animate={isInView ? { y: '0%', opacity: 1 } : { y: '105%', opacity: 0 }}
-                    transition={{
-                      duration: 0.56,
-                      delay: idx * 0.065,
-                      ease: EASE_EDITORIAL,
-                    }}
+                    transition={
+                      isInView
+                        ? {
+                            duration: 0.56,
+                            delay: idx * 0.065,
+                            ease: EASE_EDITORIAL,
+                          }
+                        : { duration: 0.15, delay: 0 }
+                    }
                     className={`inline-block will-change-transform ${isAccent ? 'text-[#002FA7]' : ''}`}
                   >
                     {word}

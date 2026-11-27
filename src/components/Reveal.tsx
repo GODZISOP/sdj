@@ -16,12 +16,9 @@ export const Reveal: React.FC<RevealProps> = ({ children, className = '', delayM
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(el);
-        }
+        setVisible(entry.isIntersecting);
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
     );
 
     observer.observe(el);
@@ -31,7 +28,7 @@ export const Reveal: React.FC<RevealProps> = ({ children, className = '', delayM
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: `${delayMs}ms` }}
+      style={{ transitionDelay: visible ? `${delayMs}ms` : '0ms' }}
       className={`scroll-reveal ${visible ? 'is-visible' : ''} ${className}`}
     >
       {children}
