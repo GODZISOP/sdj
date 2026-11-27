@@ -195,24 +195,24 @@ export const ProductDetailPage: React.FC = () => {
               </motion.button>
             </div>
 
-            {/* Studio Guarantees */}
+            {/* Wholesale Guarantees */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
-                  Studio Structural Warranty
+                  Quality Checked & Covered
                 </span>
               </div>
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
                 <Truck className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
-                  KSA & GCC Express Delivery
+                  Fast KSA & GCC Delivery
                 </span>
               </div>
               <div className="p-3.5 bg-[#F5F6F8] flex items-start gap-2.5">
                 <Award className="w-4 h-4 text-[#002FA7] flex-shrink-0 mt-0.5" />
                 <span className="text-[11px] font-medium text-neutral-700">
-                  Precision Architectural Finish
+                  Single & Bulk Ready
                 </span>
               </div>
             </div>
@@ -222,14 +222,14 @@ export const ProductDetailPage: React.FC = () => {
               <div className="flex items-center gap-2.5 text-xs text-neutral-600">
                 <Check className="w-4 h-4 text-[#002FA7] flex-shrink-0" />
                 <span>
-                  Bulk & corporate pricing available via <strong className="text-black">{settings.ownerName}</strong>
+                  Bulk wholesale prices available from <strong className="text-black">{settings.ownerName}</strong>
                 </span>
               </div>
               <Link
                 to="/contact"
                 className="text-xs font-semibold text-[#002FA7] hover:underline whitespace-nowrap"
               >
-                Inquire →
+                Get Quote →
               </Link>
             </div>
           </div>

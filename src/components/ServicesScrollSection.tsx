@@ -21,38 +21,38 @@ interface ServiceItem {
 const SERVICES: ServiceItem[] = [
   {
     number: '01',
-    titleTop: 'STUDIO',
-    titleBottom: 'CURATION',
+    titleTop: 'WHOLESALE',
+    titleBottom: 'SUPPLY',
     description:
-      'We engineer and curate architectural objects that bring quiet precision to modern living.',
-    capabilities: ['Acoustic hardware', 'Architectural lighting', 'Machined objects'],
+      'We supply genuine, fast-selling products in bulk at clear and fair wholesale prices.',
+    capabilities: ['Bulk pricing', 'Steady stock', 'Quality checks'],
     bgColor: '#eadfca',
   },
   {
     number: '02',
-    titleTop: 'COMMERCIAL',
-    titleBottom: 'OUTFITTING',
+    titleTop: 'BRAND',
+    titleBottom: 'PARTNERS',
     description:
-      'We equip executive studios, private lounges, and architectural workspaces across the GCC.',
-    capabilities: ['Space curation', 'Volume sourcing', 'On-site installation'],
+      'We build honest, long-term partnerships with trusted brands and approved suppliers.',
+    capabilities: ['Brand care', 'Clean stock supply', 'Regular reorders'],
     bgColor: '#dbe4e9',
   },
   {
     number: '03',
-    titleTop: 'BESPOKE',
-    titleBottom: 'EDITIONS',
+    titleTop: 'PACKING &',
+    titleBottom: 'PREP',
     description:
-      'We craft custom anodized finishes and tailored commissions built for lasting recognition.',
-    capabilities: ['Cobalt anodizing', 'Laser engraving', 'Corporate gifting'],
+      'We inspect, sort, and pack every bulk order safely so items arrive ready to sell.',
+    capabilities: ['Safe packing', 'Labeling & prep', 'Fast dispatch'],
     bgColor: '#d9ded1',
   },
   {
     number: '04',
-    titleTop: 'CONCIERGE',
-    titleBottom: '& DELIVERY',
+    titleTop: 'STORE &',
+    titleBottom: 'SUPPORT',
     description:
-      'We handle insured white-glove delivery and dedicated long-term care for every studio order.',
-    capabilities: ['GCC express freight', '5-year warranty', 'Direct specialist care'],
+      'We help retail shops and online sellers from their first price quote to final delivery.',
+    capabilities: ['Quick quotes', 'Clear invoices', 'Direct support'],
     bgColor: '#e4d8d2',
   },
 ];
@@ -312,7 +312,7 @@ export const ServicesScrollSection: React.FC = () => {
             style={{ writingMode: 'vertical-rl' }}
             className="rotate-180 font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.22em] leading-none"
           >
-            SJDURALLC · STUDIO
+            SJDURALLC · WHOLESALE
           </span>
         </div>
 

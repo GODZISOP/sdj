@@ -51,20 +51,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ isHeadingH1 = fa
               <h1 className="text-[34px] sm:text-[46px] md:text-[54px] font-extrabold leading-[1.02] swiss-tracking mt-2">
                 Direct Support &
                 <br />
-                <span className="text-[#002FA7]">Studio Outfitting.</span>
+                <span className="text-[#002FA7]">Wholesale Orders.</span>
               </h1>
             ) : (
               <ScrollScrubText
                 as="h2"
-                lines={['Direct Support &', 'Studio Outfitting.']}
-                accentWords={['Studio', 'Outfitting.']}
+                lines={['Direct Support &', 'Wholesale Orders.']}
+                accentWords={['Wholesale', 'Orders.']}
                 className="text-[32px] sm:text-[42px] md:text-[48px] font-extrabold leading-[1.02] swiss-tracking mt-2"
               />
             )}
             <p className="text-sm text-neutral-600 mt-4 leading-relaxed">
-              Reach <span className="font-semibold text-[#111111]">{settings.ownerName}</span> and our{' '}
+              Contact <span className="font-semibold text-[#111111]">{settings.ownerName}</span> and our{' '}
               <span className="font-semibold text-[#111111]">{settings.companyLegalName}</span> team
-              for private gym commissions, commercial orders, or product guidance.
+              for bulk price quotes, brand partnerships, or product questions.
             </p>
           </div>
 

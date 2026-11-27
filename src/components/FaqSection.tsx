@@ -21,7 +21,7 @@ export const FaqSection: React.FC = () => {
               className="text-[30px] sm:text-[34px] font-extrabold leading-[1.05] swiss-tracking"
             />
             <p className="text-sm text-neutral-600 leading-relaxed">
-              Answers about {settings.brandName} shipping, custom studio outfitting, warranties, and support.
+              Clear answers about {settings.brandName} wholesale orders, bulk pricing, shipping, and product support.
             </p>
           </div>
 

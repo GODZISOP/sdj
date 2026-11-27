@@ -22,94 +22,94 @@ const CLIENT_REVIEWS: ProductReview[] = [
   {
     id: 'rev-1',
     clientName: 'Faisal Al-Harbi',
-    role: 'Creative Director',
+    role: 'Retail Store Owner',
     city: 'Riyadh',
     productId: 'aero-headphones',
-    productName: 'Aero One Headphone',
+    productName: 'Aero One Headphones',
     productImage: '/images/prod-headphones.jpg',
     rating: 5,
-    comment: 'Studio-grade soundstage and zero ear fatigue even after 8-hour editing sessions.',
+    comment: 'Our customers love these headphones. Packing was clean and our bulk order arrived right on time.',
     timeAgo: '18m ago',
   },
   {
     id: 'rev-2',
     clientName: 'Noura Al-Qahtani',
-    role: 'Interior Architect',
+    role: 'Home Goods Buyer',
     city: 'Jeddah',
     productId: 'kinetix-lamp',
-    productName: 'Kinetix Desk Lamp',
+    productName: 'Kinetix LED Desk Lamp',
     productImage: '/images/prod-lamp.jpg',
     rating: 5,
-    comment: 'The brushed steel weight and warm 3000K glow transformed our drafting studio.',
+    comment: 'Ordered 30 desk lamps for our shop. Strong quality, bright light, and very easy to sell.',
     timeAgo: '1h ago',
   },
   {
     id: 'rev-3',
     clientName: 'Omar Bin-Saeed',
-    role: 'Founder, Craft Lab',
+    role: 'Online Seller',
     city: 'Dubai',
     productId: 'cobalt-speaker',
-    productName: 'Cobalt Acoustic Speaker',
+    productName: 'Cobalt Wireless Speaker',
     productImage: '/images/prod-speaker.jpg',
     rating: 5,
-    comment: 'Ordered 12 units for client lounges — crystal clarity and the steel dial feels unreal.',
+    comment: 'Great wholesale price and zero damaged boxes. Every speaker passed our check before listing.',
     timeAgo: '3h ago',
   },
   {
     id: 'rev-4',
     clientName: 'Layla Mansoor',
-    role: 'Lead Product Engineer',
+    role: 'Tech Shop Manager',
     city: 'Riyadh',
     productId: 'monolith-keyboard',
     productName: 'Monolith 75 Keyboard',
     productImage: '/images/prod-keyboard.jpg',
     rating: 5,
-    comment: 'Solid CNC aluminum chassis with deep thocky acoustics and tactile cobalt knob.',
+    comment: 'Fast restock and clear invoices from Sjdurallc. Best wholesale partner we have worked with.',
     timeAgo: '5h ago',
   },
   {
     id: 'rev-5',
     clientName: 'Khalid Al-Dosari',
-    role: 'Wellness Studio Owner',
+    role: 'Sports Store Buyer',
     city: 'Dammam',
     productId: 'vector-dumbbell',
-    productName: 'Vector Dumbbell',
+    productName: 'Vector Steel Dumbbell',
     productImage: '/images/cat-dumbbell.jpg',
     rating: 5,
-    comment: 'Machined stainless steel finish looks like architectural sculpture in our suite.',
+    comment: 'Heavy, well-packed, and exact weight on every unit. Smooth bulk delivery from start to finish.',
     timeAgo: '1d ago',
   },
   {
     id: 'rev-6',
     clientName: 'Sara Al-Zahrani',
-    role: 'Brand Strategist',
+    role: 'Corporate Gift Buyer',
     city: 'Riyadh',
     productId: 'thermo-flask',
-    productName: 'Thermo Cobalt Flask',
+    productName: 'Thermo Insulated Flask',
     productImage: '/images/prod-tumbler.jpg',
     rating: 5,
-    comment: 'Keeps ice solid all day in Riyadh heat — tactile matte cobalt never scratches.',
+    comment: 'Bought 100 bottles in bulk for our company team. Great quality and quick response on WhatsApp.',
     timeAgo: '2d ago',
   },
   {
     id: 'rev-7',
     clientName: 'Zaid Al-Otaibi',
-    role: 'Sound Designer',
+    role: 'Electronics Wholesaler',
     city: 'Abu Dhabi',
     productId: 'aero-headphones',
-    productName: 'Aero One Headphone',
+    productName: 'Aero One Headphones',
     productImage: '/images/prod-headphones.jpg',
     rating: 5,
-    comment: 'Fast express delivery from Sjdurallc and the metallic earcup finish is flawless.',
+    comment: 'Honest wholesale rates, genuine stock, and very helpful support whenever we need reorders.',
     timeAgo: '3d ago',
   },
 ];
 
 const PHASE_LABELS: Record<AnimationPhase, string> = {
   idle: '01 / STACKED',
-  forming: '02 / UNFURLING',
-  scrolling: '03 / STREAMING',
-  resetting: '04 / RESETTING',
+  forming: '02 / OPENING',
+  scrolling: '03 / MOVING',
+  resetting: '04 / RESET',
 };
 
 export const ClientReviewsSection: React.FC = () => {
@@ -130,19 +130,19 @@ export const ClientReviewsSection: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F5F6F8] border border-black/[0.06]">
             <span className="w-2 h-2 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
             <span className="eyebrow-mono text-[10px] text-[#111111]">
-              VERIFIED CLIENT FEEDBACK
+              VERIFIED BUYER REVIEWS
             </span>
           </div>
 
           <ScrollScrubText
             as="h2"
-            lines={['What Clients', 'Say About', 'Our Objects.']}
-            accentWords={['Clients', 'Objects.']}
+            lines={['What Wholesale', 'Buyers Say', 'About Us.']}
+            accentWords={['Wholesale', 'Us.']}
             className="text-[36px] sm:text-[44px] md:text-[50px] font-extrabold leading-[1.0] swiss-tracking text-[#111111]"
           />
 
           <p className="text-[14px] sm:text-[15px] text-neutral-600 leading-relaxed max-w-md">
-            Real reviews from architects, founders, and creators across Riyadh, Jeddah, Dammam, and Dubai. Hover any review card to pause or click to inspect the product.
+            Real feedback from shop owners, bulk buyers, and online store partners who buy from Sjdurallc. Hover any card to pause, or click to view the product.
           </p>
 
           {/* Rating & Trust Stats */}
@@ -152,15 +152,15 @@ export const ClientReviewsSection: React.FC = () => {
                 <span className="text-2xl font-extrabold text-[#111111] tabular-nums">4.9</span>
                 <Star className="w-4 h-4 fill-[#002FA7] text-[#002FA7]" />
               </div>
-              <p className="text-[11px] text-neutral-500 mt-0.5">Average Rating</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">Buyer Rating</p>
             </div>
             <div>
               <p className="text-2xl font-extrabold text-[#111111] tabular-nums">240+</p>
-              <p className="text-[11px] text-neutral-500 mt-0.5">Verified Orders</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">Bulk Orders Sent</p>
             </div>
             <div>
               <p className="text-2xl font-extrabold text-[#002FA7] tabular-nums">100%</p>
-              <p className="text-[11px] text-neutral-500 mt-0.5">GCC Insured</p>
+              <p className="text-[11px] text-neutral-500 mt-0.5">Quality Checked</p>
             </div>
           </Reveal>
 
@@ -172,7 +172,7 @@ export const ClientReviewsSection: React.FC = () => {
               className="inline-flex items-center gap-2 rounded-full bg-[#111111] hover:bg-[#002FA7] text-white text-[11px] font-semibold px-4 py-2 transition-colors"
             >
               {manualPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
-              {manualPaused ? 'Resume Stream' : 'Pause Stream'}
+              {manualPaused ? 'Play Reviews' : 'Pause Reviews'}
             </button>
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-neutral-500 bg-[#F5F6F8] px-3 py-2 border border-black/[0.06]">
               {isPaused ? 'PAUSED' : PHASE_LABELS[phase]}

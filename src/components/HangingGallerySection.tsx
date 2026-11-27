@@ -82,14 +82,14 @@ export const HangingGallerySection: React.FC = () => {
         >
           <span className="w-2 h-2 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
           <span className="text-[11px] font-semibold tracking-[0.06em] text-neutral-700">
-            Interactive {settings.brandName} Archive — Drag Any Card Out
+            {settings.brandName} Wholesale Catalog — Drag Any Card Out
           </span>
         </motion.div>
 
         <ScrollScrubText
           as="h2"
-          lines={['CURATED OBJECTS BUILT TO', 'MOVE AND INSPIRE', 'EVERY SPACE']}
-          accentWords={['MOVE']}
+          lines={['QUALITY PRODUCTS READY FOR', 'WHOLESALE AND RETAIL', 'BUSINESS GROWTH']}
+          accentWords={['WHOLESALE']}
           className="text-[36px] sm:text-[52px] md:text-[64px] font-black uppercase leading-[0.95] tracking-[-0.04em] text-[#111111]"
         />
 
@@ -100,7 +100,7 @@ export const HangingGallerySection: React.FC = () => {
           transition={{ duration: 0.35, delay: 0.08, ease: EASE_EDITORIAL }}
           className="text-[14px] sm:text-[15px] text-neutral-600 mt-5 max-w-lg mx-auto leading-relaxed"
         >
-          Grab and pull any hanging piece right off the studio line to inspect its details, or jump straight into its full specification page.
+          Grab and pull any product card off the line to see its details, or open the product page to place a single or bulk order.
         </motion.p>
 
         <motion.div
@@ -114,7 +114,7 @@ export const HangingGallerySection: React.FC = () => {
             href="#equipment"
             className="inline-flex items-center gap-2.5 rounded-full bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 shadow-md transition-transform hover:-translate-y-0.5"
           >
-            Explore Collection
+            View All Products
             <ArrowRight className="w-4 h-4" />
           </a>
           <span className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-[0.12em] text-neutral-500 px-3 py-2">

@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
               <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[22px]">
                 <span className="block">{settings.brandName}</span>
                 <span className="block text-[11px] font-mono uppercase tracking-[0.14em] text-[#4C78FF] mt-1">
-                  Studio®
+                  Wholesale LLC
                 </span>
               </div>
             </div>

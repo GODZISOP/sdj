@@ -33,77 +33,92 @@ const CATEGORY_ORDER: CategoryKey[] = [
 const HERO_PILLARS = [
   {
     Icon: Volume2,
-    title: 'PREMIUM SOUND',
-    desc: 'Rich, detailed audio designed for immersive everyday listening.',
+    title: 'WHOLESALE PRICING',
+    desc: 'Fair bulk prices designed to help retail shops and online sellers grow.',
   },
   {
     Icon: Star,
-    title: 'BUILT FOR COMFORT',
-    desc: 'Lightweight, ergonomic design made for effortless all-day wear.',
+    title: 'QUALITY CHECKED',
+    desc: 'Every single product batch is checked carefully before packing.',
   },
   {
     Icon: Sliders,
-    title: 'SMART PERFORMANCE',
-    desc: 'Advanced engineering for intuitive control and crystal clarity.',
+    title: 'STEADY STOCK',
+    desc: 'Reliable inventory and regular restocks for your top-selling products.',
   },
   {
     Icon: ShoppingCart,
-    title: 'FREE SHIPPING',
-    desc: 'Enjoy fast, complimentary delivery across KSA & GCC.',
+    title: 'FAST SHIPPING',
+    desc: 'Safe packing and quick tracked delivery across Saudi Arabia & GCC.',
   },
 ];
 
 const HERO_TEXT_SLIDES = [
   {
-    badgeLeft: 'EDITION 01 · AUDIO',
-    leftTop: 'SCULPTED',
-    leftBottom: 'SOUND.',
-    leftDesc: 'Precision-engineered industrial acoustics & architectural objects crafted for clarity.',
-    badgeRight: 'ACTIVE ANC · 45H BATTERY',
-    rightTop: 'PURE',
-    rightBottom: 'FORM.',
-    rightSpec1: 'CNC ALUMINUM HOUSING',
-    rightSpec2: 'RIYADH STUDIO · GCC DELIVERY',
+    badgeLeft: 'TRUSTED WHOLESALE PARTNER',
+    leftTop: 'WHOLESALE',
+    leftBottom: 'SUPPLY.',
+    leftDesc: 'Genuine everyday products in bulk for retail shops, companies, and online stores.',
+    badgeRight: 'BULK ORDERS · READY STOCK',
+    rightTop: 'TRUSTED',
+    rightBottom: 'QUALITY.',
+    rightSpec1: 'CHECKED BEFORE PACKING',
+    rightSpec2: 'RIYADH OFFICE · GCC SHIPPING',
   },
   {
-    badgeLeft: 'ACOUSTIC ISOLATION',
-    leftTop: 'ZERO',
-    leftBottom: 'NOISE.',
-    leftDesc: 'Adaptive studio noise cancellation tuned for deep focus and effortless calm.',
-    badgeRight: 'SPATIAL CLARITY · 40MM',
-    rightTop: 'TOTAL',
-    rightBottom: 'CALM.',
-    rightSpec1: 'ULTRA-SOFT MEMORY FOAM',
-    rightSpec2: 'ALL-DAY ERGONOMIC FIT',
+    badgeLeft: 'DIRECT BUSINESS PRICING',
+    leftTop: 'BULK',
+    leftBottom: 'ORDERS.',
+    leftDesc: 'Honest wholesale prices, clear invoices, and steady supply for growing businesses.',
+    badgeRight: 'FAST DISPATCH · TRACKED',
+    rightTop: 'SAFE',
+    rightBottom: 'DELIVERY.',
+    rightSpec1: 'PROTECTIVE BOX PACKING',
+    rightSpec2: 'ON-TIME ORDER FULFILLMENT',
   },
   {
-    badgeLeft: 'ARCHITECTURAL OBJECTS',
-    leftTop: 'BUILT',
-    leftBottom: 'TO LAST.',
-    leftDesc: 'Honest metals, tactile matte cobalt finishes, and timeless geometric silhouette.',
-    badgeRight: 'CURATED LIVING',
-    rightTop: 'STUDIO',
-    rightBottom: 'CRAFT.',
-    rightSpec1: '5-YEAR STRUCTURAL WARRANTY',
-    rightSpec2: 'WHITE-GLOVE GCC SHIPPING',
+    badgeLeft: 'LONG-TERM PARTNERSHIPS',
+    leftTop: 'BRAND',
+    leftBottom: 'GROWTH.',
+    leftDesc: 'We work closely with trusted makers and brands to keep stock moving smoothly.',
+    badgeRight: 'APPROVED STOCK SUPPLY',
+    rightTop: 'HONEST',
+    rightBottom: 'DEALS.',
+    rightSpec1: 'REGULAR EASY REORDERS',
+    rightSpec2: 'DEDICATED ACCOUNT TEAM',
   },
   {
-    badgeLeft: 'FLAGSHIP COLLECTION',
-    leftTop: 'DESIGN',
-    leftBottom: 'ALIVE.',
-    leftDesc: 'From acoustic instruments to desk lighting — every piece elevates daily ritual.',
-    badgeRight: 'SJDURALLC TRADING LLC',
-    rightTop: 'BEYOND',
-    rightBottom: 'ORDINARY.',
-    rightSpec1: 'DIRECT STUDIO SUPPORT',
+    badgeLeft: 'SJDURALLC TRADING LLC',
+    leftTop: 'EASY',
+    leftBottom: 'ORDERING.',
+    leftDesc: 'Simple quotes, friendly support, and reliable supply for every product category.',
+    badgeRight: 'DIRECT WHOLESALE SUPPORT',
+    rightTop: 'READY',
+    rightBottom: 'TO SHIP.',
+    rightSpec1: 'SINGLE & BULK OPTIONS',
     rightSpec2: 'RIYADH · JEDDAH · DUBAI',
   },
 ];
 
-const MOVEMENTS = [
-  { num: '01', title: 'Hinge', desc: 'Controlled foundation & posture alignment.', image: '/images/move-hinge.jpg' },
-  { num: '02', title: 'Drive', desc: 'Kinetic transfer & balanced momentum.', image: '/images/move-drive.jpg' },
-  { num: '03', title: 'Press', desc: 'Full overhead structural extension.', image: '/images/move-press.jpg' },
+const PROCESS_STEPS = [
+  {
+    num: '01',
+    title: 'Pick Products',
+    desc: 'Choose from our quality-checked catalog of fast-moving items.',
+    image: '/images/prod-headphones-alt.jpg',
+  },
+  {
+    num: '02',
+    title: 'Get Bulk Price',
+    desc: 'Request a clear wholesale quote and invoice from our team.',
+    image: '/images/prod-lamp-alt.jpg',
+  },
+  {
+    num: '03',
+    title: 'Fast Delivery',
+    desc: 'We pack safely and ship straight to your store or warehouse.',
+    image: '/images/prod-speaker-alt.jpg',
+  },
 ];
 
 export const HomePage: React.FC = () => {
@@ -471,22 +486,22 @@ export const HomePage: React.FC = () => {
 
           <div className="lg:col-span-6 grid grid-cols-12">
             <Reveal className="col-span-12 sm:col-span-9 px-6 sm:px-10 md:px-14 py-12 sm:py-14 flex flex-col justify-center space-y-5">
-              <p className="eyebrow-mono text-neutral-500">THE {settings.brandName.toUpperCase()} PHILOSOPHY</p>
+              <p className="eyebrow-mono text-neutral-500">WHY CHOOSE {settings.brandName.toUpperCase()}</p>
               <ScrollScrubText
                 as="h2"
-                lines={['Built Better.', 'Live Calmer.', 'Last Longer.']}
-                accentWords={['Last', 'Longer.']}
+                lines={['Simple Supply.', 'Fair Prices.', 'Real Growth.']}
+                accentWords={['Real', 'Growth.']}
                 className="text-[34px] sm:text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]"
               />
               <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
-                Thoughtfully engineered audio, lighting, drinkware, and studio objects crafted from honest materials.
+                We make buying wholesale products simple, honest, and dependable for retail stores, offices, and online sellers.
               </p>
               <div className="pt-2">
                 <a
                   href="#equipment"
                   className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#002FA7] hover:gap-3 transition-all"
                 >
-                  Explore Objects
+                  Browse Products
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
@@ -552,11 +567,11 @@ export const HomePage: React.FC = () => {
         <div className="mt-12 pt-8 border-t border-black/[0.06]">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8">
             <div>
-              <p className="eyebrow-mono text-[#002FA7]">HOVER ANY PRODUCT FOR ALTERNATE VIEW</p>
+              <p className="eyebrow-mono text-[#002FA7]">HOVER ANY PRODUCT FOR CLOSE-UP VIEW</p>
               <ScrollScrubText
                 as="h3"
-                lines={[activeCategory === 'All' ? 'Curated Studio Collection' : `${activeCategory} Collection`]}
-                accentWords={['Studio']}
+                lines={[activeCategory === 'All' ? 'Wholesale Product Catalog' : `${activeCategory} Products`]}
+                accentWords={['Wholesale']}
                 className="text-2xl sm:text-3xl font-extrabold swiss-tracking mt-1"
               />
             </div>
@@ -607,34 +622,34 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. MOVEMENT / CRAFT IN FOCUS — INTERACTIVE SPOTLIGHT */}
+      {/* 4. SIMPLE 3-STEP WHOLESALE ORDER PROCESS */}
       <Reveal>
         <section id="programs" className="border-t border-black/[0.06] py-16">
           <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4 space-y-4">
-              <p className="eyebrow-mono text-neutral-500">MOVEMENT IN FOCUS</p>
+              <p className="eyebrow-mono text-neutral-500">HOW WE WORK</p>
               <ScrollScrubText
                 as="h2"
-                lines={['Train', 'with Intention.']}
-                accentWords={['Intention.']}
+                lines={['Simple', 'Bulk Ordering.']}
+                accentWords={['Ordering.']}
                 className="text-[34px] sm:text-[38px] md:text-[42px] font-extrabold leading-[1.04] swiss-tracking"
               />
               <p className="text-[14px] text-neutral-600 max-w-xs leading-relaxed">
-                Hover each stage to inspect balanced technique and daily movement rituals.
+                Three easy steps to source genuine products in bulk and receive them ready to sell.
               </p>
               <div className="pt-2">
                 <a
-                  href="#compare"
+                  href="#contact"
                   className="inline-flex items-center gap-2.5 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-6 py-3 transition-all hover:translate-x-0.5"
                 >
-                  Compare Essentials
+                  Request Bulk Quote
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
 
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {MOVEMENTS.map((step) => {
+              {PROCESS_STEPS.map((step) => {
                 const isActive = hoveredMove === step.num;
                 const isDimmed = hoveredMove !== null && !isActive;
                 return (
@@ -646,11 +661,12 @@ export const HomePage: React.FC = () => {
                       isDimmed ? 'opacity-55 scale-[0.985]' : 'opacity-100'
                     }`}
                   >
-                    <div className="aspect-[3/4] bg-white border border-black/[0.08] group-hover:border-[#002FA7] flex items-center justify-center p-4 overflow-hidden relative transition-colors duration-300">
+                    <div className="aspect-[4/4] bg-[#F5F6F8] border border-black/[0.08] group-hover:border-[#002FA7] overflow-hidden relative transition-colors duration-300">
                       <img
                         src={step.image}
                         alt={`${step.num} ${step.title}`}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
                       <div
                         className={`absolute bottom-0 left-0 right-0 h-1 bg-[#002FA7] origin-left transition-transform duration-300 ${
@@ -687,11 +703,11 @@ export const HomePage: React.FC = () => {
 
             <div className="lg:col-span-8 px-4 sm:px-6 md:px-12 py-10 sm:py-14">
               <div className="mb-8">
-                <p className="eyebrow-mono text-neutral-500">FIND YOUR FIT</p>
+                <p className="eyebrow-mono text-neutral-500">QUICK COMPARISON</p>
                 <ScrollScrubText
                   as="h2"
-                  lines={['Compare', 'Our Essentials']}
-                  accentWords={['Essentials']}
+                  lines={['Compare', 'Top Products']}
+                  accentWords={['Products']}
                   className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold leading-[1.06] swiss-tracking mt-1"
                 />
               </div>
