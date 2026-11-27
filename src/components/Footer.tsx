@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
               {/* Clean White Monogram + Brand */}
               <Link to="/" className="inline-flex items-center gap-3 group">
                 <img
-                  src="/favicon.svg"
+                  src="/favicon.svg?v=2"
                   alt={`${settings.brandName} Logo`}
                   className="w-9 h-9 rounded-lg ring-1 ring-white/30 shadow-md transition-transform duration-300 group-hover:scale-105"
                 />

@@ -120,7 +120,7 @@ export const Navbar: React.FC = () => {
             className="inline-flex items-center gap-2 group"
           >
             <img
-              src="/favicon.svg"
+              src="/favicon.svg?v=2"
               alt={`${settings.brandName} Logo`}
               className="w-6 h-6 sm:w-7 sm:h-7 rounded-md transition-transform duration-300 group-hover:scale-105"
             />

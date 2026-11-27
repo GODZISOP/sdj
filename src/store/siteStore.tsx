@@ -2,18 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, ContactInquiry, FaqItem, OrderRecord, Product, SiteSettings } from '../types';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'sjdurallc_products_v7',
-  SETTINGS: 'sjdurallc_settings_v7',
-  INQUIRIES: 'sjdurallc_inquiries_v7',
-  ORDERS: 'sjdurallc_orders_v7',
-  CART: 'sjdurallc_cart_v7',
-  FAQS: 'sjdurallc_faqs_v7',
+  PRODUCTS: 'sjdurallc_products_v8',
+  SETTINGS: 'sjdurallc_settings_v8',
+  INQUIRIES: 'sjdurallc_inquiries_v8',
+  ORDERS: 'sjdurallc_orders_v8',
+  CART: 'sjdurallc_cart_v8',
+  FAQS: 'sjdurallc_faqs_v8',
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   brandName: 'Sjdurallc',
   companyLegalName: 'Sjdurallc Wholesale & Trading LLC',
-  ownerName: 'Rana Javeed Akhter',
+  ownerName: 'Rana Javed Akhter',
   tagline: 'Reliable wholesale supply, bulk orders, and quality products for stores and online sellers.',
   phone: '+966 53 097 8783',
   whatsapp: '+966 53 097 8783',
@@ -29,7 +29,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
     category: 'Bulk Orders',
     question: 'How can I place a wholesale or bulk order?',
     answer:
-      'Contact Rana Javeed Akhter at info@sjdurallc.com or +966 53 097 8783 with the products and quantity you need. We will send you clear wholesale pricing within 24 hours.',
+      'Contact Rana Javed Akhter at info@sjdurallc.com or +966 53 097 8783 with the products and quantity you need. We will send you clear wholesale pricing within 24 hours.',
   },
   {
     id: 'faq-2',
@@ -229,9 +229,23 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [products]);
 
-  const [settings, setSettings] = useState<SiteSettings>(() =>
-    loadFromStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS)
-  );
+  const [settings, setSettings] = useState<SiteSettings>(() => {
+    const loaded = loadFromStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+    return {
+      ...loaded,
+      ownerName: loaded.ownerName.replace(/Javeed/gi, 'Javed'),
+    };
+  });
+
+  // Auto-heal stale HMR state if "Javeed" is still held in memory
+  useEffect(() => {
+    if (/Javeed/i.test(settings.ownerName)) {
+      setSettings((prev) => ({
+        ...prev,
+        ownerName: prev.ownerName.replace(/Javeed/gi, 'Javed'),
+      }));
+    }
+  }, [settings.ownerName]);
   const [inquiries, setInquiries] = useState<ContactInquiry[]>(() =>
     loadFromStorage(STORAGE_KEYS.INQUIRIES, DEFAULT_INQUIRIES)
   );
