@@ -113,6 +113,34 @@
   animation-play-state: paused !important;
 }
 
+/* Soft reflective hover shine for Editorial 3x3 Gallery tiles (desktop only, no scroll interference) */
+.editorial-tile-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-tile-shine::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.24) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%) skewX(-12deg);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 4;
+}
+
+@media (hover: hover) {
+  .editorial-tile-shine:hover::after {
+    transform: translateX(120%) skewX(-12deg);
+  }
+}
+
 .animate-fade-up {
   animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

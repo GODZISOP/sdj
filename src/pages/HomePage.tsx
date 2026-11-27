@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
   ArrowRight,
   Volume2,
@@ -17,6 +17,7 @@ import { StudioMarquee } from '../components/StudioMarquee';
 import { HangingGallerySection } from '../components/HangingGallerySection';
 import { ClientReviewsSection } from '../components/ClientReviewsSection';
 import { ServicesScrollSection } from '../components/ServicesScrollSection';
+import { EditorialWallSection } from '../components/EditorialWallSection';
 import { ScrollScrubText } from '../components/ScrollScrubText';
 import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
@@ -100,6 +101,26 @@ const HERO_TEXT_SLIDES = [
   },
 ];
 
+const SJDURALLC_WALL_IMAGES: string[] = [
+  '/images/prod-headphones.jpg',
+  '/images/prod-lamp-alt.jpg',
+  '/images/prod-speaker.jpg',
+  '/images/prod-tumbler-alt.jpg',
+  '/images/prod-keyboard.jpg',
+  '/images/hero-dumbbell.jpg',
+  '/images/prod-headphones-alt.jpg',
+  '/images/prod-speaker-alt.jpg',
+  '/images/prod-keyboard-alt.jpg',
+];
+
+const CATEGORY_FALLBACK_MEDIA: Record<CategoryKey, { image: string; hoverImage: string }> = {
+  'Audio & Tech': { image: '/images/prod-headphones.jpg', hoverImage: '/images/prod-headphones-alt.jpg' },
+  'Home & Desk': { image: '/images/prod-lamp.jpg', hoverImage: '/images/prod-lamp-alt.jpg' },
+  Drinkware: { image: '/images/prod-tumbler.jpg', hoverImage: '/images/prod-tumbler-alt.jpg' },
+  Strength: { image: '/images/cat-dumbbell.jpg', hoverImage: '/images/hero-dumbbell.jpg' },
+  Lifestyle: { image: '/images/prod-keyboard.jpg', hoverImage: '/images/prod-keyboard-alt.jpg' },
+};
+
 const PROCESS_STEPS = [
   {
     num: '01',
@@ -142,16 +163,8 @@ export const HomePage: React.FC = () => {
   const activeHeroCopy = HERO_TEXT_SLIDES[heroTextIdx];
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const philosophyRef = useRef<HTMLElement>(null);
   const collectionGridRef = useRef<HTMLDivElement>(null);
   const isCollectionInView = useInView(collectionGridRef, { once: false, amount: 0.06 });
-
-  const { scrollYProgress: philProgress } = useScroll({
-    target: philosophyRef,
-    offset: ['start end', 'end start'],
-  });
-  const philRingRotate = useTransform(philProgress, [0, 1], [-18, 28]);
-  const philRingY = useTransform(philProgress, [0, 1], [24, -24]);
 
   const heroFeaturedList = products.slice(0, 3);
   const activeHeroProduct = heroFeaturedList[heroSlideIdx] || products[0];
@@ -161,12 +174,13 @@ export const HomePage: React.FC = () => {
     activeCategory === 'All' ? products : products.filter((p) => p.category === activeCategory);
 
   const categoryCards = CATEGORY_ORDER.map((cat) => {
-    const match = products.find((p) => p.category === cat) || products[0];
+    const match = products.find((p) => p.category === cat);
+    const fb = CATEGORY_FALLBACK_MEDIA[cat];
     return {
       key: cat,
       label: cat,
-      image: match?.image || '/images/cat-dumbbell.jpg',
-      hoverImage: match?.hoverImage || match?.image || '/images/hero-dumbbell.jpg',
+      image: match?.image || fb.image,
+      hoverImage: match?.hoverImage || fb.hoverImage,
     };
   });
 
@@ -468,55 +482,30 @@ export const HomePage: React.FC = () => {
       {/* KINETIC EDITORIAL TICKER */}
       <StudioMarquee />
 
-      {/* 2. SCROLL-LINKED PHILOSOPHY SPLIT SECTION */}
-      <section ref={philosophyRef} id="philosophy" className="border-b border-black/[0.06] overflow-hidden">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-6 relative bg-[#EAECEF] min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] overflow-hidden">
-            <img
-              src="/images/philosophy-stretch.jpg"
-              alt="Minimalist sunlit studio lifestyle"
-              className="w-full h-full object-cover object-center hover:scale-[1.04] transition-transform duration-700"
-            />
-            <motion.div
-              aria-hidden="true"
-              style={{ rotate: philRingRotate, y: philRingY }}
-              className="pointer-events-none absolute right-[12%] top-1/2 -translate-y-1/2 w-[190px] h-[190px] sm:w-[260px] sm:h-[260px] rounded-full border border-[#002FA7]/55 border-dashed"
-            />
-          </div>
-
-          <div className="lg:col-span-6 grid grid-cols-12">
-            <Reveal className="col-span-12 sm:col-span-9 px-6 sm:px-10 md:px-14 py-12 sm:py-14 flex flex-col justify-center space-y-5">
-              <p className="eyebrow-mono text-neutral-500">WHY CHOOSE {settings.brandName.toUpperCase()}</p>
-              <ScrollScrubText
-                as="h2"
-                lines={['Simple Supply.', 'Fair Prices.', 'Real Growth.']}
-                accentWords={['Real', 'Growth.']}
-                className="text-[34px] sm:text-[38px] md:text-[46px] font-extrabold leading-[1.02] swiss-tracking text-[#111111]"
-              />
-              <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
-                We make buying wholesale products simple, honest, and dependable for retail stores, offices, and online sellers.
-              </p>
-              <div className="pt-2">
-                <a
-                  href="#equipment"
-                  className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#002FA7] hover:gap-3 transition-all"
-                >
-                  Browse Products
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </Reveal>
-
-            <div className="hidden sm:block sm:col-span-3 bg-[#002FA7] relative overflow-hidden">
-              <img
-                src="/images/compare-kettlebell.jpg"
-                alt="Cobalt tactile finish detail"
-                className="w-full h-full object-cover opacity-85 mix-blend-multiply hover:scale-110 transition-transform duration-700"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 2. FULL-SCREEN 3x3 SCROLL-DRIVEN EDITORIAL PRODUCT GALLERY (Replaces old Philosophy split) */}
+      <EditorialWallSection
+        id="philosophy"
+        mode="page"
+        images={SJDURALLC_WALL_IMAGES}
+        brandMark={settings.brandName.toUpperCase()}
+        categoryLabel="WHY CHOOSE SJDURALLC · WHOLESALE SUPPLY"
+        headline="Simple supply. Fair prices. Real growth for every store."
+        ctaLabel="Browse Products"
+        ctaHref="#equipment"
+        footerLabel="Bulk orders, quality checks & fast delivery"
+        sectionOne={{
+          label: 'WHY BUYERS TRUST US',
+          heading: 'Built For Real Growth',
+          description:
+            'Simple wholesale ordering, steady stock, and clean products that help retail shops and online sellers grow every month.',
+        }}
+        sectionTwo={{
+          label: 'WHOLESALE PARTNERSHIPS',
+          heading: 'Start Your Bulk Order',
+          buttonLabel: 'Contact Our Team',
+          buttonHref: '#contact',
+        }}
+      />
 
       {/* 3. 5-COLUMN INTERACTIVE CATEGORY STRIP + HOVER-SWAP COLLECTION GRID */}
       <section id="equipment" className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 py-14">
