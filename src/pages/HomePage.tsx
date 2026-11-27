@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import {
@@ -52,6 +52,53 @@ const HERO_PILLARS = [
   },
 ];
 
+const HERO_TEXT_SLIDES = [
+  {
+    badgeLeft: 'EDITION 01 · AUDIO',
+    leftTop: 'SCULPTED',
+    leftBottom: 'SOUND.',
+    leftDesc: 'Precision-engineered industrial acoustics & architectural objects crafted for clarity.',
+    badgeRight: 'ACTIVE ANC · 45H BATTERY',
+    rightTop: 'PURE',
+    rightBottom: 'FORM.',
+    rightSpec1: 'CNC ALUMINUM HOUSING',
+    rightSpec2: 'RIYADH STUDIO · GCC DELIVERY',
+  },
+  {
+    badgeLeft: 'ACOUSTIC ISOLATION',
+    leftTop: 'ZERO',
+    leftBottom: 'NOISE.',
+    leftDesc: 'Adaptive studio noise cancellation tuned for deep focus and effortless calm.',
+    badgeRight: 'SPATIAL CLARITY · 40MM',
+    rightTop: 'TOTAL',
+    rightBottom: 'CALM.',
+    rightSpec1: 'ULTRA-SOFT MEMORY FOAM',
+    rightSpec2: 'ALL-DAY ERGONOMIC FIT',
+  },
+  {
+    badgeLeft: 'ARCHITECTURAL OBJECTS',
+    leftTop: 'BUILT',
+    leftBottom: 'TO LAST.',
+    leftDesc: 'Honest metals, tactile matte cobalt finishes, and timeless geometric silhouette.',
+    badgeRight: 'CURATED LIVING',
+    rightTop: 'STUDIO',
+    rightBottom: 'CRAFT.',
+    rightSpec1: '5-YEAR STRUCTURAL WARRANTY',
+    rightSpec2: 'WHITE-GLOVE GCC SHIPPING',
+  },
+  {
+    badgeLeft: 'FLAGSHIP COLLECTION',
+    leftTop: 'DESIGN',
+    leftBottom: 'ALIVE.',
+    leftDesc: 'From acoustic instruments to desk lighting — every piece elevates daily ritual.',
+    badgeRight: 'SJDURALLC TRADING LLC',
+    rightTop: 'BEYOND',
+    rightBottom: 'ORDINARY.',
+    rightSpec1: 'DIRECT STUDIO SUPPORT',
+    rightSpec2: 'RIYADH · JEDDAH · DUBAI',
+  },
+];
+
 const MOVEMENTS = [
   { num: '01', title: 'Hinge', desc: 'Controlled foundation & posture alignment.', image: '/images/move-hinge.jpg' },
   { num: '02', title: 'Drive', desc: 'Kinetic transfer & balanced momentum.', image: '/images/move-drive.jpg' },
@@ -65,8 +112,18 @@ export const HomePage: React.FC = () => {
   const [hoveredMove, setHoveredMove] = useState<string | null>(null);
   const [hoveredCompareId, setHoveredCompareId] = useState<string | null>(null);
   const [heroSlideIdx, setHeroSlideIdx] = useState(0);
+  const [heroTextIdx, setHeroTextIdx] = useState(0);
   const [pillHovered, setPillHovered] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHeroTextIdx((prev) => (prev + 1) % HERO_TEXT_SLIDES.length);
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const activeHeroCopy = HERO_TEXT_SLIDES[heroTextIdx];
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const philosophyRef = useRef<HTMLElement>(null);
@@ -104,134 +161,160 @@ export const HomePage: React.FC = () => {
 
   return (
     <main className="bg-white">
-      {/* 1. FULL-BLEED CINEMATIC VIDEO HERO WITH MULTI-DIRECTION TEXT ANIMATION */}
+      {/* 1. FULL-BLEED CINEMATIC VIDEO HERO WITH SEAMLESS EDGE BLEND & LIVE CYCLING MULTI-DIRECTION TEXT */}
       <section
         className="relative w-full h-[80vh] min-h-[580px] max-h-[860px] overflow-hidden flex items-center justify-center"
         style={{
           background:
-            'radial-gradient(ellipse 62% 78% at 50% 46%, #B8BCC2 0%, #A1A5AB 58%, #8F9399 100%)',
+            'linear-gradient(90deg, #919498 0%, #9B9EA2 28%, #A6A9AD 50%, #9E9FA3 72%, #979A9E 100%)',
         }}
       >
-        {/* Uncropped Studio Video (100% visible head + headphones, feathered seamlessly into backdrop) */}
-        <video
-          ref={videoRef}
-          src="/videos/hero-headphones.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
+        {/* Exact 16:9 Aspect Video Box so CSS edge mask feathers directly over the actual video pixels -> ZERO vertical seams! */}
+        <div
           style={{
             WebkitMaskImage:
-              'linear-gradient(90deg, transparent 0%, black 11%, black 89%, transparent 100%)',
+              'linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%)',
             maskImage:
-              'linear-gradient(90deg, transparent 0%, black 11%, black 89%, transparent 100%)',
+              'linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%)',
           }}
-          className="relative z-0 h-full w-full max-w-[1380px] object-contain object-center"
-        />
+          className="relative z-0 h-full aspect-video max-w-none flex-shrink-0 flex items-center justify-center"
+        >
+          <video
+            ref={videoRef}
+            src="/videos/hero-headphones.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-contain object-center"
+          />
+        </div>
 
         {/* Subtle Bottom Editorial Vignette */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.05] via-transparent to-black/[0.18] z-10"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.04] via-transparent to-black/[0.16] z-10"
         />
 
-        {/* MULTI-DIRECTION SLIDE TEXT OVERLAY (Left slides from Left, Right slides from Right — replays on scroll!) */}
+        {/* LIVE CYCLING MULTI-DIRECTION SLIDE TEXT OVERLAY */}
         <div className="pointer-events-none absolute inset-0 z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-between pt-8 md:pt-0 pb-36 md:pb-16">
-          {/* LEFT FLANK — Slides IN from Left -> Right */}
-          <motion.div
-            initial={{ opacity: 0, x: -70 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ duration: 0.55, ease: EASE_EDITORIAL }}
-            className="max-w-[290px] lg:max-w-[360px] space-y-2.5"
-          >
-            <div className="inline-flex items-center gap-2 bg-white/80 px-3 py-1 rounded-full border border-white/90 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111] font-semibold">
-                {settings.brandName} · Edition 01
-              </span>
-            </div>
-
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ x: -80, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0.05, ease: EASE_EDITORIAL }}
-                className="text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
+          {/* LEFT FLANK — Live Multi-Direction Text Cycle */}
+          <div className="max-w-[290px] lg:max-w-[360px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`left-${heroTextIdx}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+                className="space-y-2.5"
               >
-                SCULPTED
-              </motion.h1>
-            </div>
-            <div className="overflow-hidden">
-              <motion.span
-                initial={{ x: 60, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0.14, ease: EASE_EDITORIAL }}
-                className="block text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#002FA7]"
+                <motion.div
+                  initial={{ x: -30, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 30, opacity: 0 }}
+                  transition={{ duration: 0.42, ease: EASE_EDITORIAL }}
+                  className="inline-flex items-center gap-2 bg-white/80 px-3 py-1 rounded-full border border-white/90 shadow-sm"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111] font-semibold">
+                    {activeHeroCopy.badgeLeft}
+                  </span>
+                </motion.div>
+
+                <div className="overflow-hidden">
+                  <motion.h1
+                    initial={{ x: -65, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: 65, opacity: 0 }}
+                    transition={{ duration: 0.48, ease: EASE_EDITORIAL }}
+                    className="text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
+                  >
+                    {activeHeroCopy.leftTop}
+                  </motion.h1>
+                </div>
+                <div className="overflow-hidden">
+                  <motion.span
+                    initial={{ x: 65, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -65, opacity: 0 }}
+                    transition={{ duration: 0.48, delay: 0.06, ease: EASE_EDITORIAL }}
+                    className="block text-[38px] sm:text-[48px] lg:text-[64px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#002FA7]"
+                  >
+                    {activeHeroCopy.leftBottom}
+                  </motion.span>
+                </div>
+
+                <motion.p
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -8, opacity: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1, ease: EASE_EDITORIAL }}
+                  className="hidden sm:block text-[12px] lg:text-[13px] font-medium text-[#111111]/85 leading-relaxed pt-1"
+                >
+                  {activeHeroCopy.leftDesc}
+                </motion.p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* RIGHT FLANK — Live Opposite Multi-Direction Text Cycle */}
+          <div className="hidden md:flex flex-col items-end text-right max-w-[290px] lg:max-w-[360px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`right-${heroTextIdx}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+                className="flex flex-col items-end space-y-2.5"
               >
-                SOUND.
-              </motion.span>
-            </div>
+                <motion.span
+                  initial={{ x: 30, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -30, opacity: 0 }}
+                  transition={{ duration: 0.42, ease: EASE_EDITORIAL }}
+                  className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#111111]/80 bg-white/75 px-3 py-1 rounded-full border border-white/90"
+                >
+                  {activeHeroCopy.badgeRight}
+                </motion.span>
 
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 0.45, delay: 0.22, ease: EASE_EDITORIAL }}
-              className="hidden sm:block text-[12px] lg:text-[13px] font-medium text-[#111111]/80 leading-relaxed pt-1"
-            >
-              Precision-engineered industrial acoustics & architectural objects crafted for clarity.
-            </motion.p>
-          </motion.div>
+                <div className="overflow-hidden">
+                  <motion.span
+                    initial={{ x: 65, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -65, opacity: 0 }}
+                    transition={{ duration: 0.48, ease: EASE_EDITORIAL }}
+                    className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.14)]"
+                  >
+                    {activeHeroCopy.rightTop}
+                  </motion.span>
+                </div>
+                <div className="overflow-hidden">
+                  <motion.span
+                    initial={{ x: -65, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: 65, opacity: 0 }}
+                    transition={{ duration: 0.48, delay: 0.06, ease: EASE_EDITORIAL }}
+                    className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
+                  >
+                    {activeHeroCopy.rightBottom}
+                  </motion.span>
+                </div>
 
-          {/* RIGHT FLANK — Slides IN from Right -> Left */}
-          <motion.div
-            initial={{ opacity: 0, x: 70 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: 0.08, ease: EASE_EDITORIAL }}
-            className="hidden md:flex flex-col items-end text-right max-w-[290px] lg:max-w-[360px] space-y-2.5"
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#111111]/75 bg-white/75 px-3 py-1 rounded-full border border-white/90">
-              ACTIVE ANC · 45H BATTERY
-            </span>
-
-            <div className="overflow-hidden">
-              <motion.span
-                initial={{ x: 80, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0.1, ease: EASE_EDITORIAL }}
-                className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.14)]"
-              >
-                PURE
-              </motion.span>
-            </div>
-            <div className="overflow-hidden">
-              <motion.span
-                initial={{ x: -60, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0.18, ease: EASE_EDITORIAL }}
-                className="block text-[44px] lg:text-[62px] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#111111]"
-              >
-                FORM.
-              </motion.span>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 0.45, delay: 0.25, ease: EASE_EDITORIAL }}
-              className="flex flex-col items-end gap-1 pt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111]/80"
-            >
-              <span>CNC ALUMINUM HOUSING</span>
-              <span>RIYADH STUDIO · GCC DELIVERY</span>
-            </motion.div>
-          </motion.div>
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -8, opacity: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1, ease: EASE_EDITORIAL }}
+                  className="flex flex-col items-end gap-1 pt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111]/80"
+                >
+                  <span>{activeHeroCopy.rightSpec1}</span>
+                  <span>{activeHeroCopy.rightSpec2}</span>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Subtle Sound Toggle Button (Bottom-Right) */}
