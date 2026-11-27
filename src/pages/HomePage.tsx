@@ -15,6 +15,7 @@ import { Reveal } from '../components/Reveal';
 import { ProductCard } from '../components/ProductCard';
 import { StudioMarquee } from '../components/StudioMarquee';
 import { HangingGallerySection } from '../components/HangingGallerySection';
+import { ClientReviewsSection } from '../components/ClientReviewsSection';
 import { ScrollScrubText } from '../components/ScrollScrubText';
 import { FaqSection } from '../components/FaqSection';
 import { ContactSection } from '../components/ContactSection';
@@ -245,6 +246,9 @@ export const HomePage: React.FC = () => {
 
       {/* 1C. INTERACTIVE HANGING POLAROID GALLERY (Drag & Pull Cards Off Wire!) */}
       <HangingGallerySection />
+
+      {/* 1D. ANIMATED CLIENT PRODUCT REVIEWS FEED (Eldora-style 4-Phase Stream) */}
+      <ClientReviewsSection />
 
       {/* KINETIC EDITORIAL TICKER */}
       <StudioMarquee />
