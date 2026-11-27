@@ -143,15 +143,6 @@ export const Navbar: React.FC = () => {
           >
             <Search className="w-[17px] h-[17px]" strokeWidth={1.75} />
           </button>
-          <Link
-            to="/admin"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`hidden sm:inline-block text-[11px] font-semibold tracking-[0.13em] uppercase transition-colors ${
-              location.pathname === '/admin' ? 'text-[#002FA7]' : 'text-[#111111] hover:text-[#002FA7]'
-            }`}
-          >
-            Account
-          </Link>
           <motion.button
             whileTap={{ scale: 0.92 }}
             type="button"
@@ -214,16 +205,9 @@ export const Navbar: React.FC = () => {
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
-            >
-              Contact ({settings.phone})
-            </Link>
-            <Link
-              to="/admin"
-              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#002FA7] bg-[#F5F6F8]"
             >
-              Account / Admin Panel →
+              Contact ({settings.phone}) →
             </Link>
           </motion.nav>
         )}

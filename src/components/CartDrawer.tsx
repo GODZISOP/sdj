@@ -71,7 +71,7 @@ export const CartDrawer: React.FC = () => {
                   <CheckCircle2 className="w-12 h-12 text-[#002FA7] mx-auto" />
                   <h3 className="text-lg font-bold">Order Received</h3>
                   <p className="text-sm text-neutral-600">
-                    Reference <span className="font-mono font-semibold text-black">{confirmedId}</span> has been logged in the Admin Panel.
+                    Reference <span className="font-mono font-semibold text-black">{confirmedId}</span> has been received. Our team will contact you shortly.
                   </p>
                   <button
                     type="button"

@@ -99,18 +99,18 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Admin Quick Access */}
+          {/* Wholesale Quote Quick Action (No public Admin Panel button!) */}
           <div className="md:col-span-2 space-y-3">
-            <p className="eyebrow-mono text-neutral-500">Management</p>
+            <p className="eyebrow-mono text-neutral-500">Wholesale</p>
             <Link
-              to="/admin"
+              to="/contact"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-[#002FA7] hover:bg-[#0038CC] px-4 py-2.5 transition-colors"
             >
-              Admin Panel
+              Get Quote
               <ArrowUpRight className="w-4 h-4" />
             </Link>
             <p className="text-xs text-neutral-500 leading-relaxed">
-              Manage products, FAQs, contact inquiries, orders & footer details.
+              Request bulk pricing, invoices, and wholesale catalog support.
             </p>
           </div>
         </div>

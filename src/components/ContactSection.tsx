@@ -168,7 +168,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ isHeadingH1 = fa
                     <CheckCircle2 className="w-12 h-12 text-[#002FA7] mx-auto" />
                     <h3 className="text-2xl font-bold">Message Sent</h3>
                     <p className="text-sm text-neutral-600 max-w-md mx-auto">
-                      Thank you. Your inquiry has been recorded in the Admin Panel inbox and{' '}
+                      Thank you. Your message has been received and{' '}
                       <span className="font-semibold text-black">{settings.ownerName}</span> (
                       <span className="font-semibold text-black">{settings.email}</span>) will respond
                       shortly.
