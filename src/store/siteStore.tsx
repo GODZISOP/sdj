@@ -2,25 +2,25 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem, ContactInquiry, FaqItem, OrderRecord, Product, SiteSettings } from '../types';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'sjdurallc_products_v5',
-  SETTINGS: 'sjdurallc_settings_v5',
-  INQUIRIES: 'sjdurallc_inquiries_v5',
-  ORDERS: 'sjdurallc_orders_v5',
-  CART: 'sjdurallc_cart_v5',
-  FAQS: 'sjdurallc_faqs_v5',
+  PRODUCTS: 'sjdurallc_products_v6',
+  SETTINGS: 'sjdurallc_settings_v6',
+  INQUIRIES: 'sjdurallc_inquiries_v6',
+  ORDERS: 'sjdurallc_orders_v6',
+  CART: 'sjdurallc_cart_v6',
+  FAQS: 'sjdurallc_faqs_v6',
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   brandName: 'Sjdurallc',
   companyLegalName: 'Sjdurallc Trading & Studio LLC',
   ownerName: 'Rana Javeed Akhter',
-  tagline: 'Sculptural tech, architectural home objects, and studio gear curated for everyday living.',
+  tagline: 'Immersive sound, architectural objects, and precision studio gear curated for everyday living.',
   phone: '+966 53 097 8783',
   whatsapp: '+966 53 097 8783',
   email: 'info@sjdurallc.com',
   address: 'Riyadh Design District, Studio 04, Kingdom of Saudi Arabia',
   hours: 'Sun – Thu: 09:00 – 19:00 AST',
-  footerNote: 'Sjdurallc — Curated architectural objects, precision tech, and everyday studio essentials.',
+  footerNote: 'Sjdurallc — Curated architectural objects, precision audio, and everyday studio essentials.',
 };
 
 export const DEFAULT_FAQS: FaqItem[] = [
@@ -29,7 +29,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
     category: 'Orders & Delivery',
     question: 'Do you deliver across Saudi Arabia and GCC?',
     answer:
-      'Yes. Sjdurallc ships all tech, home, and studio products across Riyadh, Jeddah, Dammam, and all GCC countries with tracked express delivery.',
+      'Yes. Sjdurallc ships all audio, tech, home, and studio products across Riyadh, Jeddah, Dammam, and all GCC countries with tracked express delivery.',
   },
   {
     id: 'faq-2',
@@ -43,7 +43,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
     category: 'Materials & Warranty',
     question: 'What warranty covers Sjdurallc products?',
     answer:
-      'All audio, desk lighting, and machined metal products carry a 2-year to 5-year structural warranty against manufacturing defects.',
+      'All headphones, audio, desk lighting, and machined metal products carry a 2-year to 5-year structural warranty against manufacturing defects.',
   },
   {
     id: 'faq-4',
@@ -55,6 +55,20 @@ export const DEFAULT_FAQS: FaqItem[] = [
 ];
 
 export const DEFAULT_PRODUCTS: Product[] = [
+  {
+    id: 'aero-headphones',
+    name: 'Aero One Headphone',
+    category: 'Audio & Tech',
+    price: 380,
+    image: '/images/prod-headphones.jpg',
+    hoverImage: '/images/prod-headphones-alt.jpg',
+    trainingFocus: 'Active ANC / 45h',
+    weightRange: '265 g',
+    material: 'Anodized Aluminum & Memory Foam',
+    bestFor: 'Immersive Everyday Listening',
+    description: 'Immersive spatial sound, lightweight sculptural comfort, and intuitive tactile earcup controls.',
+    inCompare: true,
+  },
   {
     id: 'kinetix-lamp',
     name: 'Kinetix Desk Lamp',
@@ -123,20 +137,6 @@ export const DEFAULT_PRODUCTS: Product[] = [
     material: 'Machined Steel',
     bestFor: 'Home & Studio',
     description: 'Precision-turned solid stainless steel dumbbell with micro-knurled ergonomic grip and chamfered plates.',
-    inCompare: true,
-  },
-  {
-    id: 'studio-mat',
-    name: 'Cobalt Lifestyle Mat',
-    category: 'Lifestyle',
-    price: 145,
-    image: '/images/cat-mat.jpg',
-    hoverImage: '/images/philosophy-stretch.jpg',
-    trainingFocus: 'Grip & Cushion',
-    weightRange: '2.4 kg (6mm)',
-    material: 'Natural Tree Rubber',
-    bestFor: 'Daily Stretching & Calm',
-    description: 'High-density natural rubber mat with cobalt open-cell grip surface for studio, lounge, or travel.',
     inCompare: false,
   },
 ];
@@ -148,7 +148,7 @@ const DEFAULT_INQUIRIES: ContactInquiry[] = [
     email: 'tariq@studiofit.sa',
     phone: '+966 50 412 8890',
     subject: 'Corporate & Studio Order',
-    message: 'Looking to order 20 Cobalt Acoustic Speakers and Kinetix Desk Lamps for our new Riyadh office.',
+    message: 'Looking to order 20 Aero One Headphones and Kinetix Desk Lamps for our new Riyadh office.',
     createdAt: '2026-11-24T10:15:00Z',
     status: 'New',
   },
@@ -193,7 +193,9 @@ function loadFromStorage<T>(key: string, fallback: T): T {
 
 function sanitizeProducts(list: Product[]): Product[] {
   const defaultMap = new Map(DEFAULT_PRODUCTS.map((p) => [p.id, p]));
-  return list.map((p) => {
+  const hasAero = list.some((p) => p.id === 'aero-headphones');
+  const base = hasAero ? list : [DEFAULT_PRODUCTS[0], ...list];
+  return base.map((p) => {
     const def = defaultMap.get(p.id);
     const hasDeadSvg = typeof p.image === 'string' && p.image.endsWith('.svg');
     const missingHover = !p.hoverImage || p.hoverImage.endsWith('.svg');
@@ -202,13 +204,6 @@ function sanitizeProducts(list: Product[]): Product[] {
         ...p,
         image: def.image,
         hoverImage: def.hoverImage,
-      };
-    }
-    if (hasDeadSvg) {
-      return {
-        ...p,
-        image: p.image.replace(/\.svg$/, '.jpg'),
-        hoverImage: p.hoverImage ? p.hoverImage.replace(/\.svg$/, '.jpg') : p.image.replace(/\.svg$/, '.jpg'),
       };
     }
     return p;
@@ -220,18 +215,21 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sanitizeProducts(loadFromStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS))
   );
 
-  // Auto-heal stale HMR state if any product still holds legacy .svg paths or missing hoverImage
+  // Auto-heal stale HMR state
   useEffect(() => {
-    const needsHeal = products.some(
-      (p) =>
-        (typeof p.image === 'string' && p.image.endsWith('.svg')) ||
-        !p.hoverImage ||
-        p.hoverImage.endsWith('.svg')
-    );
+    const needsHeal =
+      !products.some((p) => p.id === 'aero-headphones') ||
+      products.some(
+        (p) =>
+          (typeof p.image === 'string' && p.image.endsWith('.svg')) ||
+          !p.hoverImage ||
+          p.hoverImage.endsWith('.svg')
+      );
     if (needsHeal) {
       setProducts((prev) => sanitizeProducts(prev));
     }
   }, [products]);
+
   const [settings, setSettings] = useState<SiteSettings>(() =>
     loadFromStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS)
   );

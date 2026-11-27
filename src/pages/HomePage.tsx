@@ -1,7 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, Infinity as InfinityIcon, Leaf, Layers } from 'lucide-react';
+import {
+  ArrowRight,
+  Volume2,
+  VolumeX,
+  Star,
+  Sliders,
+  ShoppingCart,
+} from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { CategoryKey } from '../types';
 import { Reveal } from '../components/Reveal';
@@ -12,11 +19,34 @@ import { ContactSection } from '../components/ContactSection';
 import { EASE_EDITORIAL, SPRING_CRISP } from '../lib/motion';
 
 const CATEGORY_ORDER: CategoryKey[] = [
-  'Home & Desk',
   'Audio & Tech',
+  'Home & Desk',
   'Drinkware',
   'Strength',
   'Lifestyle',
+];
+
+const HERO_PILLARS = [
+  {
+    Icon: Volume2,
+    title: 'PREMIUM SOUND',
+    desc: 'Rich, detailed audio designed for immersive everyday listening.',
+  },
+  {
+    Icon: Star,
+    title: 'BUILT FOR COMFORT',
+    desc: 'Lightweight, ergonomic design made for effortless all-day wear.',
+  },
+  {
+    Icon: Sliders,
+    title: 'SMART PERFORMANCE',
+    desc: 'Advanced engineering for intuitive control and crystal clarity.',
+  },
+  {
+    Icon: ShoppingCart,
+    title: 'FREE SHIPPING',
+    desc: 'Enjoy fast, complimentary delivery across KSA & GCC.',
+  },
 ];
 
 const MOVEMENTS = [
@@ -31,17 +61,12 @@ export const HomePage: React.FC = () => {
   const [hoveredCat, setHoveredCat] = useState<CategoryKey | null>(null);
   const [hoveredMove, setHoveredMove] = useState<string | null>(null);
   const [hoveredCompareId, setHoveredCompareId] = useState<string | null>(null);
-  const [heroHover, setHeroHover] = useState(false);
-  const [heroTilt, setHeroTilt] = useState({ rx: 0, ry: 0 });
+  const [heroSlideIdx, setHeroSlideIdx] = useState(0);
+  const [pillHovered, setPillHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
-  const heroRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const philosophyRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-  const heroImageY = useTransform(heroProgress, [0, 1], [0, 42]);
 
   const { scrollYProgress: philProgress } = useScroll({
     target: philosophyRef,
@@ -49,6 +74,9 @@ export const HomePage: React.FC = () => {
   });
   const philRingRotate = useTransform(philProgress, [0, 1], [-18, 28]);
   const philRingY = useTransform(philProgress, [0, 1], [24, -24]);
+
+  const heroFeaturedList = products.slice(0, 3);
+  const activeHeroProduct = heroFeaturedList[heroSlideIdx] || products[0];
 
   const compareProducts = products.filter((p) => p.inCompare).slice(0, 3);
   const filteredEquipment =
@@ -64,166 +92,152 @@ export const HomePage: React.FC = () => {
     };
   });
 
-  const handleHeroPointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    setHeroTilt({ rx: -ny * 7, ry: nx * 7 });
-  };
-
-  const resetHeroTilt = () => {
-    setHeroHover(false);
-    setHeroTilt({ rx: 0, ry: 0 });
+  const toggleAudio = () => {
+    if (!videoRef.current) return;
+    const nextMuted = !isMuted;
+    videoRef.current.muted = nextMuted;
+    setIsMuted(nextMuted);
   };
 
   return (
     <main className="bg-white">
-      {/* 1. LIVE INTERACTIVE HERO SECTION */}
-      <section
-        ref={heroRef}
-        className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-14 md:pb-20 overflow-hidden"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+      {/* 1. FULL-BLEED CINEMATIC VIDEO HERO SECTION (Matching Reference) */}
+      <section className="relative w-full h-[76vh] min-h-[540px] max-h-[840px] bg-[#BFC3C9] overflow-hidden">
+        {/* Seamless Autoplaying Studio Video */}
+        <video
+          ref={videoRef}
+          src="/videos/hero-headphones.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+
+        {/* Subtle Top/Bottom Editorial Vignette for Legibility */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.04] via-transparent to-black/[0.14]"
+        />
+
+        {/* Subtle Sound Toggle Button (Bottom-Right) */}
+        <button
+          type="button"
+          onClick={toggleAudio}
+          aria-label={isMuted ? 'Unmute hero video' : 'Mute hero video'}
+          className="absolute top-5 right-5 sm:bottom-8 sm:top-auto sm:right-8 z-20 inline-flex items-center gap-2 rounded-full bg-white/75 hover:bg-white backdrop-blur-md px-3.5 py-2 border border-white/80 text-[10px] font-mono uppercase tracking-[0.14em] text-[#111111] transition-all shadow-sm"
+        >
+          {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-[#002FA7]" />}
+          <span className="hidden sm:inline">{isMuted ? 'Sound Off' : 'Sound On'}</span>
+        </button>
+
+        {/* Floating Frosted Glass Product Pill Card (Exact Reference Position & Look) */}
+        {activeHeroProduct && (
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE_EDITORIAL }}
-            className="lg:col-span-6 space-y-5 sm:space-y-6"
+            transition={{ duration: 0.75, delay: 0.2, ease: EASE_EDITORIAL }}
+            onMouseEnter={() => setPillHovered(true)}
+            onMouseLeave={() => setPillHovered(false)}
+            className="absolute bottom-7 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-[490px]"
           >
-            {/* Live Studio Status Indicator */}
-            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 bg-[#F5F6F8] border border-black/[0.06]">
-              <span className="w-2 h-2 rounded-full bg-[#002FA7] live-dot text-[#002FA7]" />
-              <span className="eyebrow-mono text-[10px] text-[#111111]">
-                {settings.brandName.toUpperCase()} &nbsp;/&nbsp; LIVE STUDIO EDITION
-              </span>
-            </div>
+            <div className="rounded-[28px] bg-white/65 hover:bg-white/82 backdrop-blur-xl border border-white/80 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.22)] px-4 py-3.5 sm:px-5 sm:py-4 transition-all duration-300">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeHeroProduct.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.28, ease: EASE_EDITORIAL }}
+                  className="flex items-center gap-3.5 sm:gap-4"
+                >
+                  {/* Rounded Product Thumbnail with Hover Image Swap */}
+                  <Link
+                    to={`/product/${activeHeroProduct.id}`}
+                    className="relative w-14 h-14 sm:w-[68px] sm:h-[68px] rounded-2xl bg-white/95 p-1 flex-shrink-0 overflow-hidden shadow-sm border border-black/[0.05]"
+                  >
+                    <img
+                      src={activeHeroProduct.image}
+                      alt={activeHeroProduct.name}
+                      className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
+                        pillHovered ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+                      }`}
+                    />
+                    <img
+                      src={activeHeroProduct.hoverImage || activeHeroProduct.image}
+                      alt={`${activeHeroProduct.name} detail`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
+                        pillHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
+                      }`}
+                    />
+                  </Link>
 
-            <h1 className="text-[40px] sm:text-[56px] lg:text-[72px] font-extrabold leading-[0.96] swiss-tracking text-[#111111]">
-              <motion.span
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.05, ease: EASE_EDITORIAL }}
-                className="block"
-              >
-                Curated
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.14, ease: EASE_EDITORIAL }}
-                className="block"
-              >
-                Objects
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.23, ease: EASE_EDITORIAL }}
-                className="block text-[#002FA7]"
-              >
-                Reimagined.
-              </motion.span>
-            </h1>
+                  {/* Product Title + Concise Description */}
+                  <div className="flex-1 min-w-0">
+                    <Link
+                      to={`/product/${activeHeroProduct.id}`}
+                      className="block text-[12px] sm:text-[13px] font-extrabold tracking-[0.08em] uppercase text-[#111111] hover:text-[#002FA7] transition-colors truncate"
+                    >
+                      {activeHeroProduct.name}
+                    </Link>
+                    <p className="text-[11px] sm:text-[12px] text-neutral-700 leading-snug mt-0.5 line-clamp-2">
+                      {activeHeroProduct.description}
+                    </p>
+                  </div>
 
-            <p className="text-[15px] sm:text-[16px] text-neutral-600 max-w-md leading-relaxed">
-              {settings.tagline}
-            </p>
+                  {/* Pill SHOP Button */}
+                  <Link
+                    to={`/product/${activeHeroProduct.id}`}
+                    className="flex-shrink-0 rounded-full bg-white hover:bg-[#111111] hover:text-white text-[#111111] text-[10px] sm:text-[11px] font-bold tracking-[0.14em] uppercase px-4 sm:px-5 py-2.5 shadow-sm border border-black/[0.06] transition-all duration-200"
+                  >
+                    Shop
+                  </Link>
+                </motion.div>
+              </AnimatePresence>
 
-            <div className="pt-1 flex flex-wrap items-center gap-3">
-              <motion.a
-                whileHover={{ x: 2 }}
-                whileTap={{ scale: 0.97 }}
-                href="#equipment"
-                className="w-full sm:w-auto justify-center inline-flex items-center gap-3 bg-[#002FA7] hover:bg-[#00227A] text-white text-[13px] font-semibold px-7 py-3.5 transition-colors group"
-              >
-                Explore Collection
-                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-              </motion.a>
-              <Link
-                to="/contact"
-                className="w-full sm:w-auto justify-center inline-flex items-center gap-2 border border-black/15 hover:border-[#002FA7] hover:text-[#002FA7] text-[#111111] text-[13px] font-semibold px-6 py-3.5 transition-colors"
-              >
-                Studio Consultation
-              </Link>
-            </div>
-
-            <div className="pt-6 sm:pt-8 grid grid-cols-3 gap-3 sm:gap-6 max-w-md border-t border-black/[0.06]">
-              {[
-                { Icon: InfinityIcon, l1: 'Studio-Grade', l2: 'Performance' },
-                { Icon: Leaf, l1: 'Sustainable', l2: 'Materials' },
-                { Icon: Layers, l1: 'Design-First', l2: 'Aesthetics' },
-              ].map(({ Icon, l1, l2 }) => (
-                <div key={l1} className="space-y-2 group">
-                  <Icon
-                    className="w-5 h-5 text-neutral-700 group-hover:text-[#002FA7] transition-colors"
-                    strokeWidth={1.5}
+              {/* Minimal Slide Indicator Dashes inside Pill */}
+              <div className="flex items-center justify-center gap-1.5 mt-2.5">
+                {heroFeaturedList.map((item, idx) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-label={`Preview ${item.name}`}
+                    onClick={() => setHeroSlideIdx(idx)}
+                    className={`h-[3px] rounded-full transition-all duration-300 ${
+                      idx === heroSlideIdx
+                        ? 'w-5 bg-[#111111]'
+                        : 'w-2 bg-[#111111]/25 hover:bg-[#111111]/55'
+                    }`}
                   />
-                  <p className="text-[11px] font-medium leading-tight text-neutral-700">
-                    {l1}
-                    <br />
-                    {l2}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right Interactive Tilt + Hover-Swap Hero Stage */}
-          <motion.div
-            style={{ y: heroImageY }}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.12, ease: EASE_EDITORIAL }}
-            className="lg:col-span-6 flex justify-center lg:justify-end"
-          >
-            <div
-              onMouseEnter={() => setHeroHover(true)}
-              onMouseLeave={resetHeroTilt}
-              onMouseMove={handleHeroPointerMove}
-              style={{
-                transform: `perspective(1000px) rotateX(${heroTilt.rx}deg) rotateY(${heroTilt.ry}deg)`,
-                transition: heroHover ? 'transform 120ms ease-out' : 'transform 500ms cubic-bezier(0.22,1,0.36,1)',
-              }}
-              className="relative w-full max-w-[580px] aspect-[4/3] overflow-hidden bg-[#F5F6F8] border border-black/[0.06] cursor-pointer group"
-            >
-              {/* Rotating technical architectural ring */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-12 -right-12 w-56 h-56 rounded-full border border-dashed border-[#002FA7]/25 animate-spin-slow z-10"
-              />
-
-              {/* Primary Hero Image */}
-              <img
-                src="/images/hero-dumbbell.jpg"
-                alt="Sjdurallc machined steel sculptural object on stone pedestal"
-                className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ease-out ${
-                  heroHover ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
-                }`}
-              />
-
-              {/* Hover Alternate Hero Image */}
-              <img
-                src={products[0]?.hoverImage || '/images/prod-lamp-alt.jpg'}
-                alt="Sjdurallc illuminated architectural studio view"
-                className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ease-out ${
-                  heroHover ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
-                }`}
-              />
-
-              {/* Live Floating Caption Badge */}
-              <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between bg-white/92 backdrop-blur-md px-4 py-2.5 border border-black/[0.08]">
-                <div className="flex items-center gap-2">
-                  <Layers className="w-3.5 h-3.5 text-[#002FA7]" />
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#111111]">
-                    {heroHover ? 'ILLUMINATED EDITION · KINETIX' : 'HOVER TO REVEAL ALTERNATE EDITION'}
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] font-semibold text-[#002FA7]">
-                  {heroHover ? '02 / 02' : '01 / 02'}
-                </span>
+                ))}
               </div>
             </div>
           </motion.div>
+        )}
+      </section>
+
+      {/* 1B. 4-COLUMN EDITORIAL FEATURE STRIP (Matching Reference Bottom Band) */}
+      <section className="bg-white border-b border-black/[0.06] py-9 sm:py-11">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 sm:gap-8">
+            {HERO_PILLARS.map(({ Icon, title, desc }, idx) => (
+              <Reveal key={title} delayMs={idx * 70}>
+                <div className="flex items-start gap-3.5 group">
+                  <div className="mt-0.5 text-[#111111] group-hover:text-[#002FA7] transition-colors flex-shrink-0">
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={1.65} />
+                  </div>
+                  <div>
+                    <h3 className="text-[11px] font-extrabold tracking-[0.12em] uppercase text-[#111111]">
+                      {title}
+                    </h3>
+                    <p className="text-[12px] text-neutral-500 leading-relaxed mt-1">
+                      {desc}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -257,7 +271,7 @@ export const HomePage: React.FC = () => {
                 <span className="text-[#002FA7]">Last Longer.</span>
               </h2>
               <p className="text-[14px] text-neutral-600 leading-relaxed max-w-sm">
-                Thoughtfully engineered tech, lighting, drinkware, and studio objects crafted from honest materials.
+                Thoughtfully engineered audio, lighting, drinkware, and studio objects crafted from honest materials.
               </p>
               <div className="pt-2">
                 <a

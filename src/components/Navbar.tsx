@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, User, ShoppingBag, X, Menu } from 'lucide-react';
+import { Search, ShoppingBag, X, Menu } from 'lucide-react';
 import { useSite } from '../store/siteStore';
 import { EASE_EDITORIAL, SPRING_CRISP } from '../lib/motion';
 
@@ -15,9 +15,10 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const isHomeTop = location.pathname === '/' && !scrolled && !searchOpen && !mobileMenuOpen;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 18);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -45,67 +46,85 @@ export const Navbar: React.FC = () => {
   return (
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/92 backdrop-blur-md border-b border-black/[0.08] shadow-[0_8px_30px_-18px_rgba(0,0,0,0.18)]'
-          : 'bg-white/95 backdrop-blur-sm border-b border-black/[0.06]'
+        isHomeTop
+          ? 'bg-[#BFC3C9]/85 backdrop-blur-md border-b border-black/[0.06]'
+          : scrolled
+            ? 'bg-white/95 backdrop-blur-md border-b border-black/[0.08] shadow-[0_8px_30px_-18px_rgba(0,0,0,0.16)]'
+            : 'bg-white/95 backdrop-blur-sm border-b border-black/[0.06]'
       }`}
     >
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 h-[68px] md:h-[72px] flex items-center justify-between">
-        {/* Stacked Brand Wordmark + Sculptural Logo Mark */}
-        <Link
-          to="/"
-          onClick={() => setMobileMenuOpen(false)}
-          className="flex items-center gap-2.5 sm:gap-3 group"
-        >
-          <img
-            src="/favicon.svg"
-            alt={`${settings.brandName} Logo`}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3"
-          />
-          <div className="leading-[0.95] tracking-[-0.03em] font-bold text-[17px] sm:text-[19px] text-[#111111]">
-            <span className="block">{settings.brandName}</span>
-            <span className="block text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.14em] text-[#002FA7] mt-0.5">
-              Studio®
-            </span>
-          </div>
-        </Link>
-
-        {/* Centered Desktop Navigation with animated hover underlines */}
-        <nav className="hidden md:flex items-center gap-9 text-[13px] font-medium text-[#111111]">
-          {[
-            { label: 'Collection', action: () => scrollToSection('equipment') },
-            { label: 'Craft', action: () => scrollToSection('programs') },
-            { label: 'Compare', action: () => scrollToSection('compare') },
-          ].map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={item.action}
-              className="relative py-1 hover:text-[#002FA7] transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#002FA7] after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300"
-            >
-              {item.label}
-            </button>
-          ))}
-          <Link
-            to="/contact#faqs"
-            className="relative py-1 hover:text-[#002FA7] transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#002FA7] after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300"
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 h-[64px] md:h-[68px] grid grid-cols-3 items-center">
+        {/* Left Navigation Links (matching editorial reference) */}
+        <nav className="hidden md:flex items-center gap-6 lg:gap-7 text-[11px] font-semibold tracking-[0.13em] uppercase text-[#111111]">
+          <button
+            type="button"
+            onClick={() => scrollToSection('equipment')}
+            className="hover:text-[#002FA7] transition-colors"
           >
+            Shop
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection('compare')}
+            className="hover:text-[#002FA7] transition-colors"
+          >
+            Collection
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection('philosophy')}
+            className="hover:text-[#002FA7] transition-colors"
+          >
+            About
+          </button>
+          <Link to="/contact#faqs" className="hover:text-[#002FA7] transition-colors">
             FAQs
           </Link>
           <Link
             to="/contact"
-            className={`relative py-1 hover:text-[#002FA7] transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1.5px] after:bg-[#002FA7] after:origin-left after:transition-transform after:duration-300 ${
-              location.pathname === '/contact'
-                ? 'text-[#002FA7] font-semibold after:scale-x-100'
-                : 'after:scale-x-0 hover:after:scale-x-100'
+            className={`hover:text-[#002FA7] transition-colors ${
+              location.pathname === '/contact' ? 'text-[#002FA7]' : ''
             }`}
           >
             Contact
           </Link>
         </nav>
 
-        {/* Right Utility Icons */}
-        <div className="flex items-center gap-4 sm:gap-5">
+        {/* Mobile Left Hamburger */}
+        <div className="flex md:hidden items-center">
+          <button
+            type="button"
+            aria-label="Toggle Menu"
+            onClick={() => {
+              setMobileMenuOpen((prev) => !prev);
+              setSearchOpen(false);
+            }}
+            className="text-[#111111] hover:text-[#002FA7] transition-colors p-1.5 -ml-1.5"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {/* Center Editorial Brand Wordmark (matching reference center logo) */}
+        <div className="flex justify-center">
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="inline-flex items-center gap-2 group"
+          >
+            <img
+              src="/favicon.svg"
+              alt={`${settings.brandName} Logo`}
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-md transition-transform duration-300 group-hover:scale-105"
+            />
+            <span className="text-[16px] sm:text-[18px] font-extrabold tracking-[0.14em] uppercase text-[#111111]">
+              {settings.brandName}
+            </span>
+          </Link>
+        </div>
+
+        {/* Right Utility Controls */}
+        <div className="flex items-center justify-end gap-4 sm:gap-6">
           <button
             type="button"
             aria-label="Search collection"
@@ -115,18 +134,16 @@ export const Navbar: React.FC = () => {
             }}
             className="text-[#111111] hover:text-[#002FA7] transition-colors p-1"
           >
-            <Search className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <Search className="w-[17px] h-[17px]" strokeWidth={1.75} />
           </button>
           <Link
             to="/admin"
-            aria-label="Admin Panel"
-            title="Admin Panel"
             onClick={() => setMobileMenuOpen(false)}
-            className={`transition-colors p-1 ${
+            className={`hidden sm:inline-block text-[11px] font-semibold tracking-[0.13em] uppercase transition-colors ${
               location.pathname === '/admin' ? 'text-[#002FA7]' : 'text-[#111111] hover:text-[#002FA7]'
             }`}
           >
-            <User className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            Account
           </Link>
           <motion.button
             whileTap={{ scale: 0.92 }}
@@ -135,28 +152,17 @@ export const Navbar: React.FC = () => {
             onClick={() => setIsCartOpen(true)}
             className="relative text-[#111111] hover:text-[#002FA7] transition-colors p-1"
           >
-            <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <ShoppingBag className="w-[17px] h-[17px]" strokeWidth={1.75} />
             <motion.span
               key={totalItems}
               initial={{ scale: 0.6 }}
               animate={{ scale: 1 }}
               transition={SPRING_CRISP}
-              className="absolute -top-0.5 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-[#002FA7] text-white text-[10px] font-semibold flex items-center justify-center"
+              className="absolute -top-0.5 -right-1.5 min-w-[16px] h-[16px] px-1 rounded-full bg-[#111111] text-white text-[10px] font-semibold flex items-center justify-center"
             >
               {totalItems}
             </motion.span>
           </motion.button>
-          <button
-            type="button"
-            aria-label="Toggle Menu"
-            onClick={() => {
-              setMobileMenuOpen((prev) => !prev);
-              setSearchOpen(false);
-            }}
-            className="md:hidden text-[#111111] hover:text-[#002FA7] transition-colors p-1"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
         </div>
       </div>
 
@@ -173,44 +179,44 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => scrollToSection('equipment')}
-              className="w-full text-left px-3 py-3 text-sm font-semibold hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
+              className="w-full text-left px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
             >
-              Collection
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('programs')}
-              className="w-full text-left px-3 py-3 text-sm font-semibold hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
-            >
-              Craft & Movement
+              Shop Collection
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('compare')}
-              className="w-full text-left px-3 py-3 text-sm font-semibold hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
+              className="w-full text-left px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
             >
-              Compare Essentials
+              Compare
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('philosophy')}
+              className="w-full text-left px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
+            >
+              About
             </button>
             <Link
               to="/contact#faqs"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-3 text-sm font-semibold hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
+              className="block px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
             >
               FAQs
             </Link>
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-3 text-sm font-semibold hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
+              className="block px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-[#F5F6F8] hover:text-[#002FA7] transition-colors"
             >
               Contact ({settings.phone})
             </Link>
             <Link
               to="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-3 text-sm font-semibold text-[#002FA7] bg-[#F5F6F8]"
+              className="block px-3 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#002FA7] bg-[#F5F6F8]"
             >
-              Admin Panel →
+              Account / Admin Panel →
             </Link>
           </motion.nav>
         )}
@@ -234,7 +240,7 @@ export const Navbar: React.FC = () => {
                   autoFocus
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search lamps, speakers, flasks, keyboards, studio gear..."
+                  placeholder="Search headphones, lamps, speakers, flasks, keyboards..."
                   className="w-full text-sm outline-none bg-transparent"
                 />
                 <button
