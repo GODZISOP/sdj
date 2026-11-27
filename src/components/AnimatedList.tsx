@@ -22,8 +22,8 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
   stackGap = 18,
   columnGap = 114,
   scaleFactor = 0.045,
-  scrollDownDuration = 4.2,
-  formationDuration = 0.55,
+  scrollDownDuration = 3.6,
+  formationDuration = 0.48,
   paused = false,
   onPhaseChange,
 }) => {
@@ -50,20 +50,23 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
 
     let timer: number;
     if (phase === 'idle') {
-      timer = window.setTimeout(() => setPhase('forming'), 550);
+      // Quick stacked beat before unfurling
+      timer = window.setTimeout(() => setPhase('forming'), 300);
     } else if (phase === 'forming') {
-      timer = window.setTimeout(() => setPhase('scrolling'), formationDuration * 1000 + 180);
+      // Start gliding immediately as soon as the column unfurls (zero dead pause!)
+      timer = window.setTimeout(() => setPhase('scrolling'), formationDuration * 1000);
     } else if (phase === 'scrolling') {
-      timer = window.setTimeout(() => setPhase('resetting'), scrollDownDuration * 1000 + 220);
+      // Immediately fold back once scroll finishes
+      timer = window.setTimeout(() => setPhase('resetting'), scrollDownDuration * 1000 + 80);
     } else if (phase === 'resetting') {
-      timer = window.setTimeout(() => setPhase('idle'), 550);
+      timer = window.setTimeout(() => setPhase('idle'), 480);
     }
 
     return () => window.clearTimeout(timer);
   }, [phase, paused, isInView, prefersReduced, count, formationDuration, scrollDownDuration]);
 
-  // Distance to scroll through the formed vertical column cleanly inside the viewport
-  const scrollTravel = Math.max(0, (count - 3) * columnGap);
+  // Smooth full travel through the column
+  const scrollTravel = Math.max(0, (count - 2.6) * columnGap);
 
   if (prefersReduced) {
     return (
@@ -89,15 +92,15 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
         className="pointer-events-none absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-[#F5F7FB] to-transparent z-20"
       />
 
-      {/* Entire Column Container that scrolls smoothly during Phase 3 */}
+      {/* Entire Column Container that glides immediately during Phase 3 with linear flow (zero sluggish lead-in!) */}
       <motion.div
         animate={{
           y: phase === 'scrolling' ? -scrollTravel : 0,
         }}
         transition={
           phase === 'scrolling'
-            ? { duration: scrollDownDuration, ease: [0.35, 0.05, 0.65, 0.95] }
-            : { duration: 0.85, ease: EASE_EDITORIAL }
+            ? { duration: scrollDownDuration, ease: 'linear' }
+            : { duration: 0.45, ease: EASE_EDITORIAL }
         }
         className="relative w-full pt-7"
       >
@@ -123,8 +126,8 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
                 opacity: targetOpacity,
               }}
               transition={{
-                duration: isStacked ? 0.78 : formationDuration,
-                delay: isStacked ? 0 : index * 0.04,
+                duration: isStacked ? 0.45 : formationDuration,
+                delay: isStacked ? 0 : index * 0.025,
                 ease: EASE_EDITORIAL,
               }}
               style={{

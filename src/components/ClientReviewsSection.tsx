@@ -191,8 +191,8 @@ export const ClientReviewsSection: React.FC = () => {
               stackGap={20}
               columnGap={114}
               scaleFactor={0.045}
-              scrollDownDuration={4.2}
-              formationDuration={0.55}
+              scrollDownDuration={3.6}
+              formationDuration={0.48}
               paused={isPaused}
               onPhaseChange={setPhase}
             >
