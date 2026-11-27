@@ -80,11 +80,11 @@ const StackedServiceCard: React.FC<StackedServiceCardProps> = ({
     const d = index - p * maxStep;
     if (d >= 0) {
       if (d <= 1) {
-        return `${d * 63}vh`;
+        return `${d * 76}vh`;
       }
-      return `${63 + (d - 1) * 50}vh`;
+      return `${76 + (d - 1) * 52}vh`;
     }
-    return `${d * 76}vh`;
+    return `${d * 78}vh`;
   });
 
   const rotate = useTransform(progress, (p) => {
@@ -129,22 +129,22 @@ const StackedServiceCard: React.FC<StackedServiceCardProps> = ({
         boxShadow: '0 10px 28px rgba(25, 30, 33, 0.09)',
         zIndex: 10 + index,
       }}
-      className="absolute w-[73vw] h-[min(74vw,49vh)] sm:w-[min(52vw,60vh)] sm:h-[min(52vw,60vh)] lg:w-[min(36vw,68vh)] lg:h-[min(36vw,68vh)] rounded-none border-0 p-6 sm:p-8 lg:p-11 flex flex-col justify-between will-change-transform select-none"
+      className="absolute w-[70vw] h-[min(70vw,44vh)] sm:w-[min(46vw,380px)] sm:h-[min(45vw,370px)] lg:w-[min(30vw,430px)] lg:h-[min(29vw,410px)] rounded-none border-0 p-5 sm:p-7 lg:p-9 flex flex-col justify-between will-change-transform select-none"
     >
       {/* Top Editorial Block: Two-Line Heading + Short Description */}
       <div>
-        <h3 className="text-[26px] sm:text-[34px] lg:text-[46px] font-black uppercase leading-[0.92] tracking-[-0.045em] text-[#14171a]">
+        <h3 className="text-[22px] sm:text-[30px] lg:text-[38px] font-black uppercase leading-[0.92] tracking-[-0.045em] text-[#14171a]">
           <span className="block">{service.titleTop}</span>
           <span className="block">{service.titleBottom}</span>
         </h3>
-        <p className="mt-3 sm:mt-4 lg:mt-5 text-[12px] sm:text-[13.5px] lg:text-[15px] leading-[1.48] font-medium text-[#1e2328]/80 max-w-[34ch]">
+        <p className="mt-2.5 sm:mt-3.5 text-[11.5px] sm:text-[13px] lg:text-[14px] leading-[1.45] font-medium text-[#1e2328]/80 max-w-[32ch]">
           {service.description}
         </p>
       </div>
 
       {/* Bottom Row: Service List (Left) + Oversized Two-Digit Number (Right) */}
-      <div className="flex items-end justify-between gap-4 pt-4">
-        <ul className="space-y-0.5 sm:space-y-1 text-[11px] sm:text-[12.5px] lg:text-[13.5px] font-semibold tracking-[-0.01em] text-[#14171a]/85">
+      <div className="flex items-end justify-between gap-4 pt-3">
+        <ul className="space-y-0.5 sm:space-y-1 text-[11px] sm:text-[12px] lg:text-[13px] font-semibold tracking-[-0.01em] text-[#14171a]/85">
           {service.capabilities.map((cap) => (
             <li key={cap}>{cap}</li>
           ))}
@@ -152,7 +152,7 @@ const StackedServiceCard: React.FC<StackedServiceCardProps> = ({
 
         <span
           aria-hidden="true"
-          className="text-[48px] sm:text-[66px] lg:text-[94px] font-black leading-[0.76] tracking-[-0.06em] text-[#14171a] tabular-nums"
+          className="text-[44px] sm:text-[58px] lg:text-[76px] font-black leading-[0.76] tracking-[-0.06em] text-[#14171a] tabular-nums"
         >
           {service.number}
         </span>
@@ -260,27 +260,27 @@ export const ServicesScrollSection: React.FC = () => {
           <motion.span
             style={{
               x: line1X,
-              filter: 'blur(clamp(5px, 0.7vw, 11px))',
+              filter: 'blur(clamp(5px, 0.65vw, 10px))',
             }}
-            className="block whitespace-nowrap text-[clamp(108px,23vw,320px)] font-black uppercase leading-[0.82] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
+            className="block whitespace-nowrap text-[clamp(88px,19vw,260px)] font-black uppercase leading-[0.84] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
           >
             WHAT
           </motion.span>
           <motion.span
             style={{
               x: line2X,
-              filter: 'blur(clamp(6px, 0.8vw, 12px))',
+              filter: 'blur(clamp(6px, 0.75vw, 11px))',
             }}
-            className="block whitespace-nowrap text-[clamp(108px,23vw,320px)] font-black uppercase leading-[0.82] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
+            className="block whitespace-nowrap text-[clamp(88px,19vw,260px)] font-black uppercase leading-[0.84] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
           >
             WE
           </motion.span>
           <motion.span
             style={{
               x: line3X,
-              filter: 'blur(clamp(5px, 0.7vw, 11px))',
+              filter: 'blur(clamp(5px, 0.65vw, 10px))',
             }}
-            className="block whitespace-nowrap text-[clamp(108px,23vw,320px)] font-black uppercase leading-[0.82] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
+            className="block whitespace-nowrap text-[clamp(88px,19vw,260px)] font-black uppercase leading-[0.84] tracking-[-0.065em] text-[#0c0e10]/[0.58] will-change-transform"
           >
             DO
           </motion.span>
