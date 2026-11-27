@@ -53,7 +53,7 @@ interface ScrubWordProps {
 
 const ScrubHeadlineWord: React.FC<ScrubWordProps> = ({ word, progress, range }) => {
   const opacity = useTransform(progress, range, [0, 1]);
-  const y = useTransform(progress, range, [26, 0]);
+  const y = useTransform(progress, range, [20, 0]);
 
   return (
     <motion.span
@@ -69,22 +69,22 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
   id = 'philosophy',
   mode = 'page',
   images = [],
-  brandMark = 'NOIR/24',
-  categoryLabel = 'Independent creative archive',
-  headline = 'Culture moves fast. We capture the moments worth remembering.',
-  ctaLabel = 'Enter the archive',
+  brandMark = 'SJDURALLC',
+  categoryLabel = 'WHY CHOOSE SJDURALLC · WHOLESALE SUPPLY',
+  headline = 'Simple supply. Fair prices. Real growth for every store.',
+  ctaLabel = 'Browse Products',
   ctaHref = '#equipment',
-  footerLabel = 'Fashion, sound and youth culture',
+  footerLabel = 'Bulk orders, quality checks & fast delivery',
   sectionOne = {
-    label: 'Selected stories',
-    heading: 'The New Energy',
+    label: 'WHY BUYERS TRUST US',
+    heading: 'Built For Real Growth',
     description:
-      'An evolving collection of visual culture, creative people and ideas defining what comes next.',
+      'Simple wholesale ordering, steady stock, and clean products that help retail shops and online sellers grow every month.',
   },
   sectionTwo = {
-    label: 'New collaborations',
-    heading: 'Make Something Iconic',
-    buttonLabel: 'Start a project',
+    label: 'WHOLESALE PARTNERSHIPS',
+    heading: 'Start Your Bulk Order',
+    buttonLabel: 'Contact Our Team',
     buttonHref: '#contact',
   },
   showFollowingSections = true,
@@ -94,7 +94,6 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
   const prefersReduced = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
 
-  // Track responsive breakpoints cleanly on resize
   useEffect(() => {
     const checkViewport = () => setIsMobile(window.innerWidth < 768);
     checkViewport();
@@ -102,7 +101,6 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
     return () => window.removeEventListener('resize', checkViewport);
   }, []);
 
-  // Always guarantee exactly 9 images by filling missing positions from defaults
   const resolvedImages = useMemo(() => {
     const merged: string[] = [];
     for (let i = 0; i < 9; i++) {
@@ -111,7 +109,6 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
     return merged;
   }, [images]);
 
-  // Organize 9 images into 3 vertical columns × 3 portrait tiles
   const columns = useMemo(
     () => [
       [resolvedImages[0], resolvedImages[1], resolvedImages[2]],
@@ -123,95 +120,82 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
 
   const words = useMemo(() => headline.trim().split(/\s+/), [headline]);
 
-  // Single master scroll progress value (supports both page mode and embedded scroll mode)
   const { scrollYProgress } = useScroll({
     container: mode === 'embedded' ? embeddedContainerRef : undefined,
     target: trackRef,
     offset: ['start start', 'end end'],
   });
 
-  // Smooth fluid interpolation (Lenis-like inertial scrub without lag or overshoot)
+  // Fast, fluid damped interpolation — zero jitter, zero heavy overshoot
   const progress = useSpring(scrollYProgress, {
-    stiffness: 115,
-    damping: 28,
-    mass: 0.42,
-    restDelta: 0.0005,
+    stiffness: 140,
+    damping: 30,
+    mass: 0.35,
+    restDelta: 0.001,
   });
 
-  // 1. Massive 3×3 image wall shrinks smoothly from ~3x viewport until full 3x3 grid fits cleanly
-  const wallScale = useTransform(progress, [0, 0.62], isMobile ? [1.05, 0.36] : [1.0, 0.355]);
-  // 2. Counter-scale inner images so they stay visually composed & stable while outer grid shrinks
-  const innerImgScale = useTransform(progress, [0, 0.62], [1.26, 1.0]);
+  // 8x LIGHTER GPU LAYER: 100vw x 100svh grid scaled down from 2.45 -> 1.0 (pure GPU transform!)
+  const wallScale = useTransform(progress, [0, 0.58], isMobile ? [2.15, 1.0] : [2.45, 1.0]);
 
-  // 3. Oversized bottom-left brand mark scales down & rises to top-left
-  const brandScale = useTransform(progress, [0, 0.56], isMobile ? [1.45, 0.62] : [2.4, 0.58]);
-  const brandY = useTransform(progress, [0, 0.56], isMobile ? ['0svh', '-74svh'] : ['0svh', '-78svh']);
+  // Oversized bottom-left brand mark scales down & glides up to top-left
+  const brandScale = useTransform(progress, [0, 0.52], isMobile ? [1.35, 0.62] : [2.1, 0.58]);
+  const brandY = useTransform(progress, [0, 0.52], isMobile ? ['0svh', '-72svh'] : ['0svh', '-78svh']);
 
-  // 4. Bottom editorial footer blurs, shrinks, and fades out early in scroll
+  // Bottom editorial footer shrinks & fades out cleanly (GPU opacity + transform only, NO laggy blur animation!)
   const footerOpacity = useTransform(progress, [0, 0.22], [1, 0]);
-  const footerScale = useTransform(progress, [0, 0.22], [1, 0.86]);
-  const footerBlur = useTransform(progress, [0, 0.22], ['blur(0px)', 'blur(10px)']);
+  const footerScale = useTransform(progress, [0, 0.22], [1, 0.88]);
+  const footerY = useTransform(progress, [0, 0.22], [0, 12]);
 
-  // 5. Category label reveals right ahead of headline words
+  // Category label reveals right ahead of headline
   const categoryOpacity = useTransform(progress, [0.3, 0.42], [0, 1]);
-  const categoryY = useTransform(progress, [0.3, 0.42], [18, 0]);
+  const categoryY = useTransform(progress, [0.3, 0.42], [14, 0]);
 
-  // 6. Acid-lime CTA pill reveals after most of the headline has appeared
-  const ctaOpacity = useTransform(progress, [0.66, 0.8], [0, 1]);
-  const ctaY = useTransform(progress, [0.66, 0.8], [22, 0]);
-  const ctaScale = useTransform(progress, [0.66, 0.8], [0.94, 1]);
-  const ctaPointerEvents = useTransform(progress, (v) => (v > 0.64 ? 'auto' : 'none'));
+  // Sjdurallc Cobalt Pill CTA reveals after most of the headline appears
+  const ctaOpacity = useTransform(progress, [0.64, 0.78], [0, 1]);
+  const ctaY = useTransform(progress, [0.64, 0.78], [18, 0]);
+  const ctaScale = useTransform(progress, [0.64, 0.78], [0.95, 1]);
+  const ctaPointerEvents = useTransform(progress, (v) => (v > 0.62 ? 'auto' : 'none'));
 
-  // 7 & 8. Near end of scroll: slight upward hero shift + gradual dark scrim overlay
-  const heroShiftY = useTransform(progress, [0.82, 1], ['0svh', '-9svh']);
-  const darkOverlayOpacity = useTransform(progress, [0.18, 0.58, 1], [0.18, 0.54, 0.84]);
+  // Near end of scroll: subtle upward hero lift + progressive dark scrim
+  const heroShiftY = useTransform(progress, [0.82, 1], ['0svh', '-7svh']);
+  const darkOverlayOpacity = useTransform(progress, [0.16, 0.56, 1], [0.22, 0.58, 0.84]);
 
-  // Reduced-Motion Accessible Fallback
+  // Reduced-Motion Fallback
   if (prefersReduced) {
     const content = (
-      <section id={id} aria-label={`${brandMark} editorial showcase`} className="w-full bg-[#0a0b0d] text-white">
+      <section id={id} aria-label={`${brandMark} showcase`} className="w-full bg-[#0b0e14] text-white">
         <div className="relative min-h-[100svh] w-full overflow-hidden flex items-center justify-center">
-          {/* Static final 3x3 wall */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 grid grid-cols-3 gap-2 sm:gap-3 p-2 sm:p-3 opacity-60"
-          >
+          <div aria-hidden="true" className="absolute inset-0 grid grid-cols-3 gap-2 sm:gap-3 p-2 sm:p-3 opacity-60">
             {columns.map((col, cIdx) => (
               <div key={cIdx} className="grid grid-rows-3 gap-2 sm:gap-3 h-full">
                 {col.map((src, rIdx) => (
                   <div key={rIdx} className="relative w-full h-full overflow-hidden bg-neutral-900">
-                    <img
-                      src={src}
-                      alt=""
-                      className="w-full h-full object-cover saturate-[1.12] contrast-[1.06]"
-                    />
+                    <img src={src} alt="" className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          <div aria-hidden="true" className="absolute inset-0 bg-black/55" />
+          <div aria-hidden="true" className="absolute inset-0 bg-[#070b14]/65" />
 
-          {/* Top-left settled brand mark */}
           <div className="absolute top-6 left-6 sm:top-8 sm:left-10 z-20 font-black uppercase tracking-[-0.04em] text-xl sm:text-2xl text-white">
             {brandMark}
           </div>
 
-          {/* Center headline & acid-lime CTA */}
           <div className="relative z-20 max-w-3xl mx-auto px-6 text-center space-y-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#d9ff43]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#608CFF]">
               {categoryLabel}
             </p>
-            <h2 className="text-[36px] sm:text-[54px] lg:text-[66px] font-black leading-[0.98] tracking-[-0.04em] text-white">
+            <h2 className="text-[34px] sm:text-[52px] lg:text-[64px] font-black leading-[0.98] tracking-[-0.04em] text-white">
               {headline}
             </h2>
             <div className="pt-2">
               <a
                 href={ctaHref}
-                className="inline-flex items-center gap-3 rounded-full bg-[#d9ff43] text-[#0c0e10] pl-6 pr-2 py-2 text-xs sm:text-sm font-extrabold tracking-wide shadow-[0_12px_36px_-8px_rgba(217,255,67,0.5)]"
+                className="inline-flex items-center gap-3 rounded-full bg-[#002FA7] hover:bg-[#0038CC] text-white pl-6 pr-2 py-2 text-xs sm:text-sm font-bold tracking-wide"
               >
                 <span>{ctaLabel}</span>
-                <span className="w-9 h-9 rounded-full bg-[#111315] text-[#d9ff43] flex items-center justify-center">
+                <span className="w-9 h-9 rounded-full bg-white text-[#002FA7] flex items-center justify-center">
                   <ArrowUpRight className="w-4 h-4" />
                 </span>
               </a>
@@ -222,17 +206,17 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
         {showFollowingSections && (
           <>
             <div
-              className="min-h-[85svh] w-full flex items-center justify-center px-6 py-24 text-center relative overflow-hidden"
+              className="min-h-[75svh] w-full flex items-center justify-center px-6 py-20 text-center"
               style={{
                 background:
-                  'radial-gradient(circle at 50% 45%, rgba(217,255,67,0.14) 0%, rgba(20,25,17,0) 60%), #141911',
+                  'radial-gradient(circle at 50% 45%, rgba(0, 66, 235, 0.24) 0%, rgba(7, 17, 43, 0) 60%), #07112b',
               }}
             >
               <div className="max-w-3xl space-y-5">
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#d9ff43]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#608CFF]">
                   {sectionOne.label}
                 </p>
-                <h2 className="text-[42px] sm:text-[64px] lg:text-[82px] font-black leading-[0.94] tracking-[-0.045em] text-white">
+                <h2 className="text-[40px] sm:text-[62px] lg:text-[78px] font-black leading-[0.95] tracking-[-0.045em] text-white">
                   {sectionOne.heading}
                 </h2>
                 <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto leading-relaxed">
@@ -242,23 +226,23 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
             </div>
 
             <div
-              className="min-h-[80svh] w-full flex items-center justify-center px-6 py-24 text-center relative overflow-hidden"
+              className="min-h-[70svh] w-full flex items-center justify-center px-6 py-20 text-center border-t border-white/[0.08]"
               style={{
                 background:
-                  'radial-gradient(ellipse 65% 50% at 50% 100%, rgba(139,92,246,0.28) 0%, rgba(8,8,10,0) 68%), #08080a',
+                  'radial-gradient(ellipse 65% 50% at 50% 100%, rgba(0, 47, 167, 0.34) 0%, rgba(11, 14, 20, 0) 68%), #0b0e14',
               }}
             >
               <div className="max-w-3xl space-y-6">
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-purple-300">
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7AA2FF]">
                   {sectionTwo.label}
                 </p>
-                <h2 className="text-[42px] sm:text-[64px] lg:text-[80px] font-black leading-[0.95] tracking-[-0.045em] text-white">
+                <h2 className="text-[40px] sm:text-[62px] lg:text-[76px] font-black leading-[0.95] tracking-[-0.045em] text-white">
                   {sectionTwo.heading}
                 </h2>
                 <div className="pt-2">
                   <a
                     href={sectionTwo.buttonHref}
-                    className="inline-flex items-center gap-2.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 px-7 py-3.5 text-sm font-bold text-white transition-colors"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-white/10 hover:bg-[#002FA7] border border-white/20 px-7 py-3.5 text-sm font-bold text-white transition-colors"
                   >
                     <span>{sectionTwo.buttonLabel}</span>
                     <ArrowUpRight className="w-4 h-4" />
@@ -281,49 +265,46 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
   const galleryExperience = (
     <section
       id={id}
-      aria-label={`${brandMark} editorial gallery showcase`}
-      className="relative w-full bg-[#0a0b0d] text-white overflow-x-clip m-0 p-0 border-0"
+      aria-label={`${brandMark} wholesale gallery`}
+      className="relative w-full bg-[#0b0e14] text-white overflow-x-clip m-0 p-0 border-0"
     >
-      {/* PINNED SCROLL TRACK (380svh for rich scrubbed control) */}
-      <div ref={trackRef} className="relative w-full h-[380svh]">
+      {/* PINNED SCROLL TRACK (300svh — brisk, responsive, zero sluggish feel) */}
+      <div ref={trackRef} className="relative w-full h-[300svh]">
         <motion.div
-          style={{ y: heroShiftY }}
-          className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#0a0b0d] flex items-center justify-center"
+          style={{ y: heroShiftY, contain: 'layout style paint' }}
+          className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#0b0e14] flex items-center justify-center"
         >
-          {/* MASSIVE 3 × 3 EDITORIAL IMAGE WALL */}
+          {/* LIGHTWEIGHT 100vw × 100svh 3 × 3 PRODUCT WALL SCALED ON GPU (Zero 4K texture lag!) */}
           <motion.div
             style={{ scale: wallScale }}
-            className={`relative z-0 flex-shrink-0 grid grid-cols-3 ${
-              isMobile ? 'w-[310vw] h-[290svh] gap-2.5 p-2.5' : 'w-[285vw] h-[285svh] gap-5 p-5'
+            className={`relative z-0 w-full h-full grid grid-cols-3 ${
+              isMobile ? 'gap-2 p-2' : 'gap-3.5 p-3.5'
             } will-change-transform`}
           >
             {columns.map((col, colIdx) => (
               <div
                 key={colIdx}
-                className={`grid grid-rows-3 h-full ${isMobile ? 'gap-2.5' : 'gap-5'}`}
+                className={`grid grid-rows-3 h-full ${isMobile ? 'gap-2' : 'gap-3.5'}`}
               >
                 {col.map((src, rowIdx) => {
                   const flatIndex = colIdx * 3 + rowIdx;
-                  // Center cross tiles load eagerly since they're visible at start of scroll
                   const isEager = flatIndex === 4 || flatIndex === 1 || flatIndex === 3 || flatIndex === 5;
                   return (
                     <div
                       key={flatIndex}
-                      className="editorial-tile-shine relative w-full h-full overflow-hidden rounded-none bg-[#16181d]"
+                      className="editorial-tile-shine relative w-full h-full overflow-hidden rounded-none bg-[#151922]"
                     >
-                      <motion.img
+                      <img
                         src={src}
                         alt=""
                         aria-hidden="true"
                         loading={isEager ? 'eager' : 'lazy'}
                         decoding="async"
-                        style={{ scale: innerImgScale }}
-                        className="w-full h-full object-cover saturate-[1.14] contrast-[1.06] will-change-transform"
+                        className="w-full h-full object-cover"
                       />
-                      {/* Subtle dark editorial gradient per photo */}
                       <div
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/25"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070b14]/50 via-transparent to-[#070b14]/25"
                       />
                     </div>
                   );
@@ -332,21 +313,11 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
             ))}
           </motion.div>
 
-          {/* Fine Editorial Film Grain Texture Overlay */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10 opacity-[0.14] mix-blend-overlay"
-            style={{
-              backgroundImage:
-                'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
-            }}
-          />
-
-          {/* Progressive Dark Overlay for High Contrast & Transition Out */}
+          {/* Progressive Cobalt-Tinted Dark Scrim */}
           <motion.div
             aria-hidden="true"
             style={{ opacity: darkOverlayOpacity }}
-            className="pointer-events-none absolute inset-0 z-20 bg-[#07080a]"
+            className="pointer-events-none absolute inset-0 z-20 bg-[#070b14]"
           />
 
           {/* OVERSIZED BOTTOM-LEFT BRAND MARK (scales down & rises to top-left on scroll) */}
@@ -356,39 +327,39 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
               y: brandY,
               transformOrigin: '0% 100%',
             }}
-            className="pointer-events-none absolute bottom-14 sm:bottom-8 left-5 sm:left-10 z-30 font-black uppercase tracking-[-0.055em] leading-[0.88] text-[28px] sm:text-[38px] lg:text-[46px] text-white drop-shadow-[0_6px_28px_rgba(0,0,0,0.45)] will-change-transform select-none"
+            className="pointer-events-none absolute bottom-14 sm:bottom-8 left-5 sm:left-10 z-30 font-black uppercase tracking-[-0.055em] leading-[0.88] text-[28px] sm:text-[38px] lg:text-[46px] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.45)] will-change-transform select-none"
           >
             {brandMark}
           </motion.div>
 
-          {/* BOTTOM-RIGHT EDITORIAL FOOTER LABEL (blurs, shrinks & fades out early) */}
+          {/* BOTTOM-RIGHT EDITORIAL FOOTER LABEL (shrinks & fades smoothly — GPU-only!) */}
           <motion.p
             style={{
               opacity: footerOpacity,
               scale: footerScale,
-              filter: footerBlur,
+              y: footerY,
             }}
             className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:bottom-8 md:right-10 z-30 text-center md:text-right font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-white/90 whitespace-nowrap drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] will-change-transform select-none"
           >
             {footerLabel}
           </motion.p>
 
-          {/* CENTRAL EDITORIAL CONTENT (Category + Word-by-Word Scrubbed Headline + Acid-Lime Pill CTA) */}
+          {/* CENTRAL CONTENT (Category + Word-by-Word Scrubbed Headline + Sjdurallc Cobalt Pill CTA) */}
           <div className="absolute inset-0 z-30 flex items-center justify-center px-5 sm:px-8 pointer-events-none">
             <div className="max-w-[820px] w-full text-center flex flex-col items-center">
               <motion.p
                 style={{ opacity: categoryOpacity, y: categoryY }}
-                className="font-mono text-[10px] sm:text-[12px] uppercase tracking-[0.24em] text-[#d9ff43] font-semibold mb-4 sm:mb-5 will-change-transform"
+                className="font-mono text-[10px] sm:text-[12px] uppercase tracking-[0.24em] text-[#608CFF] font-semibold mb-4 sm:mb-5 will-change-transform"
               >
                 {categoryLabel}
               </motion.p>
 
-              <h2 className="text-[32px] sm:text-[52px] lg:text-[68px] font-black leading-[0.98] tracking-[-0.045em] text-white max-w-[16ch] sm:max-w-[18ch] mx-auto drop-shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+              <h2 className="text-[32px] sm:text-[52px] lg:text-[66px] font-black leading-[0.98] tracking-[-0.045em] text-white max-w-[16ch] sm:max-w-[18ch] mx-auto drop-shadow-[0_8px_28px_rgba(0,0,0,0.45)]">
                 {words.map((word, idx) => {
                   const total = Math.max(words.length, 1);
-                  const step = 0.34 / total;
-                  const start = 0.36 + idx * step;
-                  const end = Math.min(start + step * 2.1, 0.76);
+                  const step = 0.32 / total;
+                  const start = 0.34 + idx * step;
+                  const end = Math.min(start + step * 2, 0.72);
                   return (
                     <ScrubHeadlineWord
                       key={`${word}-${idx}`}
@@ -400,7 +371,7 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
                 })}
               </h2>
 
-              {/* Acid-Lime Pill Call-to-Action Button (#d9ff43) */}
+              {/* Sjdurallc Signature Cobalt Pill CTA Button */}
               <motion.div
                 style={{
                   opacity: ctaOpacity,
@@ -414,12 +385,12 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
                   href={ctaHref}
                   style={{
                     boxShadow:
-                      '0 14px 40px -6px rgba(217, 255, 67, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.7)',
+                      '0 14px 38px -6px rgba(0, 47, 167, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.32)',
                   }}
-                  className="group inline-flex items-center gap-3.5 rounded-full bg-[#d9ff43] hover:bg-[#e4ff6b] text-[#0b0d0f] pl-6 pr-2 py-2 text-[12px] sm:text-[13px] font-extrabold uppercase tracking-[0.1em] transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  className="group inline-flex items-center gap-3.5 rounded-full bg-[#002FA7] hover:bg-[#0038CC] text-white pl-6 pr-2 py-2 text-[12px] sm:text-[13px] font-extrabold uppercase tracking-[0.1em] transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
                   <span>{ctaLabel}</span>
-                  <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#111315] text-[#d9ff43] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                  <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-[#002FA7] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                     <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </a>
@@ -429,21 +400,21 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
         </motion.div>
       </div>
 
-      {/* FOLLOWING SECTION ONE — Deep Olive + Subtle Acid-Lime Radial Glow */}
+      {/* FOLLOWING SECTION ONE — Deep Sjdurallc Cobalt-Navy + Bright Cobalt Radial Glow */}
       {showFollowingSections && (
         <>
           <div
-            className="relative min-h-[82svh] w-full flex items-center justify-center px-5 sm:px-8 py-24 text-center overflow-hidden"
+            className="relative min-h-[76svh] w-full flex items-center justify-center px-5 sm:px-8 py-20 text-center overflow-hidden"
             style={{
               background:
-                'radial-gradient(circle at 50% 42%, rgba(217, 255, 67, 0.16) 0%, rgba(20, 26, 17, 0) 58%), #141a11',
+                'radial-gradient(circle at 50% 42%, rgba(0, 66, 235, 0.28) 0%, rgba(7, 17, 43, 0) 58%), #07112b',
             }}
           >
             <div className="relative z-10 max-w-3xl mx-auto space-y-5">
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#d9ff43]">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#608CFF]">
                 {sectionOne.label}
               </p>
-              <h2 className="text-[40px] sm:text-[64px] lg:text-[84px] font-black leading-[0.94] tracking-[-0.045em] text-white">
+              <h2 className="text-[38px] sm:text-[62px] lg:text-[80px] font-black leading-[0.94] tracking-[-0.045em] text-white">
                 {sectionOne.heading}
               </h2>
               <p className="text-[15px] sm:text-[18px] text-white/75 max-w-xl mx-auto leading-relaxed">
@@ -452,25 +423,25 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
             </div>
           </div>
 
-          {/* FOLLOWING SECTION TWO — Near-Black + Subtle Bottom Purple Glow + Glass CTA */}
+          {/* FOLLOWING SECTION TWO — Near-Black Obsidian + Cobalt Bottom Glow + Glass CTA */}
           <div
-            className="relative min-h-[76svh] w-full flex items-center justify-center px-5 sm:px-8 py-24 text-center overflow-hidden border-t border-white/[0.06]"
+            className="relative min-h-[72svh] w-full flex items-center justify-center px-5 sm:px-8 py-20 text-center overflow-hidden border-t border-white/[0.08]"
             style={{
               background:
-                'radial-gradient(ellipse 68% 52% at 50% 100%, rgba(147, 51, 234, 0.30) 0%, rgba(8, 8, 10, 0) 68%), #08080a',
+                'radial-gradient(ellipse 68% 52% at 50% 100%, rgba(0, 47, 167, 0.36) 0%, rgba(11, 14, 20, 0) 68%), #0b0e14',
             }}
           >
             <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-purple-300">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#7AA2FF]">
                 {sectionTwo.label}
               </p>
-              <h2 className="text-[40px] sm:text-[64px] lg:text-[82px] font-black leading-[0.94] tracking-[-0.045em] text-white">
+              <h2 className="text-[38px] sm:text-[62px] lg:text-[78px] font-black leading-[0.94] tracking-[-0.045em] text-white">
                 {sectionTwo.heading}
               </h2>
               <div className="pt-3">
                 <a
                   href={sectionTwo.buttonHref}
-                  className="group inline-flex items-center gap-3 rounded-full bg-white/[0.08] hover:bg-white/[0.16] backdrop-blur-md border border-white/20 px-7 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-[0.12em] text-white transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-300"
+                  className="group inline-flex items-center gap-3 rounded-full bg-white/[0.09] hover:bg-[#002FA7] border border-white/20 hover:border-[#002FA7] px-7 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-[0.12em] text-white transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#608CFF]"
                 >
                   <span>{sectionTwo.buttonLabel}</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" />
@@ -487,7 +458,7 @@ export const EditorialWallSection: React.FC<EditorialWallSectionProps> = ({
     return (
       <div
         ref={embeddedContainerRef}
-        className="relative h-[100svh] w-full overflow-y-auto overflow-x-clip bg-[#0a0b0d]"
+        className="relative h-[100svh] w-full overflow-y-auto overflow-x-clip bg-[#0b0e14]"
       >
         {galleryExperience}
       </div>

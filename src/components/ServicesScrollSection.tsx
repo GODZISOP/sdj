@@ -250,7 +250,10 @@ export const ServicesScrollSection: React.FC = () => {
       className="relative w-full h-[430vh] bg-[#f8f8f7] overflow-x-clip m-0 p-0 border-0"
     >
       {/* Full-Screen 100vh Edge-to-Edge Sticky Stage */}
-      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-[#f8f8f7] flex items-center justify-center">
+      <div
+        style={{ contain: 'layout style paint' }}
+        className="sticky top-0 h-[100dvh] w-full overflow-hidden bg-[#f8f8f7] flex items-center justify-center"
+      >
         {/* Huge Staggered Blurred Background Typography */}
         <motion.div
           aria-hidden="true"

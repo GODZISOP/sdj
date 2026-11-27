@@ -211,10 +211,12 @@ export const HangingGallerySection: React.FC = () => {
                 }
                 style={{ transformOrigin: '50% 0%' }}
               >
-                {/* Organic Breeze Pendulum Sway Wrapper */}
+                {/* Organic Breeze Pendulum Sway Wrapper (pauses when off-screen so GPU stays 100% free!) */}
                 <div
                   style={{ animationDelay: slot.delay }}
-                  className={`${slot.swayClass} ${isHovered || isDragging || isDetached ? 'sway-paused' : ''}`}
+                  className={`${slot.swayClass} ${
+                    !isStageInView || isHovered || isDragging || isDetached ? 'sway-paused' : ''
+                  }`}
                 >
                   {/* Draggable Polaroid Card (Zero-lag pure GPU transform) */}
                   <motion.div

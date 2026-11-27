@@ -163,8 +163,29 @@ export const HomePage: React.FC = () => {
   const activeHeroCopy = HERO_TEXT_SLIDES[heroTextIdx];
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
   const collectionGridRef = useRef<HTMLDivElement>(null);
   const isCollectionInView = useInView(collectionGridRef, { once: false, amount: 0.06 });
+
+  // Pause hero video decoder automatically when scrolled off-screen so lower scroll sections run at 60fps+
+  useEffect(() => {
+    const heroEl = heroSectionRef.current;
+    const vid = videoRef.current;
+    if (!heroEl || !vid) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(heroEl);
+    return () => observer.disconnect();
+  }, []);
 
   const heroFeaturedList = products.slice(0, 3);
   const activeHeroProduct = heroFeaturedList[heroSlideIdx] || products[0];
@@ -195,6 +216,7 @@ export const HomePage: React.FC = () => {
     <main className="bg-white">
       {/* 1. FULL-BLEED CINEMATIC VIDEO HERO WITH SEAMLESS EDGE BLEND & LIVE CYCLING MULTI-DIRECTION TEXT */}
       <section
+        ref={heroSectionRef}
         className="relative w-full h-[80vh] min-h-[580px] max-h-[860px] overflow-hidden flex items-center justify-center"
         style={{
           background:
